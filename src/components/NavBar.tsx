@@ -15,6 +15,8 @@ export const NavBar = () => {
                   <div className="sm:flex h-full hidden">
                     <NavBarItem pathname={location.pathname} link="/" title="Home" />
                     <NavBarItem pathname={location.pathname} link="/create" title="Create Monitor" />
+                    <NavBarItem pathname={location.pathname} link="/agent" title="Create Agent" />
+                    <NavBarItem pathname={location.pathname} link="/test" title="Tests" />
                   </div>
                 </div>
                 

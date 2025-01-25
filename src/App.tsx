@@ -10,6 +10,8 @@ import { SignUpPage } from "./pages/SignUp";
 import { ReactNode } from "react";
 import { NavBar } from "./components/NavBar";
 import { Toaster } from "react-hot-toast";
+import AgentCreate from "./pages/AgentCreate";
+import TestPage from "./pages/TestPage";
 
 function App() {
   const location = useLocation();
@@ -27,7 +29,9 @@ function App() {
           <Route path="/" element= { <ProtectedRoute child={<Home/>} /> }/>
           <Route path="/create" element={ <ProtectedRoute child={<MonitorCreate/>} />} />
           <Route path="/sign-in" element={<SignInPage/>} />
+          <Route path="/agent" element={<AgentCreate/>} />
           <Route path="/sign-up" element={<SignUpPage/>} />
+          <Route path="/test" element={<TestPage/>} />
 
         </Routes>
       {/* </ScrollArea> */}
