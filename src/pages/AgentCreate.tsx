@@ -42,14 +42,13 @@ const AgentCreate = () => {
             <ButtonCN className="w-[130px]">Deploy</ButtonCN>
           </div>
 
-          <div className="flex flex-grow px-48 gap-4 w-full">
-            <div className="flex flex-col w-full h-full py-6 gap-4">
+          <div className="flex flex-grow px-48 gap-10 w-full">
+            <div className="flex flex-col w-3/5 h-full py-6 gap-4">
               
-              {/* select model */}
-              <div className="bg-white border shadow-sm gap-20 rounded-lg flex justify-between items-center py-4 px-6">
+              <div className="bg-black bg-opacity-70 text-white border shadow-sm gap-20 rounded-lg flex justify-between items-center py-4 px-6">
                 <p className="flex items-center gap-2"> <LuBrainCircuit size={20} /> Model</p>
                 <Select>
-                  <SelectTrigger className="w-full h-8">
+                  <SelectTrigger className="w-full bg-white text-black h-8">
                     <SelectValue placeholder="select model" />
                   </SelectTrigger>
                   <SelectContent>
@@ -68,16 +67,16 @@ const AgentCreate = () => {
                 </Select>
               </div>
 
-              <div className="flex flex-col gap-1 mt-1">
-                <h3 className="text-md text-gray-500 font-semibold">Instruction</h3>
+              <div className="flex flex-col gap-1 mt-1 bg-black rounded-lg bg-opacity-10 p-4">
+                <h3 className="text-md text-gray-600 font-semibold">Instruction</h3>
                 <Textarea 
                   // placeholder="e.g. given the age of the candidate, return whether they are eligible for voting" 
                   className="drop-shadow-none shadow-sm font-sans min-h-[120px]"
                 />
               </div>
 
-              <div className="flex flex-col gap-1 mt-1">
-                <h3 className="text-md text-gray-500 font-semibold">Output format</h3>
+              <div className="flex flex-col gap-1 mt-1 bg-black rounded-lg bg-opacity-10 p-4">
+                <h3 className="text-md text-gray-600 font-semibold">Output format</h3>
                 <div className="flex gap-3">
                   <Textarea 
                     // placeholder="e.g. given the age of the candidate, return whether they are eligible for voting" 
@@ -89,9 +88,8 @@ const AgentCreate = () => {
 
             </div>
             
-            <div className="w-full flex flex-col py-6 flex-grow bg-white">
+            <div className="w-2/5 flex flex-col py-6 flex-grow bg-gray-200">
               
-              {/* input section */}
               <div className="flex flex-col gap-1 mt-1 px-6">
                 <h3 className="text-md text-gray-500 font-semibold">Input</h3>
                 <Textarea 
@@ -105,7 +103,6 @@ const AgentCreate = () => {
 
               <div className="h-1 w-full my-4 bg-gray-100"></div>
 
-              {/* output section */}
               <div className="flex flex-col gap-1 px-6">
                 <h3 className="text-md text-gray-500 font-semibold">Output</h3>
                 <Textarea 
