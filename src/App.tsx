@@ -1,6 +1,5 @@
 
 import { Routes,Route, useLocation } from "react-router-dom"
-import MonitorCreate from "./pages/MonitorCreate";
 import { Home } from "./pages/Home";
 
 // import { ScrollArea } from "./components/ui/scroll-area";
@@ -27,9 +26,8 @@ function App() {
       {/* <ScrollArea className="h-full w-full px-10 rounded-md border"> */}
         <Routes>
           <Route path="/" element= { <ProtectedRoute child={<Home/>} /> }/>
-          <Route path="/create" element={ <ProtectedRoute child={<MonitorCreate/>} />} />
           <Route path="/sign-in" element={<SignInPage/>} />
-          <Route path="/agent" element={<AgentCreate/>} />
+          <Route path="/create" element={<AgentCreate/>} />
           <Route path="/sign-up" element={<SignUpPage/>} />
           <Route path="/test" element={<TestPage/>} />
 

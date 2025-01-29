@@ -13,7 +13,6 @@ import {
 } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea";
 
-
 const AgentCreate = () => {
 
   const [ agentName, setAgentName ] = useState('Your AI Agent');
@@ -22,19 +21,21 @@ const AgentCreate = () => {
 
   return (
     <div className='flex flex-col font-mono min-h-screen bg-gray-100 px-2.5 sm:px-6 md:px-10 lg:px-0'>
-          <div className="bg-white flex justify-between items-center px-48 w-full py-5 border">
+          <div className=" flex justify-between items-center px-48 pt-7 w-full py-5">
             <div className="flex flex-col gap-2 w-full pr-20">
-              <ButtonCN variant={'outline'} className="h-7 max-w-20 mb-2.5">Back</ButtonCN>
+              {/* <ButtonCN variant={'outline'} className="h-7 max-w-20 mb-2.5">Back</ButtonCN> */}
               <Input 
                 value={agentName} 
                 onChange={(e) => setAgentName(e.target.value)}
-                className="w-full h-8 bg-white font-bold text-xl border-none" 
-                placeholder="Write description here" 
+                className="w-full bg-gray-100 h-8 my-2 font-bold text-xl border-none" 
+                // className="w-full my-2 py-6 font-bold text-xl" 
+                placeholder="Title" 
               />
               <Input 
                 value={agentDescription}
                 onChange={(e) => setAgentDescription(e.target.value)}
-                className="w-full text-gray-500 focus-visible:outline-gray-300 h-6 text-sm bg-white border-none" 
+                className="w-full bg-gray-100 text-gray-500 focus-visible:outline-gray-300 h-6 text-sm  border-none" 
+                // className="w-full text-gray-500 focus-visible:outline-gray-300 text-sm" 
                 placeholder="Write description here" 
               />
             </div>
@@ -70,8 +71,8 @@ const AgentCreate = () => {
               <div className="flex flex-col gap-1 mt-1 bg-black rounded-lg bg-opacity-10 p-4">
                 <h3 className="text-md text-gray-600 font-semibold">Instruction</h3>
                 <Textarea 
-                  // placeholder="e.g. given the age of the candidate, return whether they are eligible for voting" 
-                  className="drop-shadow-none shadow-sm font-sans min-h-[120px]"
+                  placeholder="e.g. given the age of the candidate, return whether they are eligible for voting" 
+                  className="drop-shadow-none shadow-sm min-h-[120px] focus-visible:outline-gray-300 focus-visible:ring-gray-400 focus-visible:ring-1 outline-gray-300"
                 />
               </div>
 
@@ -79,16 +80,18 @@ const AgentCreate = () => {
                 <h3 className="text-md text-gray-600 font-semibold">Output format</h3>
                 <div className="flex gap-3">
                   <Textarea 
-                    // placeholder="e.g. given the age of the candidate, return whether they are eligible for voting" 
-                    className="drop-shadow-none shadow-sm font-sans h-[200px]"
+                    placeholder='e.g. { "isEligible": True }' 
+                    className="drop-shadow-none shadow-sm h-[200px]"
                   />
-                  <div className="bg-white rounded-lg border w-full flex-grow"></div>
+                  <div className="bg-white rounded-lg border w-full flex-grow">
+                    {/* <p>{`e.g. { \n"isEligible": True \n}`}</p> */}
+                  </div>
                 </div>
               </div>
 
             </div>
             
-            <div className="w-2/5 flex flex-col py-6 flex-grow bg-gray-200">
+            <div className="w-2/5 flex flex-col h-min my-6 py-3 pb-8 rounded-md bg-gray-200">
               
               <div className="flex flex-col gap-1 mt-1 px-6">
                 <h3 className="text-md text-gray-500 font-semibold">Input</h3>

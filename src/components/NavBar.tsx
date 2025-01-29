@@ -14,8 +14,7 @@ export const NavBar = () => {
                 <img src="/Plutofy-Logo.png" onClick={()=> window.open("https://plutofy.live/", "_blank")}  alt="image" className="rounded-t-sm bg-[#553566] min-w-12 flex items-end mt-4 mr-6 px-2.5 aspect-square object-contain hover:cursor-pointer" />
                   <div className="sm:flex h-full hidden">
                     <NavBarItem pathname={location.pathname} link="/" title="Home" />
-                    <NavBarItem pathname={location.pathname} link="/create" title="Create Monitor" />
-                    <NavBarItem pathname={location.pathname} link="/agent" title="Create Agent" />
+                    <NavBarItem pathname={location.pathname} link="/create" title="Create Agent" />
                     <NavBarItem pathname={location.pathname} link="/test" title="Tests" />
                   </div>
                 </div>
@@ -40,10 +39,10 @@ interface NavBarItemProps {
   
 export const NavBarItem = (args: NavBarItemProps) => {
     return (
-        <Link to={args.link} className="h-full flex flex-col justify-between">
+        <Link to={args.link} className="h-full  flex flex-col justify-between">
             <div></div> <div></div> <div></div>
             
-            <Button type="text" className={`rounded-lg  font-semibold ${args.pathname == args.link ? ' text-black' : 'text-gray-500' } `}>{args.title}</Button>
+            <Button type="text" className={`rounded-lg font-mono font-semibold ${args.pathname == args.link ? ' text-black' : 'text-gray-500' } `}>{args.title}</Button>
             
             <div className={`h-0.5 ${args.pathname == args.link ? 'bg-black' : ''}`}></div>
         </Link>
