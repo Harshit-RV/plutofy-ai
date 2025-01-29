@@ -10,11 +10,12 @@ import { ReactNode } from "react";
 import { NavBar } from "./components/NavBar";
 import { Toaster } from "react-hot-toast";
 import AgentCreate from "./pages/AgentCreate";
+import AgentCreate2 from "./pages/AgentCreate2";
+import Success from "./pages/Success"
 import TestPage from "./pages/TestPage";
 
 function App() {
   const location = useLocation();
-  
   
   return (
     <div className="flex flex-col">
@@ -28,7 +29,9 @@ function App() {
           <Route path="/" element= { <ProtectedRoute child={<Home/>} /> }/>
           <Route path="/sign-in" element={<SignInPage/>} />
           <Route path="/create" element={<AgentCreate/>} />
+          <Route path="/create2" element={<AgentCreate2 />} />
           <Route path="/sign-up" element={<SignUpPage/>} />
+          <Route path="/success" element={<Success/>} />
           <Route path="/test" element={<TestPage/>} />
 
         </Routes>

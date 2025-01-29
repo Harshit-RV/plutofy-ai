@@ -13,12 +13,6 @@ import {
 } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea";
 import JsonBuilder from "@/components/JsonInput";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
 
 const AgentCreate = () => {
 
@@ -28,21 +22,18 @@ const AgentCreate = () => {
 
   return (
     <div className='flex flex-col font-mono min-h-screen bg-gray-100 px-2.5 sm:px-6 md:px-10 lg:px-0'>
-          <div className=" flex justify-between items-center bg-white border px-48 pt-5 w-full py-5">
+          <div className=" flex justify-between items-center px-48 pt-7 w-full py-5">
             <div className="flex flex-col w-full pr-20">
-              {/* <ButtonCN variant={'outline'} className="h-7 max-w-20 mb-2.5">Back</ButtonCN> */}
               <Input 
                 value={agentName} 
                 onChange={(e) => setAgentName(e.target.value)}
-                className="w-full bg-white my-2 font-bold text-xl border-none" 
-                // className="w-full my-2 py-6 font-bold text-xl" 
+                className="w-full bg-gray-100 my-2 font-bold text-xl border-none" 
                 placeholder="Title" 
               />
               <Input 
                 value={agentDescription}
                 onChange={(e) => setAgentDescription(e.target.value)}
-                className="w-full bg-white text-gray-500 focus-visible:outline-gray-300 text-sm h-6 border-none" 
-                // className="w-full text-gray-500 focus-visible:outline-gray-300 text-sm" 
+                className="w-full bg-gray-100 text-gray-500 focus-visible:outline-gray-300 text-sm h-8 border-none" 
                 placeholder="Write description here" 
               />
             </div>
@@ -53,7 +44,7 @@ const AgentCreate = () => {
           <div className="flex flex-grow px-48 gap-10 w-full">
             <div className="flex flex-col w-3/5 h-full py-6 gap-4">
               
-              <div className="bg-black bg-opacity-80 text-white border shadow-sm gap-20 rounded-xl flex justify-between items-center py-4 px-6">
+              <div className="bg-black bg-opacity-70 text-white border shadow-sm gap-20 rounded-lg flex justify-between items-center py-4 px-6">
                 <p className="flex items-center gap-2"> <LuBrainCircuit size={20} /> Model</p>
                 <Select>
                   <SelectTrigger className="w-full bg-white text-black h-8">
@@ -75,36 +66,27 @@ const AgentCreate = () => {
                 </Select>
               </div>
 
-              <Card>
-                <CardHeader className="pt-6 pb-3">
-                  <CardTitle className="flex justify-between">
-                      <h2 className="font-black text-md">Instruction</h2>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="py-0 pb-4">
-                  <Textarea 
-                        placeholder="e.g. given the age of the candidate, return whether they are eligible for voting" 
-                        className="bg-gray-100 drop-shadow-none shadow-sm min-h-[120px] focus-visible:outline-gray-300 focus-visible:ring-gray-400 focus-visible:ring-1 outline-gray-300"
-                      />
-                </CardContent>
-              </Card>
+              {/* <div className="flex flex-col gap-1 mt-1 bg-[#56667a] rounded-lg p-4"> */}
+              <div className="flex flex-col gap-2 mt-1 bg-black rounded-lg bg-opacity-10 p-4">
+                <h3 className="text-md text-gray-600 font-semibold">Instruction</h3>
+                <Textarea 
+                  placeholder="e.g. given the age of the candidate, return whether they are eligible for voting" 
+                  className="drop-shadow-none shadow-sm min-h-[120px] focus-visible:outline-gray-300 focus-visible:ring-gray-400 focus-visible:ring-1 outline-gray-300"
+                />
+              </div>
 
-              <Card>
-                <CardHeader className="pt-6 pb-3">
-                    <CardTitle className="flex justify-between">
-                        <h2 className="font-black text-md">Output Format</h2>
-                    </CardTitle>
-                </CardHeader>
-                <CardContent className="py-0 pb-4">
+              <div className="flex flex-col gap-1 mt-1 bg-black rounded-lg bg-opacity-10 p-4">
+                <h3 className="text-md text-gray-600 font-semibold">Output format</h3>
+                <div className="flex gap-3">
                   <JsonBuilder />
-                </CardContent>
-              </Card>
+                </div>
+              </div>
 
             </div>
             
-            <div className="w-2/5 flex flex-col h-min my-6 py-3 pb-8 rounded-lg bg-gray-200 border">
+            <div className="w-2/5 flex flex-col h-min my-6 py-3 pb-8 rounded-md bg-gray-200">
               
-              <div className="flex flex-col gap-1 mt-1 px-5">
+              <div className="flex flex-col gap-1 mt-1 px-6">
                 <h3 className="text-md text-gray-500 font-semibold">Input</h3>
                 <Textarea 
                   className="drop-shadow-none shadow-sm font-sans min-h-[180px]"
@@ -117,7 +99,7 @@ const AgentCreate = () => {
 
               <div className="h-1 w-full my-4 bg-gray-100"></div>
 
-              <div className="flex flex-col gap-1 px-5">
+              <div className="flex flex-col gap-1 px-6">
                 <h3 className="text-md text-gray-500 font-semibold">Output</h3>
                 <Textarea 
                   className="drop-shadow-none shadow-sm font-sans min-h-[180px]"
