@@ -1,0 +1,54 @@
+import mongoose, { Schema, Document } from 'mongoose';
+
+export interface OutputStructure {
+  id: string;
+  name: string;
+  type: string;
+  fields?: OutputStructure[];
+}
+
+export interface AgentProps {
+  name: string;
+  userId: string;
+  description: string;
+  modelName: string;
+  modelCategory: string;
+  instruction: string;
+  outputStructure: OutputStructure[];
+}
+
+export interface AgentDoc extends Document {
+  name: string;
+  userId: string;
+  description: string;
+  modelName: string;
+  modelCategory: string;
+  instruction: string;
+  outputStructure: OutputStructure[];
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+const outputSchema: Schema = new Schema({
+  id: { type: String, required: true },
+  name: { type: String, required: true },
+  type: { type: String, required: true },
+  fields: { type: [this], default: [] },
+});
+
+const agentSchema: Schema = new Schema(
+  {
+    name: { type: String, required: true },
+    userId: { type: String, required: true },
+    description: { type: String, required: true },
+    modelName: { type: String, required: true },
+    modelCategory: { type: String, required: true },
+    instruction: { type: String, required: true },
+    outputStructure: { type: [outputSchema], required: true },
+  },
+  { timestamps: true }
+);
+
+const Agent = mongoose.model<AgentDoc>('Agent', agentSchema);
+
+export default Agent;
