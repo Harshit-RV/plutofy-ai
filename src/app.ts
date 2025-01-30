@@ -1,6 +1,7 @@
 import express, { Application, NextFunction, Request, Response, } from 'express';
 import mongoose from 'mongoose';
 import agentRoutes from './routes/agent.route';
+import completionRoutes from './routes/completion.route'
 import config from './config';
 import "dotenv/config";
 import cors from 'cors'; 
@@ -19,6 +20,8 @@ mongoose.connect(config.mongoURI);
 // Routes
 // app.use('/', homeRoutes);
 app.use('/agent', agentRoutes);
+app.use('/v1/completion', completionRoutes);
+
 
 app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
   console.error(err.stack);

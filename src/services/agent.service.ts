@@ -11,6 +11,10 @@ export const getAgentsByUserId = async (userId: string) : Promise<AgentDoc[]> =>
   return Agent.find({ userId });
 }
 
+export const getAgentsByAgentId = async (agentId: string) : Promise<AgentDoc | null> => {
+  return Agent.findOne({ agentId });
+}
+
 export const getAgentById = async (id: string) : Promise<AgentDoc | null> => {
   return Agent.findById(id);
 }

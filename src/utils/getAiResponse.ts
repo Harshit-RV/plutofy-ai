@@ -18,4 +18,5 @@ export const getResponse = async (props: ReponseProps) => {
   });
 
   console.log(res?.parsed);
+  return res?.parsed;
 }
