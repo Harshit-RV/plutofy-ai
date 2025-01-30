@@ -20,6 +20,7 @@ export interface AgentProps {
 export interface AgentDoc extends Document {
   name: string;
   userId: string;
+  agentId: string;
   description: string;
   modelName: string;
   modelCategory: string;
@@ -40,6 +41,7 @@ const agentSchema: Schema = new Schema(
   {
     name: { type: String, required: true },
     userId: { type: String, required: true },
+    agentId: { type: String, required: true, unique: true },
     description: { type: String, required: true },
     modelName: { type: String, required: true },
     modelCategory: { type: String, required: true },

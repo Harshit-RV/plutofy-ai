@@ -42,17 +42,17 @@ router.post('/create', async (req, res) : Promise<any> => {
 });
 
 // Get agents by user ID
-// router.get('/list/:userId', async (req, res) : Promise<any> => {
+router.get('/list/:userId', async (req, res) : Promise<any> => {
 
-//   const { userId } = req.query.params;
-//   // if (!userId) {
-//   //   return res.status(403).end();
-//   // }
+  const { userId } = req.params;
+  if (!userId) {
+    return res.status(403).end();
+  }
 
-//   const agents = await getAgentsByUserId(userId);
+  const agents = await getAgentsByUserId(userId);
 
-//   return res.json(agents);
-// });
+  return res.json(agents);
+});
 
 // Get agent by ID
 router.get('/:id', async (req, res) : Promise<any> => {

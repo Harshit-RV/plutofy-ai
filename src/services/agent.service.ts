@@ -1,7 +1,9 @@
 import Agent, { AgentDoc, AgentProps } from "../models/Agent.model";
+import { v4 as uuidv4 } from 'uuid';
 
 export const createNewAgent = async (args: AgentProps) : Promise<AgentDoc> => {
-  const agent = new Agent(args);
+  
+  const agent = new Agent({ ...args, agentId: uuidv4() });
   return agent.save();
 }
 

@@ -1,13 +1,6 @@
 import { z, ZodObject, ZodRawShape, ZodSchema } from "zod";
 import { OutputStructure } from "../models/Agent.model";
 
-// export interface RequiredFields {
-//   id: string,
-//   name: string;
-//   type: string;
-//   fields?: RequiredFields[]; // Optional subfields for nested objects
-// }
-
 /**
  * Function to generate a Zod schema dynamically
  * @param fields - Array of field definitions
