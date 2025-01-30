@@ -44,7 +44,7 @@ export const NavBarItem = (args: NavBarItemProps) => {
         <Link to={args.link} className="h-full  flex flex-col justify-between">
             <div></div> <div></div> <div></div>
             
-            <Button type="text" className={`rounded-lg font-mono font-semibold ${args.pathname == args.link ? ' text-black' : 'text-gray-500' } `}>{args.title}</Button>
+            <Button type="text" className={`rounded-lg font-semibold ${args.pathname == args.link ? ' text-black' : 'text-gray-500' } `}>{args.title}</Button>
             
             <div className={`h-0.5 ${args.pathname == args.link ? 'bg-black' : ''}`}></div>
         </Link>

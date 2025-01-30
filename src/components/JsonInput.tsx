@@ -126,7 +126,7 @@ export default function JsonBuilder() {
             </SelectContent>
           </Select>
           
-          <ButtonCN variant="outline" size="sm" className="h-10 hover:text-red-600" onClick={() => removeField(field.id)}>
+          <ButtonCN variant="outline" size="sm" className="h-10 text-red-600 hover:text-red-600" onClick={() => removeField(field.id)}>
             <X className="h-4 w-4" />
           </ButtonCN>
 
