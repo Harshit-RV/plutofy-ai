@@ -6,7 +6,7 @@ import { X, ChevronDown, ChevronRight } from "lucide-react"
 import { Input as InputAnt } from 'antd';
 import { OutputStructure } from "@/types/agent";
 
-type JsonValue = string | number | boolean | null | JsonValue[] | { [key: string]: JsonValue }
+export type JsonValue = string | number | boolean | null | JsonValue[] | { [key: string]: JsonValue }
 
 type Field = {
   id: string

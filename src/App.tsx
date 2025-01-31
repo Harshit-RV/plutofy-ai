@@ -29,7 +29,7 @@ function App() {
           <Route path="/sign-in" element={<SignInPage/>} />
           <Route path="/create" element={<AgentCreate/>} />
           <Route path="/sign-up" element={<SignUpPage/>} />
-          <Route path="/test/:agentId" element={<TestAgent/>} />
+          <Route path="/test/:agentDocId" element={<TestAgent/>} />
           {/* <Route path="/success" element={<Success/>} /> */}
 
         </Routes>

@@ -1,101 +1,186 @@
 import { ButtonCN } from "@/components/ui/buttoncn";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
-import { AgentDoc, AgentProps, OutputStructure } from "@/types/agent";
-import toast from "react-hot-toast";
-import { createAgent } from "@/utils/agent.utils";
-import AIDeploymentSuccess from "./Success";
+import { OutputStructure } from "@/types/agent";
+import { ChevronsUpDown, AlertCircle, Loader2 } from "lucide-react"
+import { getAgentByDocId, getCompletion } from "@/utils/agent.utils";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible"
+import { useNavigate, useParams } from "react-router-dom";
+import { useQuery } from "react-query";
+import { JsonValue } from "@/components/JsonInput";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 
 const AgentCreate = () => {
-  const [ formData, setFormData ] = useState<AgentProps>({
-    name: "Your AI Agent",
-    userId: "harshit-rai-verma", //TODO: get user id from auth
-    description: "this is the description",
-    modelName: "",
-    modelCategory: "",
-    instruction: "this is the basic instruction",
-    // description: "",
-    // modelName: "",
-    // modelCategory: "",
-    // instruction: "",
-    outputStructure: [],
-  })
 
-  const [ createdAgent, setCreatedAgent ] = useState<AgentDoc | null>(null);
+  const { agentDocId } = useParams();
+  const [ input, setInput ] = useState<string>("");
+  const [ output, setOutput ] = useState<string>("");
+  const navigate = useNavigate();
 
-  const onClick = async () => {
-    console.log(formData)
-    // const token: string | null = await getToken();
+  const fetchAgent = async () => {
+    // const token = await getToken();
+    const token = 'token'
+    if (!token) return;
+    return await getAgentByDocId({ agentDocId: agentDocId ?? 'something-random', token: token });
+  }
 
-    if (!formData.name || formData.name == '' || !formData.modelName || formData.modelName == '' || !formData.instruction || formData.instruction == '') {
-      toast.error('Please fill all details');
-      return;
+  const getJsonObject = (fields: OutputStructure[]): { [key: string]: JsonValue } => {
+    return fields.reduce(
+      (obj, field) => {
+        if (field.name) {
+          if (field.type === "object" && field.fields) {
+            obj[field.name] = getJsonObject(field.fields)
+          } else {
+            obj[field.name] = getDefaultValue(field.type)
+          }
+        }
+        return obj
+      },
+      {} as { [key: string]: JsonValue },
+    )
+  }
+
+  const getDefaultValue = (type: string): JsonValue => {
+    switch (type) {
+      case "string":
+        return ""
+      case "number":
+        return 0
+      case "boolean":
+        return false
+      case "object":
+        return {}
+      default:
+        return null
     }
+  }
 
-    const agent = await toast.promise(
-      createAgent({ agentProps: formData, token: '' }),
-       {
-         loading: 'Creating...',
-         success: <b>Agent Created</b>,
-         error: <b>Could not create agent.</b>,
-       }
-    );
+  const { data: agent, isLoading: agentLoading, isError: agentError } = useQuery(`agent-${agentDocId}`, fetchAgent);
 
-    setCreatedAgent(agent);
+  useEffect(() => {
+    setInput(JSON.stringify(({
+      agentId: agent?.agentId,
+      message: '',
+    }), null, 2));
+  }, [agent]);
+
+  const onClear = () => {
+    setInput(JSON.stringify(({
+      agentId: agent?.agentId,
+      message: '',
+    }), null, 2));
+    setOutput("");
+  }
+
+  const getResponse = async () => {
+    const response = await getCompletion(JSON.parse(input), '');
+    setOutput(JSON.stringify(response, null, 2));
+  }
+
+  if (agentError) {
+    return (
+      <div className='flex flex-col justify-center pb-[150px] items-center font-mono min-h-screen bg-gray-100 px-2.5 sm:px-6 md:px-10 lg:px-0'>
+        <Card className="w-full max-w-lg">
+          <CardHeader>
+            <div className="flex items-center justify-center mb-2">
+              <AlertCircle className="h-12 w-12 text-destructive" />
+            </div>
+            <CardTitle className="text-center text-2xl font-bold">400 Bad Request</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-center text-muted-foreground">
+              You're trying to access an agent that doesn't exist. Please check the agent ID and try again.
+            </p>
+          </CardContent>
+          <CardFooter className="flex justify-center">
+            <ButtonCN onClick={() => navigate('/')}>Go Back</ButtonCN>
+          </CardFooter>
+        </Card>
+      </div>
+    )
   }
 
   return (
-    createdAgent ? (
-      <AIDeploymentSuccess name={createdAgent.name} agentId={createdAgent.agentId} />
-    ) : 
+    !agentLoading || agent != undefined ? (
     <div className='flex flex-col font-mono min-h-screen bg-gray-100 px-2.5 sm:px-6 md:px-10 lg:px-0'>
           <div className=" flex justify-between items-center bg-white border px-48 pt-5 w-full py-5">
             <div className="flex flex-col w-full pr-20">
-              {/* <Input 
-                value={formData.name} 
-                disabled
-                onChange={(e) => setFormData({ ...formData, name: e.target.value})}
-                className="w-full bg-white my-2 font-bold text-xl border-none" 
-                placeholder="Name" 
-              /> */}
               <h2 className="w-full bg-white mx-3 my-2 font-bold text-xl border-none">
-                {formData.name} 
+                {agent?.name} 
               </h2>
               <p className="w-full bg-white mx-3 mt-2  text-gray-500 focus-visible:outline-gray-300 text-sm h-6 border-none">
-                {formData.description} 
+                {agent?.description} 
               </p>
             </div>
 
-            <ButtonCN onClick={onClick} variant={'outline'} className="w-[130px]">Edit</ButtonCN>
+            <ButtonCN variant={'outline'} className="w-[130px] border-gray-300">Edit</ButtonCN>
           </div>
 
-          <div className="flex flex-grow px-48 pt-10 w-full">
-            
-            <div className="w-full flex h-min gap-5 px-2">
-            {/* <div className="w-full flex  h-min my-6 py-3 pb-8 rounded-lg bg-gray-200 border"> */}
-              
-              <div className="flex flex-col w-full gap-1">
-                <h3 className="text-md text-gray-500 font-semibold">Input</h3>
-                <Textarea 
-                  className="drop-shadow-none shadow-sm font-sans min-h-[230px]"
-                />
-                <div className="flex justify-end gap-3 mt-2">
-                  <ButtonCN variant={'outline'} size={'sm'} className="">Clear</ButtonCN>
-                  <ButtonCN className="" size={'sm'}>Get Response</ButtonCN>
+          <div className="flex flex-col gap-10 flex-grow px-48 pt-6 w-full">
+
+              <Collapsible
+                className="w-full rounded-xl border space-y-2 bg-white p-4"
+              >
+                <div className="flex items-center space-x-4 px-2">
+                  <h4 className="text-sm font-semibold">
+                    Agent Config
+                  </h4>
+                  <CollapsibleTrigger asChild>
+                    <ButtonCN variant="ghost" size="sm">
+                      <ChevronsUpDown className="h-4 w-4" />
+                      <span className="sr-only">Toggle</span>
+                    </ButtonCN>
+                  </CollapsibleTrigger>
                 </div>
+                <CollapsibleContent className="flex gap-4 px-2">
+                  <div className="w-2/3 flex-grow p-2 border rounded-lg text-sm text-gray-600">
+                    {agent?.instruction} 
+                  </div>
+                  <pre className="bg-gray-100 border p-4 text-sm rounded-md overflow-auto">{JSON.stringify(getJsonObject(agent?.outputStructure ?? []), null, 2)}</pre>
+                </CollapsibleContent>
+              </Collapsible>
+
+            <div className="flex">
+              <div className="w-full flex h-min gap-5 ">
+                
+                <div className="flex flex-col w-full gap-1">
+                  <h3 className="text-md text-gray-500 font-semibold">Input</h3>
+                  <pre>
+                    <Textarea 
+                      value={input}
+                      onChange={(e) => setInput(e.target.value)}
+                      className="drop-shadow-none shadow-sm min-h-[230px]"
+                    />
+                  </pre>
+                  <div className="flex justify-end gap-3 mt-2">
+                    <ButtonCN variant={'outline'} size={'sm'} onClick={onClear}>Clear</ButtonCN>
+                    <ButtonCN className="" size={'sm'} onClick={getResponse}>Get Response</ButtonCN>
+                  </div>
+                </div>
+
+                <div className="flex flex-col w-full gap-1">
+                  <h3 className="text-md text-gray-500 font-semibold">Output</h3>
+                  <pre className="bg-white border mb-12 p-4 min-h-[230px] h-full text-sm rounded-md overflow-auto">{output}</pre>
+                </div>
+
               </div>
-
-
-              <div className="flex flex-col w-full gap-1">
-                <h3 className="text-md text-gray-500 font-semibold">Output</h3>
-                <Textarea 
-                  className="drop-shadow-none shadow-sm font-sans min-h-[230px]"
-                />
-              </div>
-
             </div>
           </div>
     </div>
+    ) : (
+      <div className="flex items-center justify-center min-h-[200px] w-full">
+        <Card className="w-[300px]">
+          <CardContent className="flex flex-col items-center justify-center p-6">
+            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            <p className="mt-4 text-center text-sm text-muted-foreground">Loading...</p>
+          </CardContent>
+        </Card>
+      </div>
+    )
   );
 }
 

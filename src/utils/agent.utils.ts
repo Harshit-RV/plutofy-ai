@@ -66,10 +66,10 @@ export const getAgentsByUserId = async (userId: string, token: string): Promise<
  * @param token - The authentication token for the request
  * @returns - The agent details
  */
-export const getAgentById = async (agentId: string, token: string): Promise<AgentDoc> => {
+export const getAgentByDocId = async ( { agentDocId, token }:{ agentDocId: string, token: string }): Promise<AgentDoc> => {
   try {
     const response = await axios.get(
-      `${API_URL}/agent/${agentId}`, 
+      `${API_URL}/agent/${agentDocId}`, 
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -156,6 +156,26 @@ export const updateAgent = async (agentId: string, updateFields: Partial<AgentPr
     return response.data;
   } catch (error) {
     console.error('Error updating agent:', error);
+    throw error;
+  }
+};
+
+export const getCompletion = async <T>(body: T, token: string): Promise<JSON> => {
+  try {
+    const response = await axios.post(
+      `${API_URL}/v1/completion`,
+      body,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    console.log(`Error getting completion:`, error);
     throw error;
   }
 };
