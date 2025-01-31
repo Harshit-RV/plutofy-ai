@@ -35,7 +35,8 @@ app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
   res.status(401).send('Unauthenticated!');
 });
 
-// Start the server
-app.listen(8080, () => {
-  console.log(`Server running on port 8080`);
+
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
