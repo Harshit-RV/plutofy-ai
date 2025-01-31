@@ -13,17 +13,17 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "react-query";
 import { JsonValue } from "@/components/JsonInput";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { useAuth } from "@clerk/clerk-react";
 
 const AgentCreate = () => {
-
+  const { getToken } = useAuth();
   const { agentDocId } = useParams();
   const [ input, setInput ] = useState<string>("");
   const [ output, setOutput ] = useState<string>("");
   const navigate = useNavigate();
 
   const fetchAgent = async () => {
-    // const token = await getToken();
-    const token = 'token'
+    const token = await getToken();
     if (!token) return;
     return await getAgentByDocId({ agentDocId: agentDocId ?? 'something-random', token: token });
   }

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { AgentDoc, AgentProps } from '../types/agent';
 
-const API_URL = "http://localhost:8080"
+const API_URL = "https://api.plutofy.live"
 
 /**
  * Function to create a new agent
@@ -9,14 +9,13 @@ const API_URL = "http://localhost:8080"
  * @param token - The authentication token for the request
  * @returns - The created agent
  */
-export const createAgent = async ( {agentProps, token} :{agentProps: AgentProps, token: string}): Promise<AgentDoc> => {
+export const createAgent = async ( {agentProps, token} :{agentProps: Omit<AgentProps, 'userId'>, token: string}): Promise<AgentDoc> => {
   try {
     console.log(`${API_URL}/agent/create`)
     const response = await axios.post(
       `${API_URL}/agent/create`, 
       {
         name: agentProps.name,
-        userId: agentProps.userId,
         description: agentProps.description,
         modelName: agentProps.modelName,
         modelCategory: agentProps.modelCategory,

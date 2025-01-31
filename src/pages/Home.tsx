@@ -7,12 +7,10 @@ import {
 } from "@/components/ui/card"
   
 import { Button } from "antd"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { MoreOutlined } from '@ant-design/icons';
 // import { useAuth } from "@clerk/clerk-react";
 import { useQuery } from 'react-query'
-// import { deleteMonitor, getList } from "../utils/monitor.utils";
-// import { AlertCondition } from "../types/monitor";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -24,28 +22,27 @@ import {
 import toast from "react-hot-toast";
 import { ButtonCN } from "@/components/ui/buttoncn";
 import { deleteAgent, getAllAgents } from "@/utils/agent.utils";
+import { useAuth } from "@clerk/clerk-react";
 
 export const Home = () => {
-    // const { getToken } = useAuth();
+    const { getToken } = useAuth();
 
     const fetchList = async () => {
-        // const token = await getToken();
-        const token = 'token'
+        const token = await getToken();
         if (!token) return;
         return await getAllAgents(token);
     }
 
     const onDelete = async ( agentId: string) => {
-        // const token = await getToken();
-        const token = ''
-        // if (!token) return;
+        const token = await getToken();
+        if (!token) return;
 
         await toast.promise(
             deleteAgent({ agentId: agentId, token: token }),
              {
                loading: 'Deleting...',
-               success: <b>Monitor Deleted</b>,
-               error: <b>Could not delete monitor.</b>,
+               success: <b>Agent Deleted</b>,
+               error: <b>Could not delete agent.</b>,
              }
            );
 
@@ -98,6 +95,7 @@ export const Home = () => {
 }
 
 const AgentCard = ({ name, description, agentDocId, onDelete } : { name: string, description: string, agentDocId: string, onDelete: (agentId: string) => void }) => {
+    const navigate = useNavigate();
     return (
         <Card>
             <CardHeader className="pt-6 pb-3">
@@ -118,7 +116,7 @@ const AgentCard = ({ name, description, agentDocId, onDelete } : { name: string,
             </CardContent>
             <CardFooter className="flex gap-4 pb-4 w-full justify-between">
                 <div className="flex gap-4">
-                    <ButtonCN variant={'secondary'} size={'sm'} className=" border-gray-400 px-7 h-7">Test</ButtonCN>
+                    <ButtonCN onClick={() => navigate(`/test/${agentDocId}`)} variant={'secondary'} size={'sm'} className=" border-gray-400 px-7 h-7">Test</ButtonCN>
                     <ButtonCN variant={'secondary'} size={'sm'} className=" border-gray-400 px-7 h-7">Edit</ButtonCN>
                 </div>
                 <ButtonCN variant={'default'} size={'sm'} className="h-8 px-4">Connect</ButtonCN>

@@ -10,7 +10,6 @@ import { ReactNode } from "react";
 import { NavBar } from "./components/NavBar";
 import { Toaster } from "react-hot-toast";
 import AgentCreate from "./pages/AgentCreate";
-import TestPage from "./pages/TestPage";
 import TestAgent from "./pages/TestAgent";
 
 function App() {
@@ -27,11 +26,9 @@ function App() {
         <Routes>
           <Route path="/" element= { <ProtectedRoute child={<Home/>} /> }/>
           <Route path="/sign-in" element={<SignInPage/>} />
-          <Route path="/create" element={<AgentCreate/>} />
+          <Route path="/create" element={ <ProtectedRoute child={<AgentCreate/>} />} />
           <Route path="/sign-up" element={<SignUpPage/>} />
-          <Route path="/test/:agentDocId" element={<TestAgent/>} />
-          {/* <Route path="/success" element={<Success/>} /> */}
-
+          <Route path="/test/:agentDocId" element={<ProtectedRoute child={<TestAgent/>} />} />
         </Routes>
       {/* </ScrollArea> */}
       

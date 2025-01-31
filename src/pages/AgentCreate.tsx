@@ -23,11 +23,13 @@ import { AgentDoc, AgentProps, OutputStructure } from "@/types/agent";
 import toast from "react-hot-toast";
 import { createAgent } from "@/utils/agent.utils";
 import AIDeploymentSuccess from "./Success";
+import { useAuth } from "@clerk/clerk-react";
 
 const AgentCreate = () => {
-  const [ formData, setFormData ] = useState<AgentProps>({
+  const { getToken } = useAuth();
+  
+  const [ formData, setFormData ] = useState<Omit<AgentProps, 'userId'>>({
     name: "Your AI Agent",
-    userId: "harshit-rai-verma", //TODO: get user id from auth
     description: "this is the description",
     modelName: "",
     modelCategory: "",
@@ -47,7 +49,8 @@ const AgentCreate = () => {
 
   const onClick = async () => {
     console.log(formData)
-    // const token: string | null = await getToken();
+    const token: string | null = await getToken();
+    if (!token) return;
 
     if (!formData.name || formData.name == '' || !formData.modelName || formData.modelName == '' || !formData.instruction || formData.instruction == '') {
       toast.error('Please fill all details');
@@ -55,7 +58,7 @@ const AgentCreate = () => {
     }
 
     const agent = await toast.promise(
-      createAgent({ agentProps: formData, token: '' }),
+      createAgent({ agentProps: formData, token: token }),
        {
          loading: 'Creating...',
          success: <b>Agent Created</b>,
