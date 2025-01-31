@@ -9,6 +9,7 @@ import {
 } from '../services/agent.service';
 import { AgentDoc, AgentProps } from '../models/Agent.model';
 import { getResponse } from '../utils/getAiResponse';
+import { isObjectIdOrHexString, isValidObjectId } from 'mongoose';
 
 const router = express.Router();
 
@@ -16,10 +17,9 @@ const router = express.Router();
 // Create a new agent
 router.post('/create', async (req, res) : Promise<any> => {
   try {
-
     const { name, userId, description, modelName, modelCategory, instruction, outputStructure } = req.body;
 
-    if (!name || !description || !modelName || !modelCategory || !instruction || !outputStructure) {
+    if (!name || !description || !modelName || !instruction || !outputStructure) {
       return res.status(400).json({ message: 'Missing required fields' });
     }
 
@@ -37,69 +37,84 @@ router.post('/create', async (req, res) : Promise<any> => {
 
     return res.status(201).json(agentDoc);
   } catch (err) {
-    return res.status(500).json(err);
+    console.log(err);
+    return res.status(500).json({error :'Something went wrong'});
   }
 });
 
 // Get agents by user ID
 router.get('/list/:userId', async (req, res) : Promise<any> => {
-
-  const { userId } = req.params;
-  if (!userId) {
-    return res.status(403).end();
-  }
-
-  const agents = await getAgentsByUserId(userId);
-
-  return res.json(agents);
-});
-
-// Get agent by ID
-router.get('/:id', async (req, res) : Promise<any> => {
-  const { id } = req.params;
-
-  const agent = await getAgentById(id);
-  if (!agent) {
-    return res.status(404).json({ message: 'Agent not found' });
+  try {
+    const { userId } = req.params;
+    if (!userId) {
+      return res.status(403).end();
+    }
+  
+    const agents = await getAgentsByUserId(userId);
+  
+    return res.json(agents);
+  } catch (e) {
+    console.log(e);
+    return res.status(500).json({error :'Something went wrong'});
   }
   
-
-  // await getResponse({
-  //   fields: agent.outputStructure,
-  //   instruction: "You are a security system. Given a name and age, you need to respond whether user can be admin or not. Anyone above 18 can be admin.",
-  //   prompt: "name : aayushi, age : 17",
-  // });
-
-  return res.json(agent);
-});
-
-// Delete an agent
-router.post('/delete', async (req, res) : Promise<any> => {
-
-  const { agentId, userId } = req.body;
-
-  if (!agentId) {
-    return res.status(400).json({ message: 'Missing required fields' });
-  }
-
-  const agent = await getAgentById(agentId);
-  if (!agent) {
-    return res.status(400).json({ message: 'No agent found' });
-  }
-
-  if (agent.userId !== userId) {
-    return res.status(403).end();
-  }
-
-  await deleteAgent(agentId);
-
-  res.status(200).end();
 });
 
 // Get all agents (admin or for specific user)
 router.get('/all', async (req, res) : Promise<any> => {
   const agents = await getAllAgents();
   return res.json(agents);
+});
+
+// Get agent by ID
+router.get('/:id', async (req, res) : Promise<any> => {
+  try {
+    const { id } = req.params;
+
+    const isValidId = isValidObjectId(id)
+    if (!isValidId) {
+      return res.status(404).json({ message: 'Agent not found' });
+    }
+
+    const agent = await getAgentById(id);
+    if (!agent) {
+      return res.status(404).json({ message: 'Agent not found' });
+    }
+
+    return res.json(agent);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({error :'Something went wrong'});
+  }
+});
+
+// Delete an agent
+router.post('/delete', async (req, res) : Promise<any> => {
+  try {
+    const { agentId } = req.body;
+
+    if (!agentId) {
+      return res.status(400).json({ message: 'Missing required fields' });
+    }
+    const isValidId = isValidObjectId(agentId)
+    if (!isValidId) {
+      return res.status(404).json({ message: 'Agent not found' });
+    }
+
+    const agent = await getAgentById(agentId);
+    if (!agent) {
+      return res.status(400).json({ message: 'No agent found' });
+    }
+
+    await deleteAgent(agentId);
+
+    res.status(200).end();
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({error :'Something went wrong'});
+  }
+
+  
 });
 
 // Update an agent

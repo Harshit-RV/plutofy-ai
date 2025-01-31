@@ -19,7 +19,7 @@ router.post('/', async (req, res) : Promise<any> => {
   try {
     const { agentId, message } = req.body;
 
-    if (!agentId || !message) {
+    if (!agentId) {
       return res.status(400).json({error: "Missing required fields"})
     }
 

@@ -44,7 +44,7 @@ const agentSchema: Schema = new Schema(
     agentId: { type: String, required: true, unique: true },
     description: { type: String, required: true },
     modelName: { type: String, required: true },
-    modelCategory: { type: String, required: true },
+    modelCategory: { type: String },
     instruction: { type: String, required: true },
     outputStructure: { type: [outputSchema], required: true },
   },
