@@ -7,17 +7,21 @@ import {
   getAllAgents, 
   updateAgent 
 } from '../services/agent.service';
-import { AgentDoc, AgentProps } from '../models/Agent.model';
-import { getResponse } from '../utils/getAiResponse';
-import { isObjectIdOrHexString, isValidObjectId } from 'mongoose';
+import { AgentProps } from '../models/Agent.model';
+import { isValidObjectId } from 'mongoose';
+import { getAuth, requireAuth } from '@clerk/express';
 
 const router = express.Router();
-
+router.use(requireAuth())
 
 // Create a new agent
 router.post('/create', async (req, res) : Promise<any> => {
   try {
-    const { name, userId, description, modelName, modelCategory, instruction, outputStructure } = req.body;
+    const { userId } = getAuth(req);
+    if (!userId) {
+      return res.status(401).end();
+    }
+    const { name, description, modelName, modelCategory, instruction, outputStructure } = req.body;
 
     if (!name || !description || !modelName || !instruction || !outputStructure) {
       return res.status(400).json({ message: 'Missing required fields' });
@@ -43,11 +47,11 @@ router.post('/create', async (req, res) : Promise<any> => {
 });
 
 // Get agents by user ID
-router.get('/list/:userId', async (req, res) : Promise<any> => {
+router.get('/list/user', async (req, res) : Promise<any> => {
   try {
-    const { userId } = req.params;
+    const { userId } = getAuth(req);
     if (!userId) {
-      return res.status(403).end();
+      return res.status(401).end();
     }
   
     const agents = await getAgentsByUserId(userId);
@@ -69,6 +73,10 @@ router.get('/all', async (req, res) : Promise<any> => {
 // Get agent by ID
 router.get('/:id', async (req, res) : Promise<any> => {
   try {
+    const { userId } = getAuth(req);
+    if (!userId) {
+      return res.status(401).end();
+    }
     const { id } = req.params;
 
     const isValidId = isValidObjectId(id)
@@ -78,6 +86,10 @@ router.get('/:id', async (req, res) : Promise<any> => {
 
     const agent = await getAgentById(id);
     if (!agent) {
+      return res.status(404).json({ message: 'Agent not found' });
+    }
+
+    if (agent.userId !== userId) {
       return res.status(404).json({ message: 'Agent not found' });
     }
 
@@ -91,6 +103,11 @@ router.get('/:id', async (req, res) : Promise<any> => {
 // Delete an agent
 router.post('/delete', async (req, res) : Promise<any> => {
   try {
+    const { userId } = getAuth(req);
+    if (!userId) {
+      return res.status(401).end();
+    }
+
     const { agentId } = req.body;
 
     if (!agentId) {
@@ -102,8 +119,11 @@ router.post('/delete', async (req, res) : Promise<any> => {
     }
 
     const agent = await getAgentById(agentId);
+    if (agent?.userId !== userId) {
+      return res.status(404).json({ message: 'Agent not found' });
+    }
     if (!agent) {
-      return res.status(400).json({ message: 'No agent found' });
+      return res.status(404).json({ message: 'No agent found' });
     }
 
     await deleteAgent(agentId);
@@ -121,8 +141,18 @@ router.post('/delete', async (req, res) : Promise<any> => {
 router.post('/update', async (req, res) : Promise<any> => {
   const { agentId, updateFields } = req.body;
 
+  const { userId } = getAuth(req);
+  if (!userId) {
+    return res.status(401).end();
+  }
+
   if (!agentId || !updateFields) {
     return res.status(400).json({ message: 'Missing required fields' });
+  }
+
+  const agent = await getAgentById(agentId);
+  if (agent?.userId !== userId) {
+    return res.status(404).json({ message: 'Agent not found' });
   }
 
   const updatedAgent = await updateAgent(agentId, updateFields);
