@@ -19,35 +19,75 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { AgentDoc, AgentProps, OutputStructure } from "@/types/agent";
+import toast from "react-hot-toast";
+import { createAgent } from "@/utils/agent.utils";
+import AIDeploymentSuccess from "./Success";
 
 const AgentCreate = () => {
+  const [ formData, setFormData ] = useState<AgentProps>({
+    name: "Your AI Agent",
+    userId: "harshit-rai-verma", //TODO: get user id from auth
+    description: "this is the description",
+    modelName: "",
+    modelCategory: "",
+    instruction: "this is the basic instruction",
+    // description: "",
+    // modelName: "",
+    // modelCategory: "",
+    // instruction: "",
+    outputStructure: [],
+  })
 
-  const [ agentName, setAgentName ] = useState('Your AI Agent');
-  const [ agentDescription, setAgentDescription ] = useState('');
+  const setOutputStructure = (outputStructure : OutputStructure[]) => {
+    setFormData({...formData, outputStructure: outputStructure})
+  }
 
+  const [ createdAgent, setCreatedAgent ] = useState<AgentDoc | null>(null);
+
+  const onClick = async () => {
+    console.log(formData)
+    // const token: string | null = await getToken();
+
+    if (!formData.name || formData.name == '' || !formData.modelName || formData.modelName == '' || !formData.instruction || formData.instruction == '') {
+      toast.error('Please fill all details');
+      return;
+    }
+
+    const agent = await toast.promise(
+      createAgent({ agentProps: formData, token: '' }),
+       {
+         loading: 'Creating...',
+         success: <b>Agent Created</b>,
+         error: <b>Could not create agent.</b>,
+       }
+    );
+
+    setCreatedAgent(agent);
+  }
 
   return (
+    createdAgent ? (
+      <AIDeploymentSuccess name={createdAgent.name} agentId={createdAgent.agentId} />
+    ) : 
     <div className='flex flex-col font-mono min-h-screen bg-gray-100 px-2.5 sm:px-6 md:px-10 lg:px-0'>
           <div className=" flex justify-between items-center bg-white border px-48 pt-5 w-full py-5">
             <div className="flex flex-col w-full pr-20">
-              {/* <ButtonCN variant={'outline'} className="h-7 max-w-20 mb-2.5">Back</ButtonCN> */}
               <Input 
-                value={agentName} 
-                onChange={(e) => setAgentName(e.target.value)}
+                value={formData.name} 
+                onChange={(e) => setFormData({ ...formData, name: e.target.value})}
                 className="w-full bg-white my-2 font-bold text-xl border-none" 
-                // className="w-full my-2 py-6 font-bold text-xl" 
-                placeholder="Title" 
+                placeholder="Name" 
               />
               <Input 
-                value={agentDescription}
-                onChange={(e) => setAgentDescription(e.target.value)}
+                value={formData.description}
+                onChange={(e) => setFormData({ ...formData, description: e.target.value})}
                 className="w-full bg-white text-gray-500 focus-visible:outline-gray-300 text-sm h-6 border-none" 
-                // className="w-full text-gray-500 focus-visible:outline-gray-300 text-sm" 
                 placeholder="Write description here" 
               />
             </div>
 
-            <ButtonCN className="w-[130px]">Deploy</ButtonCN>
+            <ButtonCN onClick={onClick} className="w-[130px]">Deploy</ButtonCN>
           </div>
 
           <div className="flex flex-grow px-48 gap-10 w-full">
@@ -55,7 +95,7 @@ const AgentCreate = () => {
               
               <div className="bg-black bg-opacity-80 text-white border shadow-sm gap-20 rounded-xl flex justify-between items-center py-4 px-6">
                 <p className="flex items-center gap-2"> <LuBrainCircuit size={20} /> Model</p>
-                <Select>
+                <Select value={formData.modelName} onValueChange={(value) => setFormData({...formData, modelName: value})}>
                   <SelectTrigger className="w-full bg-white text-black h-8">
                     <SelectValue placeholder="select model" />
                   </SelectTrigger>
@@ -83,9 +123,11 @@ const AgentCreate = () => {
                 </CardHeader>
                 <CardContent className="py-0 pb-4">
                   <Textarea 
-                        placeholder="e.g. given the age of the candidate, return whether they are eligible for voting" 
-                        className="bg-gray-100 drop-shadow-none shadow-sm min-h-[120px] focus-visible:outline-gray-300 focus-visible:ring-gray-400 focus-visible:ring-1 outline-gray-300"
-                      />
+                    value={formData.instruction}
+                    onChange={(e) => setFormData({ ...formData, instruction: e.target.value})}
+                    placeholder="e.g. given the age of the candidate, return whether they are eligible for voting" 
+                    className="bg-gray-100 drop-shadow-none shadow-sm min-h-[120px] focus-visible:outline-gray-300 focus-visible:ring-gray-400 focus-visible:ring-1 outline-gray-300"
+                  />
                 </CardContent>
               </Card>
 
@@ -96,7 +138,7 @@ const AgentCreate = () => {
                     </CardTitle>
                 </CardHeader>
                 <CardContent className="py-0 pb-4">
-                  <JsonBuilder />
+                  <JsonBuilder setOutputStructure={setOutputStructure}/>
                 </CardContent>
               </Card>
 

@@ -4,10 +4,10 @@ import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { ButtonCN } from "@/components/ui/buttoncn"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Terminal, Copy, CheckCircle, Rocket, Settings, Share2, ChevronRight, ChevronLeft } from "lucide-react"
+import { Terminal, Copy, CheckCircle, Rocket, Share2, ChevronRight, ChevronLeft } from "lucide-react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
-export default function AIDeploymentSuccess() {
+export default function AIDeploymentSuccess( { agentId, name } : { agentId: string, name: string} ) {
   const [isExpanded, setIsExpanded] = useState(false)
 
   return (
@@ -25,11 +25,11 @@ export default function AIDeploymentSuccess() {
             <div className="bg-gray-100 rounded-lg p-4 mb-4">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-sm font-medium text-gray-500">Agent Name:</span>
-                <span className="text-sm font-semibold">SmartAssistant v1.0</span>
+                <span className="text-sm font-semibold">{name}</span>
               </div>
               <div className="flex items-center justify-between mb-2">
-                <span className="text-sm font-medium text-gray-500">Deployment ID:</span>
-                <span className="text-sm font-mono">dep_8f9z2x7y1w</span>
+                <span className="text-sm font-medium text-gray-500">Agent ID:</span>
+                <span className="text-sm font-mono">{agentId}</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm font-medium text-gray-500">Status:</span>
@@ -44,9 +44,9 @@ export default function AIDeploymentSuccess() {
               {isExpanded ? <ChevronLeft className="ml-2 h-4 w-4" /> : <ChevronRight className="ml-2 h-4 w-4" />}
             </ButtonCN>
             <div className="flex space-x-2 w-full">
-              <ButtonCN variant="outline" className="flex-1">
+              {/* <ButtonCN variant="outline" className="flex-1">
                 <Settings className="mr-2 h-4 w-4" /> Edit
-              </ButtonCN>
+              </ButtonCN> */}
               <ButtonCN variant="outline" className="flex-1">
                 <Share2 className="mr-2 h-4 w-4" /> Share
               </ButtonCN>
@@ -106,7 +106,7 @@ function ConnectCard() {
 
 
           {/* <h3 className="font-semibold text-lg">Step 2: Connect to your agent</h3> */}
-          <div className="bg-gray-800 h-full mb-16 text-gray-100 p-4 rounded-md overflow-auto">
+          <div className="bg-gray-800 h-full mb-16 text-gray-100 p-4 rounded-md overflow-auto relative">
             <pre className="text-sm font-mono">
               <code>
 {`curl -X GET "https://api.plutofy.live/v1/<agent-id>" \\
@@ -118,7 +118,7 @@ function ConnectCard() {
   }'`}
 </code>
             </pre>
-            <ButtonCN variant="ghost" size="sm" className="absolute top-2 right-2 text-gray-400 hover:text-white">
+            <ButtonCN variant="ghost" size="sm" className="absolute bottom-2 right-2 text-gray-400 hover:text-white">
               <Copy className="h-4 w-4" />
             </ButtonCN>
           </div>

@@ -6,7 +6,7 @@ import {
 import { Textarea } from "./ui/textarea"
 import { ButtonCN } from "./ui/buttoncn";
 import { useAuth } from '@clerk/clerk-react';
-import { postFeedback } from "../utils/monitor.utils";
+// import { postFeedback } from "../utils/monitor.utils";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { Rate } from 'antd';
@@ -25,14 +25,14 @@ export const FeedbackComponent = () => {
       return;
     }
     
-    await toast.promise(
-      postFeedback(rating, feedback, token),
-       {
-         loading: 'Sending feedback...',
-         success: <b>Thank you for your feedback</b>,
-         error: <b>Something went wrong</b>,
-       }
-     );
+    // await toast.promise(
+    //   postFeedback(rating, feedback, token),
+    //    {
+    //      loading: 'Sending feedback...',
+    //      success: <b>Thank you for your feedback</b>,
+    //      error: <b>Something went wrong</b>,
+    //    }
+    //  );
   }
 
     return (

@@ -1,9 +1,10 @@
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { ButtonCN } from "@/components/ui/buttoncn"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { X, ChevronDown, ChevronRight } from "lucide-react"
 import { Input as InputAnt } from 'antd';
+import { OutputStructure } from "@/types/agent";
 
 type JsonValue = string | number | boolean | null | JsonValue[] | { [key: string]: JsonValue }
 
@@ -14,8 +15,14 @@ type Field = {
   fields?: Field[]
   isExpanded?: boolean
 }
+// export interface OutputStructure {
+//   id: string;
+//   name: string;
+//   type: string;
+//   fields?: OutputStructure[];
+// }
 
-export default function JsonBuilder() {
+export default function JsonBuilder( { setOutputStructure }:{ setOutputStructure : (outputStructure: OutputStructure[]) => void } ) {
   const [fields, setFields] = useState<Field[]>([])
 
   const addField = (parentId: string | null = null) => {
@@ -91,6 +98,21 @@ export default function JsonBuilder() {
       })),
     )
   }
+
+  const convertFieldsToOutputStructure = (fields: Field[]): OutputStructure[] => {
+    return fields.map(({ id, name, type, fields }) => ({
+      id,
+      name,
+      type,
+      fields: fields ? convertFieldsToOutputStructure(fields) : undefined,
+    }));
+  };
+
+  useEffect(() => {
+    const outputStructure: OutputStructure[] = convertFieldsToOutputStructure(fields);
+    setOutputStructure(outputStructure);
+    console.log('fields changed')
+  }, [fields])
 
   const renderField = (field: Field, depth = 0) => {
     return (
