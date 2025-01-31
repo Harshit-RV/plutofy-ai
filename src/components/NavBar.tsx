@@ -1,7 +1,7 @@
 import { SignedIn, UserButton } from "@clerk/clerk-react";
 import { Button } from "antd";
 import { Link, useLocation } from "react-router-dom";
-import { FeedbackComponent } from "./FeedbackComponent";
+// import { FeedbackComponent } from "./FeedbackComponent";
 
 export const NavBar = () => {
     const location = useLocation();
@@ -15,7 +15,7 @@ export const NavBar = () => {
                   <div className="sm:flex h-full hidden">
                     <NavBarItem pathname={location.pathname} link="/" title="Home" />
                     <NavBarItem pathname={location.pathname} link="/create" title="Create Agent" />
-                    <NavBarItem pathname={location.pathname} link="/test/1" title="Test" />
+                    {/* <NavBarItem pathname={location.pathname} link="/test/1" title="Test" /> */}
                     {/* <NavBarItem pathname={location.pathname} link="/create2" title="Create Agent 2" />
                     <NavBarItem pathname={location.pathname} link="/test" title="Tests" /> */}
                   </div>
@@ -23,7 +23,7 @@ export const NavBar = () => {
                 
   
                 <div className="h-full flex items-center gap-5">
-                  <FeedbackComponent />
+                  {/* <FeedbackComponent /> */}
                   <UserButton />
                 </div>
   
