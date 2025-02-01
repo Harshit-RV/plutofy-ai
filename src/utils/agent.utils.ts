@@ -42,10 +42,10 @@ export const createAgent = async ( {agentProps, token} :{agentProps: Omit<AgentP
  * @param token - The authentication token for the request
  * @returns - List of agents for the given user
  */
-export const getAgentsByUserId = async (userId: string, token: string): Promise<AgentDoc[]> => {
+export const getAgentsByUserId = async (token: string): Promise<AgentDoc[]> => {
   try {
     const response = await axios.get(
-      `${API_URL}/agent/list/${userId}`, 
+      `${API_URL}/agent/list/user`, 
       {
         headers: {
           Authorization: `Bearer ${token}`,

@@ -21,7 +21,7 @@ import {
   } from "../components/ui/dropdown-menu"
 import toast from "react-hot-toast";
 import { ButtonCN } from "@/components/ui/buttoncn";
-import { deleteAgent, getAllAgents } from "@/utils/agent.utils";
+import { deleteAgent, getAgentsByUserId } from "@/utils/agent.utils";
 import { useAuth } from "@clerk/clerk-react";
 
 export const Home = () => {
@@ -30,7 +30,7 @@ export const Home = () => {
     const fetchList = async () => {
         const token = await getToken();
         if (!token) return;
-        return await getAllAgents(token);
+        return await getAgentsByUserId(token);
     }
 
     const onDelete = async ( agentId: string) => {
@@ -47,6 +47,10 @@ export const Home = () => {
            );
 
         refetchAgents();
+    }
+
+    const onEdit = () => {
+        toast.success('Coming soon..')
     }
 
     const { data: agents, isLoading: agentsLoading, refetch: refetchAgents } = useQuery('agents', fetchList);
@@ -78,6 +82,7 @@ export const Home = () => {
                             description={agent.description}
                             agentDocId={agent._id}
                             onDelete={onDelete}
+                            onEdit={onEdit}
                         />
                         )
                     ) 
@@ -94,7 +99,7 @@ export const Home = () => {
     )
 }
 
-const AgentCard = ({ name, description, agentDocId, onDelete } : { name: string, description: string, agentDocId: string, onDelete: (agentId: string) => void }) => {
+const AgentCard = ({ name, description, agentDocId, onDelete, onEdit } : { name: string, description: string, agentDocId: string, onDelete: (agentId: string) => void, onEdit: () => void }) => {
     const navigate = useNavigate();
     return (
         <Card>
@@ -117,7 +122,7 @@ const AgentCard = ({ name, description, agentDocId, onDelete } : { name: string,
             <CardFooter className="flex gap-4 pb-4 w-full justify-between">
                 <div className="flex gap-4">
                     <ButtonCN onClick={() => navigate(`/test/${agentDocId}`)} variant={'secondary'} size={'sm'} className=" border-gray-400 px-7 h-7">Test</ButtonCN>
-                    <ButtonCN variant={'secondary'} size={'sm'} className=" border-gray-400 px-7 h-7">Edit</ButtonCN>
+                    <ButtonCN onClick={onEdit} variant={'secondary'} size={'sm'} className=" border-gray-400 px-7 h-7">Edit</ButtonCN>
                 </div>
                 <ButtonCN variant={'default'} size={'sm'} className="h-8 px-4">Connect</ButtonCN>
             </CardFooter>
