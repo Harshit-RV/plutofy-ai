@@ -4,14 +4,15 @@ import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { ButtonCN } from "@/components/ui/buttoncn"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Terminal, Copy, CheckCircle, Rocket, Share2, ChevronRight, ChevronLeft } from "lucide-react"
+import { Terminal, Copy, CheckCircle, Rocket, ChevronRight, ChevronLeft } from "lucide-react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Link } from "react-router-dom"
 
 export default function AIDeploymentSuccess( { agentId, name } : { agentId: string, name: string} ) {
   const [isExpanded, setIsExpanded] = useState(false)
 
   return (
-    <div className="min-h-screen bg-gray-100 font-mono flex items-center justify-center p-4 pb-24">
+    <div className="min-h-screen bg-gray-100 font-mono flex items-center justify-center p-4 pb-32">
       <div className="flex h-min">
         <Card className="w-full h-min max-w-lg p-[1.5vh]">
           <CardHeader className="text-center">
@@ -47,9 +48,11 @@ export default function AIDeploymentSuccess( { agentId, name } : { agentId: stri
               {/* <ButtonCN variant="outline" className="flex-1">
                 <Settings className="mr-2 h-4 w-4" /> Edit
               </ButtonCN> */}
-              <ButtonCN variant="outline" className="flex-1">
-                <Share2 className="mr-2 h-4 w-4" /> Share
-              </ButtonCN>
+              <Link to={"/"} className="flex-1">
+                <ButtonCN variant="outline" className="w-full">
+                  Go to Dashboard
+                </ButtonCN>
+              </Link>
             </div>
           </CardFooter>
         </Card>

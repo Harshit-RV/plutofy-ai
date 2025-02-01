@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/card"
   
 import { Button } from "antd"
+import { Bot } from "lucide-react"
 import { Link, useNavigate } from "react-router-dom"
 import { MoreOutlined } from '@ant-design/icons';
 // import { useAuth } from "@clerk/clerk-react";
@@ -23,6 +24,7 @@ import toast from "react-hot-toast";
 import { ButtonCN } from "@/components/ui/buttoncn";
 import { deleteAgent, getAgentsByUserId } from "@/utils/agent.utils";
 import { useAuth } from "@clerk/clerk-react";
+import { AgentCardSkeleton } from "@/components/AgentCardSkeleton";
 
 export const Home = () => {
     const { getToken } = useAuth();
@@ -50,7 +52,7 @@ export const Home = () => {
     }
 
     const onEdit = () => {
-        toast.success('Coming soon..')
+        toast('Coming soon..')
     }
 
     const { data: agents, isLoading: agentsLoading, refetch: refetchAgents } = useQuery('agents', fetchList);
@@ -76,21 +78,22 @@ export const Home = () => {
                 {
                     !agentsLoading || agents != undefined
                     ?
-                    agents?.map((agent) => (
-                        <AgentCard 
-                            name={agent.name} 
-                            description={agent.description}
-                            agentDocId={agent._id}
-                            onDelete={onDelete}
-                            onEdit={onEdit}
-                        />
+                        agents?.length == 0 
+                        ? <NoAgentYetCard />
+                        : agents?.map((agent) => (
+                            <AgentCard 
+                                name={agent.name} 
+                                description={agent.description}
+                                agentDocId={agent._id}
+                                onDelete={onDelete}
+                                onEdit={onEdit}
+                            />
                         )
                     ) 
                     : 
                     <>
-                        {/* <MonitorSkeleton/>
-                        <MonitorSkeleton/>
-                        <MonitorSkeleton/> */}
+                       <AgentCardSkeleton />
+                       <AgentCardSkeleton />
                     </>
                 }
                 </div>
@@ -126,6 +129,24 @@ const AgentCard = ({ name, description, agentDocId, onDelete, onEdit } : { name:
                 </div>
                 <ButtonCN variant={'default'} size={'sm'} className="h-8 px-4">Connect</ButtonCN>
             </CardFooter>
+        </Card>
+    )
+}
+
+const NoAgentYetCard = () => {
+    return (
+        <Card className="w-full col-span-2 shadow-none">
+            <CardContent className="flex flex-col items-center justify-center space-y-4 py-8">
+                <Bot className="w-16 h-16 text-gray-400" />
+                <h2 className="text-2xl font-semibold text-gray-800">No agents yet</h2>
+                <p className="text-gray-500 pb-2">Create your first agent to get started</p>
+                
+                <Link to="/create">
+                    <ButtonCN className="px-5">
+                        Create Agent
+                    </ButtonCN>
+                </Link>
+            </CardContent>
         </Card>
     )
 }
