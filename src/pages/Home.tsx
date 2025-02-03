@@ -75,7 +75,7 @@ export const Home = () => {
                 </div>
                 
 
-                <div className="mt-3 sm:mt-7 grid sm:grid-cols-2 gap-5">
+                <div className="mt-6 sm:mt-7 grid md:grid-cols-2 gap-5">
                 {
                     !agentsLoading || agents != undefined
                     ?
@@ -129,8 +129,8 @@ const AgentCard = ({ name, description, agentDocId, onDelete, onEdit } : { name:
             </CardContent>
             <CardFooter className="flex gap-4 pb-4 w-full justify-between">
                 <div className="flex gap-4">
-                    <ButtonCN onClick={() => navigate(`/test/${agentDocId}`)} variant={'secondary'} size={'sm'} className=" border-gray-400 px-7 h-7">Test</ButtonCN>
-                    <ButtonCN onClick={onEdit} variant={'secondary'} size={'sm'} className=" border-gray-400 px-7 h-7">Edit</ButtonCN>
+                    <ButtonCN onClick={() => navigate(`/test/${agentDocId}`)} variant={'secondary'} size={'sm'} className=" border-gray-400 px-4 sm:px-7 h-7">Test</ButtonCN>
+                    <ButtonCN onClick={onEdit} variant={'secondary'} size={'sm'} className=" border-gray-400 px-4 sm:px-7 h-7">Edit</ButtonCN>
                 </div>
                 {/* <ButtonCN variant={'default'} size={'sm'} className="h-8 px-4">Connect</ButtonCN> */}
                 <ConnectToAgentDialogBox />
