@@ -76,7 +76,7 @@ export default function AIDeploymentSuccess( { agentId, name } : { agentId: stri
 }
 
 
-function ConnectCard() {
+export function ConnectCard() {
   return (
     <Card className="h-full w-[500px] overflow-hidden">
       <CardHeader className="bg-gradient-to-r py-4 from-gray-900 via-gray-800 to-gray-700 text-white">

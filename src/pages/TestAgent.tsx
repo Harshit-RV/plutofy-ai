@@ -20,6 +20,7 @@ const AgentCreate = () => {
   const { agentDocId } = useParams();
   const [ input, setInput ] = useState<string>("");
   const [ output, setOutput ] = useState<string>("");
+  const [ loading, setLoading ] = useState<boolean>(false);
   const navigate = useNavigate();
 
   const fetchAgent = async () => {
@@ -77,8 +78,10 @@ const AgentCreate = () => {
   }
 
   const getResponse = async () => {
+    setLoading(true);
     const response = await getCompletion(JSON.parse(input), '');
     setOutput(JSON.stringify(response, null, 2));
+    setLoading(false);
   }
 
   if (agentError) {
@@ -109,10 +112,10 @@ const AgentCreate = () => {
     <div className='flex flex-col font-mono min-h-screen bg-gray-100 px-2.5 sm:px-6 md:px-10 lg:px-0'>
           <div className=" flex justify-between items-center bg-white border px-48 pt-5 w-full py-5">
             <div className="flex flex-col w-full pr-20">
-              <h2 className="w-full bg-white mx-3 my-2 font-bold text-xl border-none">
+              <h2 className="w-full bg-white mx-1 my-2 font-bold text-xl border-none">
                 {agent?.name} 
               </h2>
-              <p className="w-full bg-white mx-3 mt-2  text-gray-500 focus-visible:outline-gray-300 text-sm h-6 border-none">
+              <p className="w-full bg-white mx-1 mt-2  text-gray-500 focus-visible:outline-gray-300 text-sm border-none">
                 {agent?.description} 
               </p>
             </div>
@@ -120,7 +123,7 @@ const AgentCreate = () => {
             <ButtonCN variant={'outline'} className="w-[130px] border-gray-300">Edit</ButtonCN>
           </div>
 
-          <div className="flex flex-col gap-10 flex-grow px-48 pt-6 w-full">
+          <div className="flex flex-col gap-7 flex-grow px-48 pt-6 w-full">
 
               <Collapsible
                 className="w-full rounded-xl border space-y-2 bg-white p-4"
@@ -147,7 +150,7 @@ const AgentCreate = () => {
             <div className="flex">
               <div className="w-full flex h-min gap-5 ">
                 
-                <div className="flex flex-col w-full gap-1">
+                <div className="flex flex-col w-1/2 gap-1">
                   <h3 className="text-md text-gray-500 font-semibold">Input</h3>
                   <pre>
                     <Textarea 
@@ -158,11 +161,19 @@ const AgentCreate = () => {
                   </pre>
                   <div className="flex justify-end gap-3 mt-2">
                     <ButtonCN variant={'outline'} size={'sm'} onClick={onClear}>Clear</ButtonCN>
-                    <ButtonCN className="" size={'sm'} onClick={getResponse}>Get Response</ButtonCN>
+
+                    <ButtonCN className="" disabled={loading} size={'sm'} onClick={getResponse}>
+                      {loading ? (
+                        <Loader2 className="animate-spin w-20"/> 
+                      ) : (
+                        <p> Get Response</p>
+                      )
+                      }
+                    </ButtonCN>
                   </div>
                 </div>
 
-                <div className="flex flex-col w-full gap-1">
+                <div className="flex flex-col w-1/2 gap-1">
                   <h3 className="text-md text-gray-500 font-semibold">Output</h3>
                   <pre className="bg-white border mb-12 p-4 min-h-[230px] h-full text-sm rounded-md overflow-auto">{output}</pre>
                 </div>

@@ -25,19 +25,20 @@ import { createAgent } from "@/utils/agent.utils";
 import AIDeploymentSuccess from "./Success";
 import { useAuth } from "@clerk/clerk-react";
 
+const llmsList = [
+  { modelCategory: "OpenAI", models: ["gpt-3.5", "gpt-4o-2024-08-06", "gpt-babbage"] },
+  { modelCategory: "Gemini", models: ["Gemini o"] },
+]
+
 const AgentCreate = () => {
   const { getToken } = useAuth();
   
   const [ formData, setFormData ] = useState<Omit<AgentProps, 'userId'>>({
-    name: "Your AI Agent",
-    description: "this is the description",
+    name: "Untitled Agent",
+    description: "",
     modelName: "",
     modelCategory: "",
-    instruction: "this is the basic instruction",
-    // description: "",
-    // modelName: "",
-    // modelCategory: "",
-    // instruction: "",
+    instruction: "",
     outputStructure: [],
   })
 
@@ -75,17 +76,21 @@ const AgentCreate = () => {
     ) : 
     <div className='flex flex-col font-mono min-h-screen bg-gray-100 px-2.5 sm:px-6 md:px-10 lg:px-0'>
           <div className=" flex justify-between items-center bg-white border px-48 pt-5 w-full py-5">
-            <div className="flex flex-col w-full pr-20">
+            <div className="flex flex-col gap-1 w-full pr-20">
               <Input 
                 value={formData.name} 
                 onChange={(e) => setFormData({ ...formData, name: e.target.value})}
-                className="w-full bg-white my-2 font-bold text-xl border-none" 
+                className="w-full bg-white my-2 py-6 px-4 font-bold text-xl rounded-lg focus-visible:ring-gray-400 focus-visible:ring-2 focus-visible:ring-offset-0 border-gray-300" 
+                
+                // className="w-full bg-gray-100 my-2 font-bold text-xl border-none" 
                 placeholder="Name" 
               />
-              <Input 
+              <Input
                 value={formData.description}
+                maxLength={200}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value})}
-                className="w-full bg-white text-gray-500 focus-visible:outline-gray-300 text-sm h-6 border-none" 
+                className="w-full bg-white text-gray-500 px-4 text-sm h-8 focus-visible:ring-gray-400 focus-visible:ring-2 focus-visible:ring-offset-0 border-gray-300" 
+                // className="w-full bg-gray-100 text-gray-500 focus-visible:outline-gray-300 text-sm h-6 border-none" 
                 placeholder="Write description here" 
               />
             </div>
@@ -103,17 +108,18 @@ const AgentCreate = () => {
                     <SelectValue placeholder="select model" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectGroup>
-                      <SelectLabel>OpenAI Models</SelectLabel>
-                      <SelectItem value="gpt-3.5">gpt-3.5</SelectItem>
-                      <SelectItem value="gpt-4o-2024-08-06">gpt-4o-2024-08-06</SelectItem>
-                      <SelectItem value="gpt-babbage">gpt-babbage</SelectItem>
-                    </SelectGroup>
-
-                    <SelectGroup>
-                      <SelectLabel>Gemini Models</SelectLabel>
-                      <SelectItem value="Gemini o">Gemini o</SelectItem>
-                    </SelectGroup>
+                    {
+                      llmsList.map((llms) => (
+                        <SelectGroup>
+                          <SelectLabel>{llms.modelCategory} models</SelectLabel>
+                          {
+                            llms.models.map((model) => (
+                              <SelectItem value={model}>{model}</SelectItem>
+                            ))
+                          }
+                        </SelectGroup>
+                      ))
+                    }
                   </SelectContent>
                 </Select>
               </div>

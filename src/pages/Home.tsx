@@ -25,6 +25,7 @@ import { ButtonCN } from "@/components/ui/buttoncn";
 import { deleteAgent, getAgentsByUserId } from "@/utils/agent.utils";
 import { useAuth } from "@clerk/clerk-react";
 import { AgentCardSkeleton } from "@/components/AgentCardSkeleton";
+import { ConnectToAgentDialogBox } from "@/components/ConnectToAgentDialogBox";
 
 export const Home = () => {
     const { getToken } = useAuth();
@@ -64,7 +65,7 @@ export const Home = () => {
                 {/* {JSON.stringify(agents)} */}
 
                 <div className="flex justify-between h-8 ">
-                    <h1 className='font-black text-[21px] sm:text-2xl font-poppins mt-0.5 sm:mt-1.5'>Your Agents</h1>
+                    <h1 className='font-black text-[21px] sm:text-xl font-poppins mt-0.5 sm:mt-1.5'>Your Agents</h1>
                     <div className="flex gap-5">
                         <Link to='/create'>
                             <Button type="primary" size="large" className="px-6 sm:px-8 h-9">Create</Button>
@@ -102,6 +103,10 @@ export const Home = () => {
     )
 }
 
+function truncateString(str: string): string {
+    return str.length > 50 ? str.slice(0, 50) + "..." : str;
+}
+
 const AgentCard = ({ name, description, agentDocId, onDelete, onEdit } : { name: string, description: string, agentDocId: string, onDelete: (agentId: string) => void, onEdit: () => void }) => {
     const navigate = useNavigate();
     return (
@@ -120,14 +125,15 @@ const AgentCard = ({ name, description, agentDocId, onDelete, onEdit } : { name:
                 </CardTitle>
             </CardHeader>
             <CardContent className="py-0 pb-4">
-                <p className="text-sm text-gray-500">{description} </p>
+                <p className="text-sm text-gray-500">{truncateString(description)} </p>
             </CardContent>
             <CardFooter className="flex gap-4 pb-4 w-full justify-between">
                 <div className="flex gap-4">
                     <ButtonCN onClick={() => navigate(`/test/${agentDocId}`)} variant={'secondary'} size={'sm'} className=" border-gray-400 px-7 h-7">Test</ButtonCN>
                     <ButtonCN onClick={onEdit} variant={'secondary'} size={'sm'} className=" border-gray-400 px-7 h-7">Edit</ButtonCN>
                 </div>
-                <ButtonCN variant={'default'} size={'sm'} className="h-8 px-4">Connect</ButtonCN>
+                {/* <ButtonCN variant={'default'} size={'sm'} className="h-8 px-4">Connect</ButtonCN> */}
+                <ConnectToAgentDialogBox />
             </CardFooter>
         </Card>
     )
