@@ -115,7 +115,7 @@ export default function JsonBuilder({ setOutputStructure }: { setOutputStructure
     const outputStructure: OutputStructure[] = convertFieldsToOutputStructure(fields)
     setOutputStructure(outputStructure)
     console.log('fields changed')
-  }, [fields, setOutputStructure])
+  }, [fields])
 
   const renderField = (field: Field, depth = 0) => {
     return (

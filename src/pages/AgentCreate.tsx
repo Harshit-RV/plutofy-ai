@@ -2,6 +2,7 @@ import { ButtonCN } from "@/components/ui/buttoncn";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { LuBrainCircuit } from "react-icons/lu";
+import { TriangleAlert }  from "lucide-react"; 
 import {
   Select,
   SelectContent,
@@ -74,9 +75,9 @@ const AgentCreate = () => {
     createdAgent ? (
       <AIDeploymentSuccess name={createdAgent.name} agentId={createdAgent.agentId} />
     ) : 
-    <div className='flex flex-col font-mono min-h-screen bg-gray-100 px-2.5 sm:px-6 md:px-10 lg:px-0'>
-          <div className=" flex justify-between items-center bg-white border px-48 pt-5 w-full py-5">
-            <div className="flex flex-col gap-1 w-full pr-20">
+    <div className='flex flex-col font-mono min-h-screen bg-gray-100'>
+          <div className=" flex justify-between items-center sm:gap-10 bg-white border px-2 sm:px-10 md:px-20 xl:px-48 pt-5 w-full py-5">
+            <div className="flex flex-col gap-1 w-full lg:pr-20">
               <Input 
                 value={formData.name} 
                 onChange={(e) => setFormData({ ...formData, name: e.target.value})}
@@ -95,16 +96,16 @@ const AgentCreate = () => {
               />
             </div>
 
-            <ButtonCN onClick={onClick} className="w-[130px]">Deploy</ButtonCN>
+            <ButtonCN onClick={onClick} className="w-[130px] hidden sm:flex">Deploy</ButtonCN>
           </div>
 
-          <div className="flex flex-grow px-48 gap-10 w-full">
-            <div className="flex flex-col w-3/5 h-full py-6 gap-4">
+          <div className="flex flex-col lg:flex-row flex-grow px-2 sm:px-10 md:px-20 xl:px-48 lg:gap-10 w-full">
+            <div className="flex flex-col w-full lg:w-3/5 h-full py-6 gap-4">
               
-              <div className="bg-black bg-opacity-80 text-white border shadow-sm gap-20 rounded-xl flex justify-between items-center py-4 px-6">
+              <div className="bg-black bg-opacity-80 text-white border shadow-sm lg:gap-20 rounded-xl flex justify-between items-center py-4 px-5 lg:px-6">
                 <p className="flex items-center gap-2"> <LuBrainCircuit size={20} /> Model</p>
                 <Select value={formData.modelName} onValueChange={(value) => setFormData({...formData, modelName: value})}>
-                  <SelectTrigger className="w-full bg-white text-black h-8">
+                  <SelectTrigger className="w-full ml-10 md:ml-48 lg:ml-0 bg-white text-black h-8">
                     <SelectValue placeholder="select model" />
                   </SelectTrigger>
                   <SelectContent>
@@ -125,12 +126,12 @@ const AgentCreate = () => {
               </div>
 
               <Card>
-                <CardHeader className="pt-6 pb-3">
+                <CardHeader className="pt-6 pb-3 px-3 md:px-5">
                   <CardTitle className="flex justify-between">
                       <h2 className="font-black text-md">Instruction</h2>
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="py-0 pb-4">
+                <CardContent className="py-0 pb-4 px-3 md:px-5">
                   <Textarea 
                     value={formData.instruction}
                     onChange={(e) => setFormData({ ...formData, instruction: e.target.value})}
@@ -141,20 +142,22 @@ const AgentCreate = () => {
               </Card>
 
               <Card>
-                <CardHeader className="pt-6 pb-3">
+                <CardHeader className="pt-6 pb-3 px-3 md:px-5">
                     <CardTitle className="flex justify-between">
                         <h2 className="font-black text-md">Output Format</h2>
                     </CardTitle>
                 </CardHeader>
-                <CardContent className="py-0 pb-4">
+                <CardContent className="py-0 pb-4 px-3 md:px-5">
                   <JsonBuilder setOutputStructure={setOutputStructure}/>
                 </CardContent>
               </Card>
 
             </div>
             
-            <div className="w-2/5 flex flex-col h-min my-6 py-3 pb-8 rounded-lg bg-gray-200 border">
-              
+            <div className="lg:w-2/5 hidden lg:flex flex-col h-min my-6 py-3 pb-8 rounded-lg bg-gray-200 border">
+              <p className="text-xs mx-5 flex gap-2 items-cȩnter py-2 px-3 text-gray-500 rounded-md font-bold my-2 bg-white"> 
+                <TriangleAlert size={15}/> This testing component is a work in progress
+              </p>
               <div className="flex flex-col gap-1 mt-1 px-5">
                 <h3 className="text-md text-gray-500 font-semibold">Input</h3>
                 <Textarea 
@@ -174,6 +177,10 @@ const AgentCreate = () => {
                   className="drop-shadow-none shadow-sm font-sans min-h-[180px]"
                 />
               </div>
+            </div>
+            <div className="sm:hidden flex gap-5 mb-10 justify-end">
+              <ButtonCN onClick={onClick} variant={'outline'} className="w-full max-w-[150px]">Deploy</ButtonCN>
+              <ButtonCN onClick={onClick} className="w-full max-w-[150px]">Deploy</ButtonCN>
             </div>
           </div>
     </div>
