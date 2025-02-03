@@ -43,9 +43,9 @@ export default function ApiKeysPage() {
 export function ApiKeysList() {
   const [apiKeys, setApiKeys] = useState<ApiKey[]>(initialApiKeys)
 
-  const toggleApiKey = (id: string) => {
-    setApiKeys((keys) => keys.map((key) => (key.id === id ? { ...key, active: !key.active } : key)))
-  }
+  // const toggleApiKey = (id: string) => {
+  //   setApiKeys((keys) => keys.map((key) => (key.id === id ? { ...key, active: !key.active } : key)))
+  // }
 
   const deleteApiKey = (id: string) => {
     setApiKeys((keys) => keys.filter((key) => key.id !== id))
