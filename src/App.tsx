@@ -11,6 +11,7 @@ import { NavBar } from "./components/NavBar";
 import { Toaster } from "react-hot-toast";
 import AgentCreate from "./pages/AgentCreate";
 import TestAgent from "./pages/TestAgent";
+import ApiKeys from "./pages/ApiKeys";
 
 function App() {
   const location = useLocation();
@@ -29,6 +30,7 @@ function App() {
           <Route path="/create" element={ <ProtectedRoute child={<AgentCreate/>} />} />
           <Route path="/sign-up" element={<SignUpPage/>} />
           <Route path="/test/:agentDocId" element={<ProtectedRoute child={<TestAgent/>} />} />
+          <Route path="/api" element={<ProtectedRoute child={<ApiKeys/>} />} />
         </Routes>
       {/* </ScrollArea> */}
       
