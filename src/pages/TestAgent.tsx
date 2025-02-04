@@ -180,13 +180,12 @@ const AgentCreate = () => {
                   </div>
                 </div>
 
-                <div className="flex flex-col lg:w-1/2 gap-1">
-                  <h3 className="text-md text-gray-500 font-semibold">Output</h3>
-                  <div className="flex flex-col-reverse lg:flex-col gap-2">
-                    <pre className="bg-white border p-4 min-h-[230px] h-full text-sm rounded-md overflow-auto">{output}</pre>
+                <div className="flex flex-col lg:w-1/2 gap-2">
+                  <div className="flex items-center gap-5">
+                    <h3 className="text-md text-gray-500 font-semibold">Output</h3>
                     {(responseInfo) && (
-                      <div className="flex py-3 px-4 gap-5  bg-white border rounded-lg text-sm text-gray-600">
-                        <p >
+                      <div className="flex px-4 py-1 bg-white gap-5  border rounded-lg text-sm text-gray-600">
+                        <p>
                           Status: <span 
                             className={responseInfo.statusCode == 200 || responseInfo.statusCode == 201 ? 'text-green-600 font-bold' : 'text-red-600 font-bold'}>
                               {responseInfo.statusCode}
@@ -198,6 +197,10 @@ const AgentCreate = () => {
                           </span> </p>
                       </div>
                     )}
+                  </div>
+                  <div className="flex flex-col-reverse gap-2">
+                    <pre className="bg-white border p-4 min-h-[230px] h-full text-sm rounded-md overflow-auto">{output}</pre>
+                    
                   </div>
                 </div>
 
