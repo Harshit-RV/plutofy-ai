@@ -159,7 +159,12 @@ export const updateAgent = async (agentId: string, updateFields: Partial<AgentPr
   }
 };
 
-export const getCompletion = async <T>(body: T, token: string): Promise<JSON> => {
+interface CompletionResponse {
+  completion: JSON;
+  statusCode: number;
+}
+
+export const getCompletion = async <T>(body: T, token: string): Promise<CompletionResponse> => {
   try {
     const response = await axios.post(
       `${API_URL}/v1/completion`,
@@ -172,7 +177,10 @@ export const getCompletion = async <T>(body: T, token: string): Promise<JSON> =>
       }
     );
     console.log(response.data);
-    return response.data;
+    return {
+      completion: response.data,
+      statusCode: response.status,
+    };
   } catch (error) {
     console.log(`Error getting completion:`, error);
     throw error;

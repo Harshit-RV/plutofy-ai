@@ -21,6 +21,7 @@ const AgentCreate = () => {
   const [ input, setInput ] = useState<string>("");
   const [ output, setOutput ] = useState<string>("");
   const [ loading, setLoading ] = useState<boolean>(false);
+  const [ responseInfo, setResponseInfo ] = useState<{responseTime: number, statusCode: number} | null>(null);
   const navigate = useNavigate();
 
   const fetchAgent = async () => {
@@ -75,12 +76,18 @@ const AgentCreate = () => {
       message: '',
     }), null, 2));
     setOutput("");
+    setResponseInfo(null);
   }
 
   const getResponse = async () => {
     setLoading(true);
+    const startTime = Date.now()
     const response = await getCompletion(JSON.parse(input), '');
-    setOutput(JSON.stringify(response, null, 2));
+    setResponseInfo({
+      responseTime: Date.now() - startTime,
+      statusCode: response.statusCode,
+    })
+    setOutput(JSON.stringify(response.completion, null, 2));
     setLoading(false);
   }
 
@@ -147,7 +154,7 @@ const AgentCreate = () => {
                 </CollapsibleContent>
               </Collapsible>
 
-            <div className="flex">
+            <div className="flex mb-10">
               <div className="w-full flex flex-col lg:flex-row h-min gap-5 ">
                 
                 <div className="flex flex-col lg:w-1/2 gap-1">
@@ -175,7 +182,23 @@ const AgentCreate = () => {
 
                 <div className="flex flex-col lg:w-1/2 gap-1">
                   <h3 className="text-md text-gray-500 font-semibold">Output</h3>
-                  <pre className="bg-white border mb-12 p-4 min-h-[230px] h-full text-sm rounded-md overflow-auto">{output}</pre>
+                  <div className="flex flex-col-reverse lg:flex-col gap-2">
+                    <pre className="bg-white border p-4 min-h-[230px] h-full text-sm rounded-md overflow-auto">{output}</pre>
+                    {(responseInfo) && (
+                      <div className="flex py-3 px-4 gap-5  bg-white border rounded-lg text-sm text-gray-600">
+                        <p >
+                          Status: <span 
+                            className={responseInfo.statusCode == 200 || responseInfo.statusCode == 201 ? 'text-green-600 font-bold' : 'text-red-600 font-bold'}>
+                              {responseInfo.statusCode}
+                          </span>
+                        </p>
+                        <p>Time: <span 
+                            className={'text-green-600 font-bold'}>
+                              {responseInfo.responseTime} ms
+                          </span> </p>
+                      </div>
+                    )}
+                  </div>
                 </div>
 
               </div>
