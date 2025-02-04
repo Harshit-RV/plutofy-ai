@@ -25,7 +25,6 @@ import toast from "react-hot-toast";
 import { createAgent } from "@/utils/agent.utils";
 import AIDeploymentSuccess from "./Success";
 import { useAuth } from "@clerk/clerk-react";
-import { TriangleAlert } from "lucide-react";
 
 const llmsList = [
   { modelCategory: "OpenAI", models: ["gpt-3.5", "gpt-4o-2024-08-06", "gpt-babbage"] },
