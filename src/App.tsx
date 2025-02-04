@@ -29,7 +29,8 @@ function App() {
           <Route path="/sign-in" element={<SignInPage/>} />
           <Route path="/create" element={ <ProtectedRoute child={<AgentCreate/>} />} />
           <Route path="/sign-up" element={<SignUpPage/>} />
-          <Route path="/test/:agentDocId" element={<ProtectedRoute child={<TestAgent/>} />} />
+          <Route path="/agent/:agentDocId" element={<ProtectedRoute child={<TestAgent isTestMode={false} />} />} />
+          <Route path="/agent/:agentDocId/test" element={<ProtectedRoute child={<TestAgent isTestMode/>} />} />
           <Route path="/api" element={<ProtectedRoute child={<ApiKeys/>} />} />
         </Routes>
       {/* </ScrollArea> */}

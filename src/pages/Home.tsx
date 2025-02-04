@@ -110,7 +110,7 @@ function truncateString(str: string): string {
 const AgentCard = ({ name, description, agentDocId, onDelete, onEdit } : { name: string, description: string, agentDocId: string, onDelete: (agentId: string) => void, onEdit: () => void }) => {
     const navigate = useNavigate();
     return (
-        <Card>
+        <Card className="hover:cursor-pointer" onClick={() => navigate(`/agent/${agentDocId}`)}>
             <CardHeader className="pt-6 pb-3">
                 <CardTitle className="flex justify-between">
                     <h2 className="font-black text-md">{name}</h2>
@@ -129,8 +129,20 @@ const AgentCard = ({ name, description, agentDocId, onDelete, onEdit } : { name:
             </CardContent>
             <CardFooter className="flex gap-4 pb-4 w-full justify-between">
                 <div className="flex gap-4">
-                    <ButtonCN onClick={() => navigate(`/test/${agentDocId}`)} variant={'secondary'} size={'sm'} className=" border-gray-400 px-4 sm:px-7 h-7">Test</ButtonCN>
-                    <ButtonCN onClick={onEdit} variant={'secondary'} size={'sm'} className=" border-gray-400 px-4 sm:px-7 h-7">Edit</ButtonCN>
+                    <ButtonCN 
+                        onClick={(event) => {
+                            event.stopPropagation();
+                            navigate(`/agent/${agentDocId}/test`);
+                        }}
+                        variant={'secondary'} 
+                        size={'sm'} 
+                        className=" border-gray-400 px-4 sm:px-7 h-7"
+                    > Test</ButtonCN>
+
+                    <ButtonCN onClick={(event) => {
+                            event.stopPropagation();
+                            onEdit();
+                        }} variant={'secondary'} size={'sm'} className=" border-gray-400 px-4 sm:px-7 h-7">Edit</ButtonCN>
                 </div>
                 {/* <ButtonCN variant={'default'} size={'sm'} className="h-8 px-4">Connect</ButtonCN> */}
                 <ConnectToAgentDialogBox />

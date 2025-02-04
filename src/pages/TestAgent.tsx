@@ -15,12 +15,13 @@ import { JsonValue } from "@/components/JsonInput";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { useAuth } from "@clerk/clerk-react";
 
-const AgentCreate = () => {
+const AgentCreate = ({ isTestMode = false } : { isTestMode: boolean }) => {
   const { getToken } = useAuth();
   const { agentDocId } = useParams();
   const [ input, setInput ] = useState<string>("");
   const [ output, setOutput ] = useState<string>("");
   const [ loading, setLoading ] = useState<boolean>(false);
+  const [ isConfigOpen, setIsConfigOpen ] = useState<boolean>(isTestMode ? false : true);
   const [ responseInfo, setResponseInfo ] = useState<{responseTime: number, statusCode: number} | null>(null);
   const navigate = useNavigate();
 
@@ -133,9 +134,11 @@ const AgentCreate = () => {
           <div className="flex flex-col gap-7 flex-grow px-3 sm:px-10 md:px-14 xl:px-48 pt-6 w-full">
 
               <Collapsible
+                open={isConfigOpen}
+                onOpenChange={setIsConfigOpen}
                 className="w-full rounded-xl border space-y-2 bg-white p-4"
               >
-                <div className="flex items-center space-x-4 px-2">
+                <div className="flex items-center space-x-4 px-1">
                   <h4 className="text-sm font-semibold">
                     Agent Config
                   </h4>
@@ -146,7 +149,7 @@ const AgentCreate = () => {
                     </ButtonCN>
                   </CollapsibleTrigger>
                 </div>
-                <CollapsibleContent className="flex flex-col lg:flex-row gap-4 px-0 lg:px-2">
+                <CollapsibleContent className="flex flex-col lg:flex-row gap-4 px-0 lg:px-0">
                   <div className="lg:w-2/3 flex-grow p-2 border rounded-lg text-sm text-gray-600">
                     {agent?.instruction} 
                   </div>
