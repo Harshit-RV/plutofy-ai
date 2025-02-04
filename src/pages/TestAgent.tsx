@@ -109,10 +109,10 @@ const AgentCreate = () => {
 
   return (
     !agentLoading || agent != undefined ? (
-    <div className='flex flex-col font-mono min-h-screen bg-gray-100 px-2.5 sm:px-6 md:px-10 lg:px-0'>
-          <div className=" flex justify-between items-center bg-white border px-48 pt-5 w-full py-5">
+      <div className='flex flex-col font-mono min-h-screen bg-gray-100'>
+          <div className=" flex justify-between items-center bg-white border px-3 sm:px-10 md:px-20 xl:px-48 pt-5 w-full py-5">
             <div className="flex flex-col w-full pr-20">
-              <h2 className="w-full bg-white mx-1 my-2 font-bold text-xl border-none">
+              <h2 className="w-full bg-white mx-1 my-1 sm:my-2 font-bold text-lg sm:text-xl border-none">
                 {agent?.name} 
               </h2>
               <p className="w-full bg-white mx-1 mt-2  text-gray-500 focus-visible:outline-gray-300 text-sm border-none">
@@ -120,10 +120,10 @@ const AgentCreate = () => {
               </p>
             </div>
 
-            <ButtonCN variant={'outline'} className="w-[130px] border-gray-300">Edit</ButtonCN>
+            <ButtonCN variant={'outline'} className="w-[130px] sm:flex hidden border-gray-300">Edit</ButtonCN>
           </div>
 
-          <div className="flex flex-col gap-7 flex-grow px-48 pt-6 w-full">
+          <div className="flex flex-col gap-7 flex-grow px-3 sm:px-10 md:px-14 xl:px-48 pt-6 w-full">
 
               <Collapsible
                 className="w-full rounded-xl border space-y-2 bg-white p-4"
@@ -139,8 +139,8 @@ const AgentCreate = () => {
                     </ButtonCN>
                   </CollapsibleTrigger>
                 </div>
-                <CollapsibleContent className="flex gap-4 px-2">
-                  <div className="w-2/3 flex-grow p-2 border rounded-lg text-sm text-gray-600">
+                <CollapsibleContent className="flex flex-col lg:flex-row gap-4 px-0 lg:px-2">
+                  <div className="lg:w-2/3 flex-grow p-2 border rounded-lg text-sm text-gray-600">
                     {agent?.instruction} 
                   </div>
                   <pre className="bg-gray-100 border p-4 text-sm rounded-md overflow-auto">{JSON.stringify(getJsonObject(agent?.outputStructure ?? []), null, 2)}</pre>
@@ -148,9 +148,9 @@ const AgentCreate = () => {
               </Collapsible>
 
             <div className="flex">
-              <div className="w-full flex h-min gap-5 ">
+              <div className="w-full flex flex-col lg:flex-row h-min gap-5 ">
                 
-                <div className="flex flex-col w-1/2 gap-1">
+                <div className="flex flex-col lg:w-1/2 gap-1">
                   <h3 className="text-md text-gray-500 font-semibold">Input</h3>
                   <pre>
                     <Textarea 
@@ -173,7 +173,7 @@ const AgentCreate = () => {
                   </div>
                 </div>
 
-                <div className="flex flex-col w-1/2 gap-1">
+                <div className="flex flex-col lg:w-1/2 gap-1">
                   <h3 className="text-md text-gray-500 font-semibold">Output</h3>
                   <pre className="bg-white border mb-12 p-4 min-h-[230px] h-full text-sm rounded-md overflow-auto">{output}</pre>
                 </div>
@@ -181,7 +181,7 @@ const AgentCreate = () => {
               </div>
             </div>
           </div>
-    </div>
+      </div>
     ) : (
       <div className="flex items-center justify-center min-h-[200px] w-full">
         <Card className="w-[300px]">

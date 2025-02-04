@@ -2,7 +2,7 @@ import { ButtonCN } from "@/components/ui/buttoncn";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { LuBrainCircuit } from "react-icons/lu";
-import { TriangleAlert }  from "lucide-react"; 
+import { Alert } from 'antd';
 import {
   Select,
   SelectContent,
@@ -25,6 +25,7 @@ import toast from "react-hot-toast";
 import { createAgent } from "@/utils/agent.utils";
 import AIDeploymentSuccess from "./Success";
 import { useAuth } from "@clerk/clerk-react";
+import { TriangleAlert } from "lucide-react";
 
 const llmsList = [
   { modelCategory: "OpenAI", models: ["gpt-3.5", "gpt-4o-2024-08-06", "gpt-babbage"] },
@@ -155,9 +156,12 @@ const AgentCreate = () => {
             </div>
             
             <div className="lg:w-2/5 hidden lg:flex flex-col h-min my-6 py-3 pb-8 rounded-lg bg-gray-200 border">
-              <p className="text-xs mx-5 flex gap-2 items-cȩnter py-2 px-3 text-gray-500 rounded-md font-bold my-2 bg-white"> 
-                <TriangleAlert size={15}/> This testing component is a work in progress
-              </p>
+              <Alert 
+                message="This testing component is a work in progress" 
+                className="font-bold mx-5 my-2 font-mono text-xs text-gray-500 rounded-md" 
+                banner 
+              />
+
               <div className="flex flex-col gap-1 mt-1 px-5">
                 <h3 className="text-md text-gray-500 font-semibold">Input</h3>
                 <Textarea 
