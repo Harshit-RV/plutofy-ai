@@ -13,7 +13,7 @@ import { ConnectCard } from "@/pages/Success"
 export const ConnectToAgentDialogBox = () => {
   return (
     <Dialog>
-      <DialogTrigger>
+      <DialogTrigger onClick={(event) => event.stopPropagation()}>
         <ButtonCN variant={'default'} size={'sm'} className="h-8 px-4">Connect</ButtonCN>
       </DialogTrigger>
       <DialogContent className="p-0">

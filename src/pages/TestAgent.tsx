@@ -150,7 +150,7 @@ const AgentCreate = ({ isTestMode = false } : { isTestMode: boolean }) => {
                   </CollapsibleTrigger>
                 </div>
                 <CollapsibleContent className="flex flex-col lg:flex-row gap-4 px-0 lg:px-0">
-                  <div className="lg:w-2/3 flex-grow p-2 border rounded-lg text-sm text-gray-600">
+                  <div className="lg:w-2/3 flex-grow p-2 lg:p-4 border rounded-lg text-sm text-gray-600">
                     {agent?.instruction} 
                   </div>
                   <pre className="bg-gray-100 border p-4 text-sm rounded-md overflow-auto">{JSON.stringify(getJsonObject(agent?.outputStructure ?? []), null, 2)}</pre>

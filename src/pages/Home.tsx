@@ -139,10 +139,16 @@ const AgentCard = ({ name, description, agentDocId, onDelete, onEdit } : { name:
                         className=" border-gray-400 px-4 sm:px-7 h-7"
                     > Test</ButtonCN>
 
-                    <ButtonCN onClick={(event) => {
+                    <ButtonCN 
+                        onClick={(event) => {
                             event.stopPropagation();
                             onEdit();
-                        }} variant={'secondary'} size={'sm'} className=" border-gray-400 px-4 sm:px-7 h-7">Edit</ButtonCN>
+                        }}
+                        variant={'secondary'}
+                        size={'sm'} 
+                        className="border-gray-400 px-4 sm:px-7 h-7"
+                    >Edit</ButtonCN>
+
                 </div>
                 {/* <ButtonCN variant={'default'} size={'sm'} className="h-8 px-4">Connect</ButtonCN> */}
                 <ConnectToAgentDialogBox />
