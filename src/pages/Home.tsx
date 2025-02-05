@@ -107,19 +107,24 @@ function truncateString(str: string): string {
     return str.length > 50 ? str.slice(0, 50) + "..." : str;
 }
 
-const AgentCard = ({ name, description, agentDocId, onDelete, onEdit } : { name: string, description: string, agentDocId: string, onDelete: (agentId: string) => void, onEdit: () => void }) => {
+export const AgentCard = ({ name, description, agentDocId, onDelete, onEdit } : { name: string, description: string, agentDocId: string, onDelete: (agentId: string) => void, onEdit: () => void }) => {
     const navigate = useNavigate();
     return (
         <Card className="hover:cursor-pointer" onClick={() => navigate(`/agent/${agentDocId}`)}>
             <CardHeader className="pt-6 pb-3">
                 <CardTitle className="flex justify-between">
                     <h2 className="font-black text-md">{name}</h2>
-                    <DropdownMenu>
-                        <DropdownMenuTrigger className="text-[18px]"><MoreOutlined/></DropdownMenuTrigger>
+                    <DropdownMenu >
+                        <DropdownMenuTrigger onClick={(event) => event.stopPropagation()} className="text-[18px]"><MoreOutlined/></DropdownMenuTrigger>
                         <DropdownMenuContent>
                             <DropdownMenuLabel>Options</DropdownMenuLabel>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem onClick={() => onDelete(agentDocId)}>Delete</DropdownMenuItem>
+                            <DropdownMenuItem 
+                                onClick={(event) => {
+                                    event.stopPropagation();
+                                    onDelete(agentDocId);
+                                }}
+                            >Delete</DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </CardTitle>
