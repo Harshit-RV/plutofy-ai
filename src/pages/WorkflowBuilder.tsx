@@ -1,5 +1,5 @@
 import LlmNode, { AgentNode } from '@/components/LlmNode';
-import { Background, Connection, Controls, ReactFlow, useEdgesState, useNodesState } from '@xyflow/react';
+import { Background, Connection, ReactFlow, useEdgesState, useNodesState } from '@xyflow/react';
  
 import '@xyflow/react/dist/style.css';
 import { useCallback } from 'react';
@@ -26,7 +26,7 @@ const nodeTypes = {
 }
 
 export default function WorkflowBuilder() {
-  const [ nodes, setNodes, onNodesChange ] = useNodesState(initialNodes);
+  const [ nodes,, onNodesChange ] = useNodesState(initialNodes);
   const [ edges, setEdges, onEdgesChange ] = useEdgesState(initialEdges);
 
   const onConnect = useCallback(
