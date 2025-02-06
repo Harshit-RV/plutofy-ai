@@ -31,6 +31,9 @@ const llmsList = [
   { modelCategory: "Gemini", models: ["Gemini o"] },
 ]
 
+const whiteBgGray200Border = "bg-white border-gray-200 hover:bg-gray-100";
+const noRingClass = "focus-visible:ring-gray-400 focus-visible:ring-2 focus-visible:ring-offset-0";
+
 const AgentCreate = () => {
   const { getToken } = useAuth();
   
@@ -76,22 +79,19 @@ const AgentCreate = () => {
       <AIDeploymentSuccess name={createdAgent.name} agentId={createdAgent.agentId} />
     ) : 
     <div className='flex flex-col font-mono min-h-screen bg-gray-100'>
-          <div className=" flex justify-between items-center sm:gap-10 bg-white border px-2 sm:px-10 md:px-20 xl:px-48 pt-5 w-full py-5">
-            <div className="flex flex-col gap-1 w-full lg:pr-20">
+          <div className="flex justify-between items-center sm:gap-10 bg-white border px-2 sm:px-10 md:px-20 xl:px-48 pt-5 w-full py-5">
+            <div className="flex flex-col w-full lg:pr-20">
               <Input 
                 value={formData.name} 
                 onChange={(e) => setFormData({ ...formData, name: e.target.value})}
-                className="w-full bg-white my-2 py-6 px-4 font-bold text-xl rounded-lg focus-visible:ring-gray-400 focus-visible:ring-2 focus-visible:ring-offset-0 border-gray-300" 
-                
-                // className="w-full bg-gray-100 my-2 font-bold text-xl border-none" 
+                className={`${whiteBgGray200Border} my-2 py-6 px-4 font-bold text-lg rounded-lg ${noRingClass}`}
                 placeholder="Name" 
               />
               <Input
                 value={formData.description}
                 maxLength={200}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value})}
-                className="w-full bg-white text-gray-500 px-4 text-sm h-8 focus-visible:ring-gray-400 focus-visible:ring-2 focus-visible:ring-offset-0 border-gray-300" 
-                // className="w-full bg-gray-100 text-gray-500 focus-visible:outline-gray-300 text-sm h-6 border-none" 
+                className={`${whiteBgGray200Border} text-gray-500 px-4 h-8 text-sm ${noRingClass}`}
                 placeholder="Write description here" 
               />
             </div>
@@ -99,13 +99,14 @@ const AgentCreate = () => {
             <ButtonCN onClick={onClick} className="w-[130px] hidden sm:flex">Deploy</ButtonCN>
           </div>
 
-          <div className="flex flex-col lg:flex-row flex-grow px-2 sm:px-10 md:px-20 xl:px-48 lg:gap-10 w-full">
-            <div className="flex flex-col w-full lg:w-3/5 h-full py-6 gap-4">
+          <div className="flex flex-col lg:flex-row flex-grow px-2 sm:px-10 md:px-20 xl:px-48 lg:gap-6 w-full">
+            <div className="lg:w-4/6 flex flex-col w-full h-full py-6 gap-4">
               
-              <div className="bg-black bg-opacity-80 text-white border shadow-sm lg:gap-20 rounded-xl flex justify-between items-center py-4 px-5 lg:px-6">
+              <Card className="shadow-none w-full drop-shadow-sm border bg-black bg-opacity-80 text-white lg:gap-20 rounded-xl flex justify-between items-center py-3 px-5 lg:px-6">
+              {/* <div className="bg-black bg-opacity-80 text-white border lg:gap-20 rounded-xl flex justify-between items-center py-4 px-5 lg:px-6"> */}
                 <p className="flex items-center gap-2"> <LuBrainCircuit size={20} /> Model</p>
                 <Select value={formData.modelName} onValueChange={(value) => setFormData({...formData, modelName: value})}>
-                  <SelectTrigger className="w-full ml-10 md:ml-48 lg:ml-0 bg-white text-black h-8">
+                  <SelectTrigger className="w-full max-w-96 ml-10 md:ml-48 lg:ml-0 bg-white text-black h-8">
                     <SelectValue placeholder="select model" />
                   </SelectTrigger>
                   <SelectContent>
@@ -123,15 +124,17 @@ const AgentCreate = () => {
                     }
                   </SelectContent>
                 </Select>
-              </div>
+              </Card>
 
-              <Card>
-                <CardHeader className="pt-6 pb-3 px-3 md:px-5">
+              <Card className="shadow-none drop-shadow-sm">
+                <CardHeader className="pt-5 pb-3 px-3 md:px-4">
                   <CardTitle className="flex justify-between">
-                      <h2 className="font-black text-md">Instruction</h2>
+                    <h4 className="text-sm font-semibold">
+                      Instruction
+                    </h4>
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="py-0 pb-4 px-3 md:px-5">
+                <CardContent className="py-0 pb-4 px-3 md:px-4">
                   <Textarea 
                     value={formData.instruction}
                     onChange={(e) => setFormData({ ...formData, instruction: e.target.value})}
@@ -141,28 +144,30 @@ const AgentCreate = () => {
                 </CardContent>
               </Card>
 
-              <Card>
-                <CardHeader className="pt-6 pb-3 px-3 md:px-5">
-                    <CardTitle className="flex justify-between">
-                        <h2 className="font-black text-md">Output Format</h2>
+              <Card className="shadow-none drop-shadow-sm">
+                <CardHeader className="pt-6 pb-1 px-3 md:px-4">
+                    <CardTitle>
+                      <h4 className="text-sm font-semibold">
+                        Output Format
+                      </h4>
                     </CardTitle>
                 </CardHeader>
-                <CardContent className="py-0 pb-4 px-3 md:px-5">
+                <CardContent className="py-0 pb-4 px-3 md:px-4">
                   <JsonBuilder setOutputStructure={setOutputStructure}/>
                 </CardContent>
               </Card>
 
             </div>
             
-            <div className="lg:w-2/5 hidden lg:flex flex-col h-min my-6 py-3 pb-8 rounded-lg bg-gray-200 border">
+            <div className="lg:w-2/6 hidden lg:flex flex-col h-min my-6 py-3 pb-8 rounded-lg bg-gray-200 border">
               <Alert 
-                message="This testing component is a work in progress" 
+                message="This component is a work in progress" 
                 className="font-bold mx-5 my-2 font-mono text-xs text-gray-500 rounded-md" 
                 banner 
               />
 
               <div className="flex flex-col gap-1 mt-1 px-5">
-                <h3 className="text-md text-gray-500 font-semibold">Input</h3>
+                <h3 className="text-sm text-gray-500 font-semibold">Input</h3>
                 <Textarea 
                   className="drop-shadow-none shadow-sm font-sans min-h-[180px]"
                 />
@@ -175,7 +180,7 @@ const AgentCreate = () => {
               <div className="h-1 w-full my-4 bg-gray-100"></div>
 
               <div className="flex flex-col gap-1 px-5">
-                <h3 className="text-md text-gray-500 font-semibold">Output</h3>
+                <h3 className="text-sm text-gray-500 font-semibold">Output</h3>
                 <Textarea 
                   className="drop-shadow-none shadow-sm font-sans min-h-[180px]"
                 />
