@@ -114,7 +114,10 @@ const AgentCard = ({ name, description, agentDocId, onDelete } : { name: string,
                         <DropdownMenuContent>
                             <DropdownMenuLabel>Options</DropdownMenuLabel>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem onClick={() => onDelete(agentDocId)}>Delete</DropdownMenuItem>
+                            <DropdownMenuItem onClick={(event) => {
+                                event.stopPropagation();
+                                onDelete(agentDocId);
+                            }}>Delete</DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </CardTitle>
