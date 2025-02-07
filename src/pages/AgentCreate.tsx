@@ -1,6 +1,6 @@
 import { ButtonCN } from "@/components/ui/buttoncn";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { LuBrainCircuit } from "react-icons/lu";
 import { Alert } from 'antd';
 import {
@@ -22,9 +22,11 @@ import {
 } from "@/components/ui/card"
 import { AgentDoc, AgentProps, OutputStructure } from "@/types/agent";
 import toast from "react-hot-toast";
-import { createAgent } from "@/utils/agent.utils";
+import { createAgent, getAgentByDocId, updateAgent } from "@/utils/agent.utils";
 import AIDeploymentSuccess from "./Success";
 import { useAuth } from "@clerk/clerk-react";
+import { useParams } from "react-router-dom";
+import { Loader2 } from "lucide-react";
 
 const llmsList = [
   { modelCategory: "OpenAI", models: ["gpt-3.5", "gpt-4o-2024-08-06", "gpt-babbage"] },
@@ -34,8 +36,11 @@ const llmsList = [
 const whiteBgGray200Border = "bg-white border-gray-200 hover:bg-gray-100";
 const noRingClass = "focus-visible:ring-gray-400 focus-visible:ring-2 focus-visible:ring-offset-0";
 
-const AgentCreate = () => {
+type Mode = 'CREATE' | 'EDIT';
+
+const AgentCreate = ({ mode } : { mode: Mode }) => {
   const { getToken } = useAuth();
+  const { agentDocId } = useParams(); 
   
   const [ formData, setFormData ] = useState<Omit<AgentProps, 'userId'>>({
     name: "Untitled Agent",
@@ -50,6 +55,8 @@ const AgentCreate = () => {
     setFormData({...formData, outputStructure: outputStructure})
   }
 
+  const [ loading, setLoading ] = useState(mode == 'EDIT');
+
   const [ createdAgent, setCreatedAgent ] = useState<AgentDoc | null>(null);
 
   const onClick = async () => {
@@ -61,17 +68,73 @@ const AgentCreate = () => {
       toast.error('Please fill all details');
       return;
     }
+    if (mode === 'EDIT') {
+      if (!agentDocId) return;
+      const agent = await toast.promise(
+        updateAgent({agentId: agentDocId, updateFields: formData, token: token }),
+        {
+          loading: 'Editing...',
+          success: <b>Agent Edited</b>,
+          error: <b>Could not edit agent.</b>,
+        }
+      );
+      setCreatedAgent(agent);
+    } else {
+      const agent = await toast.promise(
+        createAgent({ agentProps: formData, token: token }),
+        {
+          loading: 'Creating...',
+          success: <b>Agent Created</b>,
+          error: <b>Could not create agent.</b>,
+        }
+      );
+      setCreatedAgent(agent);
+    }
 
-    const agent = await toast.promise(
-      createAgent({ agentProps: formData, token: token }),
-       {
-         loading: 'Creating...',
-         success: <b>Agent Created</b>,
-         error: <b>Could not create agent.</b>,
-       }
-    );
+  }
 
-    setCreatedAgent(agent);
+  const fetchAgentForEditing = async () => {
+    const token: string | null = await getToken();
+    if (!token) return;
+    if (!agentDocId) return;
+    const agent = await getAgentByDocId({agentDocId: agentDocId, token: token})
+    setFormData({
+      name: agent.name,
+      description: agent.description,
+      modelName: agent.modelName,
+      modelCategory: agent.modelCategory,
+      instruction: agent.instruction,
+      outputStructure: agent.outputStructure,
+    })
+    setLoading(false);
+  }
+
+  useEffect(() => {
+    if (mode === 'EDIT') {
+      fetchAgentForEditing();
+    } else {
+      setFormData({
+        name: "Untitled Agent",
+        description: "",
+        modelName: "",
+        modelCategory: "",
+        instruction: "",
+        outputStructure: [],
+      })
+    }
+  }, [])
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[200px] w-full">
+        <Card className="w-[300px]">
+          <CardContent className="flex flex-col items-center justify-center p-6">
+            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            <p className="mt-4 text-center text-sm text-muted-foreground">Loading...</p>
+          </CardContent>
+        </Card>
+      </div>
+    )
   }
 
   return (
@@ -96,7 +159,9 @@ const AgentCreate = () => {
               />
             </div>
 
-            <ButtonCN onClick={onClick} className="w-[130px] hidden sm:flex">Deploy</ButtonCN>
+            <ButtonCN onClick={onClick} className="w-[130px] hidden sm:flex">
+              { mode == "CREATE" ? 'Deploy' : 'Update' }
+            </ButtonCN>
           </div>
 
           <div className="flex flex-col lg:flex-row flex-grow px-2 sm:px-10 md:px-20 xl:px-48 lg:gap-6 w-full">
@@ -153,7 +218,10 @@ const AgentCreate = () => {
                     </CardTitle>
                 </CardHeader>
                 <CardContent className="py-0 pb-4 px-3 md:px-4">
-                  <JsonBuilder setOutputStructure={setOutputStructure}/>
+                  <JsonBuilder 
+                    outputStructure={formData.outputStructure} 
+                    setOutputStructure={setOutputStructure}
+                  />
                 </CardContent>
               </Card>
 

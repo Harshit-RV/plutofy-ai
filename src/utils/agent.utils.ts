@@ -138,7 +138,7 @@ export const getAllAgents = async (token: string): Promise<AgentDoc[]> => {
  * @param token - The authentication token for the request
  * @returns - The updated agent
  */
-export const updateAgent = async (agentId: string, updateFields: Partial<AgentProps>, token: string): Promise<AgentDoc> => {
+export const updateAgent = async ({ agentId, updateFields, token } : { agentId: string, updateFields: Partial<AgentProps>, token: string }): Promise<AgentDoc> => {
   try {
     const response = await axios.post(
       `${API_URL}/agent/update`,

@@ -128,7 +128,7 @@ const AgentCreate = ({ isTestMode = false } : { isTestMode: boolean }) => {
               </p>
             </div>
 
-            <ButtonCN variant={'outline'} className="w-[130px] sm:flex hidden border-gray-300">Edit</ButtonCN>
+            <ButtonCN onClick={() => navigate(`/edit/${agentDocId}`)} variant={'outline'} className="w-[130px] sm:flex hidden border-gray-300">Edit</ButtonCN>
           </div>
 
           <div className="flex flex-col gap-7 flex-grow px-3 sm:px-10 md:px-14 xl:px-48 pt-6 w-full">

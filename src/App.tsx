@@ -27,7 +27,8 @@ function App() {
         <Routes>
           <Route path="/" element= { <ProtectedRoute child={<Home/>} /> }/>
           <Route path="/sign-in" element={<SignInPage/>} />
-          <Route path="/create" element={ <ProtectedRoute child={<AgentCreate/>} />} />
+          <Route path="/create" element={ <ProtectedRoute child={<AgentCreate mode="CREATE"/>} />} />
+          <Route path="/edit/:agentDocId" element={ <ProtectedRoute child={<AgentCreate mode="EDIT"/>} />} />
           <Route path="/sign-up" element={<SignUpPage/>} />
           <Route path="/agent/:agentDocId" element={<ProtectedRoute child={<TestAgent isTestMode={false} />} />} />
           <Route path="/agent/:agentDocId/test" element={<ProtectedRoute child={<TestAgent isTestMode/>} />} />

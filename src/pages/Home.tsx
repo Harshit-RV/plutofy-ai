@@ -52,10 +52,6 @@ export const Home = () => {
         refetchAgents();
     }
 
-    const onEdit = () => {
-        toast('Coming soon..')
-    }
-
     const { data: agents, isLoading: agentsLoading, refetch: refetchAgents } = useQuery('agents', fetchList);
 
     return (
@@ -87,7 +83,6 @@ export const Home = () => {
                                 description={agent.description}
                                 agentDocId={agent._id}
                                 onDelete={onDelete}
-                                onEdit={onEdit}
                             />
                         )
                     ) 
@@ -107,7 +102,7 @@ function truncateString(str: string): string {
     return str.length > 50 ? str.slice(0, 50) + "..." : str;
 }
 
-const AgentCard = ({ name, description, agentDocId, onDelete, onEdit } : { name: string, description: string, agentDocId: string, onDelete: (agentId: string) => void, onEdit: () => void }) => {
+const AgentCard = ({ name, description, agentDocId, onDelete } : { name: string, description: string, agentDocId: string, onDelete: (agentId: string) => void }) => {
     const navigate = useNavigate();
     return (
         <Card className="hover:cursor-pointer" onClick={() => navigate(`/agent/${agentDocId}`)}>
@@ -142,7 +137,7 @@ const AgentCard = ({ name, description, agentDocId, onDelete, onEdit } : { name:
                     <ButtonCN 
                         onClick={(event) => {
                             event.stopPropagation();
-                            onEdit();
+                            navigate(`/edit/${agentDocId}`);
                         }}
                         variant={'secondary'}
                         size={'sm'} 
