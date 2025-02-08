@@ -55,7 +55,7 @@ export const Home = () => {
     const { data: agents, isLoading: agentsLoading, refetch: refetchAgents } = useQuery('agents', fetchList);
 
     return (
-        <div className='flex justify-center font-mono min-h-screen bg-gray-100 px-2.5 sm:px-6 md:px-10 lg:px-0'>
+        <div className='flex justify-center font-mono min-h-screen bg-gray-100 px-2.5 sm:px-6 md:px-10'>
            
             <div className="py-8 sm:py-9 w-full lg:w-[1100px]">
                 {/* {JSON.stringify(agents)} */}
