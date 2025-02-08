@@ -1,8 +1,12 @@
 import ApiKey, { ApiKeyDoc, ApiKeyProps } from "../models/ApiKey.model";
-import { v4 as uuidv4 } from 'uuid';
+import crypto from 'crypto';
+
+const generateSecureApiKey = (): string => {
+  return crypto.randomBytes(32).toString('hex');
+};
 
 export const createNewApiKey = async (args: ApiKeyProps): Promise<ApiKeyDoc> => {
-  const apiKey = new ApiKey({ ...args, secretKey: uuidv4() });
+  const apiKey = new ApiKey({ ...args, secretKey: generateSecureApiKey() });
   return apiKey.save();
 };
 
@@ -24,4 +28,14 @@ export const getAllApiKeys = async (): Promise<ApiKeyDoc[]> => {
 
 export const updateApiKey = async (id: string, updateFields: Partial<ApiKeyProps>) => {
   return ApiKey.findByIdAndUpdate(id, updateFields, { new: true });
+};
+
+export const isSecretKeyValid = async (secretKey: string): Promise<boolean> => {
+  try {
+    const apiKey = await ApiKey.findOne({ secretKey });
+    return !!apiKey;
+  } catch (error) {
+    console.error('Error validating secret key:', error);
+    return false;
+  }
 };

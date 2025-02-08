@@ -1,13 +1,9 @@
 import Agent, { AgentDoc, AgentProps } from "../models/Agent.model";
-import crypto from 'crypto';
-
-const generateSecureApiKey = (): string => {
-  return crypto.randomBytes(32).toString('hex');
-};
+import { v4 as uuidv4 } from 'uuid';
 
 export const createNewAgent = async (args: AgentProps) : Promise<AgentDoc> => {
   
-  const agent = new Agent({ ...args, agentId: generateSecureApiKey() });
+  const agent = new Agent({ ...args, agentId: uuidv4() });
   return agent.save();
 }
 
