@@ -82,8 +82,11 @@ const AgentCreate = ({ isTestMode = false } : { isTestMode: boolean }) => {
 
   const getResponse = async () => {
     setLoading(true);
+    const token: string | null = await getToken();
+    if (!token) return;
+
     const startTime = Date.now()
-    const response = await getCompletion(JSON.parse(input), '');
+    const response = await getCompletion(JSON.parse(input), token);
     setResponseInfo({
       responseTime: Date.now() - startTime,
       statusCode: response.statusCode,

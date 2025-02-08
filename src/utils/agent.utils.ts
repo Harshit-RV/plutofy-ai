@@ -167,7 +167,7 @@ interface CompletionResponse {
 export const getCompletion = async <T>(body: T, token: string): Promise<CompletionResponse> => {
   try {
     const response = await axios.post(
-      `${API_URL}/v1/completion`,
+      `${API_URL}/v1/completion/from-dashboard`,
       body,
       {
         headers: {

@@ -64,7 +64,7 @@ const AgentCreate = ({ mode } : { mode: Mode }) => {
     const token: string | null = await getToken();
     if (!token) return;
 
-    if (!formData.name || formData.name == '' || !formData.modelName || formData.modelName == '' || !formData.instruction || formData.instruction == '') {
+    if (!formData.name || formData.name == '' || !formData.description || formData.description == '' || !formData.modelName || formData.modelName == '' || !formData.instruction || formData.instruction == '') {
       toast.error('Please fill all details');
       return;
     }
