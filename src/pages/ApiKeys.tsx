@@ -202,9 +202,9 @@ export const ApiCreateDialog = ( { getToken, refetchApiKeys } : { getToken: () =
             </div>
 
             { generatedKey && (
-              <div className="flex w-full">
+              <div className="flex max-w-full">
                 <div className="flex items-center border-[#FA824C] gap-3 border-2 p-2 px-4 rounded-md">
-                  <p className="text-nowrap no-scrollbar overflow-scroll max-w-[350px] w-full">{generatedKey.secretKey}</p>
+                  <p className="no-scrollbar overflow-scroll max-w-[200px] sm:max-w-[300px] lg:max-w-[350px] w-full">{generatedKey.secretKey}</p>
                   
                   <div>
                     <ButtonCN 
