@@ -198,13 +198,13 @@ export const ApiCreateDialog = ( { getToken, refetchApiKeys } : { getToken: () =
               <Label htmlFor="name">
                 Name
               </Label>
-              <Input id="name" value={name} onChange={(e) => setName(e.target.value)} />
+              <Input id="name" disabled={generatedKey != null} value={name} onChange={(e) => setName(e.target.value)} />
             </div>
 
             { generatedKey && (
               <div className="flex w-full">
                 <div className="flex items-center border-[#FA824C] gap-3 border-2 p-2 px-4 rounded-md">
-                  <p className="text-nowrap no-scrollbar overflow-scroll w-full">{generatedKey.secretKey}</p>
+                  <p className="text-nowrap no-scrollbar overflow-scroll max-w-[350px] w-full">{generatedKey.secretKey}</p>
                   
                   <div>
                     <ButtonCN 
