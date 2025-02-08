@@ -5,6 +5,7 @@ import {
 import { AgentDoc, AgentProps } from '../models/Agent.model';
 import { getResponse } from '../utils/getAiResponse';
 import { isSecretKeyValid } from '../services/apiKey.service';
+import { requireAuth } from '@clerk/express';
 
 const router = express.Router();
 
@@ -29,6 +30,35 @@ router.post('/', async (req: Request, res: Response) : Promise<any> => {
       return res.status(403).json({ message: 'INVALID_API_KEY' });
     }
 
+    const { agentId, message } = req.body;
+
+    if (!agentId) {
+      return res.status(400).json({error: "Missing required fields"})
+    }
+
+    const agent = await getAgentsByAgentId(agentId)
+    
+    if (agent == null) {
+      return res.status(400).json({error: "Agent not found. Please recheck your Agent ID"})
+    }
+
+    const response = await getResponse({
+      fields: agent.outputStructure,
+      instruction: agent.instruction,
+      prompt: message,
+    });
+
+    return res.status(200).json(response);
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json(err);
+  }
+});
+
+router.use(requireAuth())
+
+router.post('/from-dashboard', async (req: Request, res: Response) : Promise<any> => {
+  try {
     const { agentId, message } = req.body;
 
     if (!agentId) {
