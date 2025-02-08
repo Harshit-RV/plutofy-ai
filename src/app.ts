@@ -2,6 +2,7 @@ import express, { Application, NextFunction, Request, Response, } from 'express'
 import mongoose from 'mongoose';
 import agentRoutes from './routes/agent.route';
 import completionRoutes from './routes/completion.route'
+import apiKeyRoutes from './routes/apiKey.route';
 import config from './config';
 import "dotenv/config";
 import cors from 'cors'; 
@@ -27,6 +28,7 @@ app.use(clerkMiddleware({ clerkClient }));
 // Routes
 // app.use('/', homeRoutes);
 app.use('/agent', agentRoutes);
+app.use('/apikey', apiKeyRoutes);
 app.use('/v1/completion', completionRoutes);
 
 
