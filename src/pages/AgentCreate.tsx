@@ -167,7 +167,7 @@ const AgentCreate = ({ mode } : { mode: Mode }) => {
           <div className="flex flex-col lg:flex-row flex-grow px-2 sm:px-10 md:px-20 xl:px-48 lg:gap-6 w-full">
             <div className="lg:w-4/6 flex flex-col w-full h-full py-6 gap-4">
               
-              <Card className="shadow-none w-full drop-shadow-sm border bg-black bg-opacity-80 text-white lg:gap-20 rounded-xl flex justify-between items-center py-3 px-5 lg:px-6">
+              <Card className="w-full border bg-black bg-opacity-80 text-white lg:gap-20 rounded-xl flex justify-between items-center py-3 px-5 lg:px-6">
               {/* <div className="bg-black bg-opacity-80 text-white border lg:gap-20 rounded-xl flex justify-between items-center py-4 px-5 lg:px-6"> */}
                 <p className="flex items-center gap-2"> <LuBrainCircuit size={20} /> Model</p>
                 <Select value={formData.modelName} onValueChange={(value) => setFormData({...formData, modelName: value})}>
@@ -191,7 +191,7 @@ const AgentCreate = ({ mode } : { mode: Mode }) => {
                 </Select>
               </Card>
 
-              <Card className="shadow-none drop-shadow-sm">
+              <Card className="">
                 <CardHeader className="pt-5 pb-3 px-3 md:px-4">
                   <CardTitle className="flex justify-between">
                     <h4 className="text-sm font-semibold">
@@ -209,7 +209,7 @@ const AgentCreate = ({ mode } : { mode: Mode }) => {
                 </CardContent>
               </Card>
 
-              <Card className="shadow-none drop-shadow-sm">
+              <Card className="">
                 <CardHeader className="pt-6 pb-1 px-3 md:px-4">
                     <CardTitle>
                       <h4 className="text-sm font-semibold">
