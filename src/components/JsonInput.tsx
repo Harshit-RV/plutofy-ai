@@ -31,7 +31,6 @@ export default function JsonBuilder( { outputStructure, setOutputStructure }:{ o
       fields: fields ? convertOutputStructureToFields(fields) : undefined,
     }));
   };
-
   
   const [fields, setFields] = useState<Field[]>(convertOutputStructureToFields(outputStructure))
 
@@ -61,10 +60,11 @@ export default function JsonBuilder( { outputStructure, setOutputStructure }:{ o
       updateFieldsRecursively(prev, id, (field) => ({
         ...field,
         ...updates,
-        isExpanded: updates.type === "object" ? true : undefined,
-        fields: updates.type === "object" ? field.fields || [] : undefined,
+        isExpanded: updates.type === "object" || updates.type === "array" ? true : undefined,
+        fields: updates.type === "object" || updates.type === "array" ? field.fields || [] : undefined,
       })),
     )
+    if (updates.type === "array") addField(id)
   }
 
   const removeField = (id: string) => {
@@ -114,7 +114,7 @@ export default function JsonBuilder( { outputStructure, setOutputStructure }:{ o
       id,
       name,
       type,
-      fields: fields ? convertFieldsToOutputStructure(fields) : undefined,
+      fields: fields ? convertFieldsToOutputStructure(fields) : type == "array" ? [{ id: Date.now().toString(), name: "", type: "string" }] : undefined,
     }));
   };
 
@@ -124,25 +124,24 @@ export default function JsonBuilder( { outputStructure, setOutputStructure }:{ o
     console.log('fields changed')
   }, [fields])
 
-  const renderField = (field: Field, depth = 0) => {
+  const renderField = (field: Field, depth = 0, isArraySubfield = false) => {
     return (
       <div key={field.id}>
         <div className={`flex gap-1 h-min items-center font-mono`}>
-        {/* <div className={`grid grid-cols-[auto,1fr,auto,auto] gap-2 items-center h-7 ${subField ? 'h-7' : ''}`}> */}
           
-          {field.type === "object" && (
+          {(field.type === "object" || field.type === "array") && (
             <ButtonCN variant="secondary" size="icon" className="h-10 hover:border hover:bg-white" onClick={() => toggleExpand(field.id)}>
               {field.isExpanded ? <ChevronDown size={20} /> : <ChevronRight size={20} />}
             </ButtonCN>
           )}
           
           {/* {field.type !== "object" && <div className="" />} */}
+          {isArraySubfield && <div className="text-nowrap font-black text-gray-500 pr-2 text-sm"> array of </div>}
           
           <InputAnt
             value={field.name}
             onChange={(e) => updateField(field.id, { name: e.target.value })}
             placeholder="Enter field name"
-            // className={`h-7 ring-none outline-none ${subField ? '' : ''}`}
             className="w-full h-10 tracking-widest font-bold shadow-sm font-mono bg-white rounded-sm focus-visible:ring-1 focus-visible:outline-none" 
           />
           
@@ -155,20 +154,25 @@ export default function JsonBuilder( { outputStructure, setOutputStructure }:{ o
               <SelectItem value="number">Number</SelectItem>
               <SelectItem value="boolean">Boolean</SelectItem>
               <SelectItem value="object">Object</SelectItem>
+              <SelectItem value="array">Array</SelectItem>
             </SelectContent>
           </Select>
           
-          <ButtonCN variant="outline" size="sm" className="h-10 text-red-600 hover:text-red-600" onClick={() => removeField(field.id)}>
-            <X className="h-4 w-4" />
-          </ButtonCN>
+          {!isArraySubfield && (
+            <ButtonCN variant="outline" size="sm" className="h-10 text-red-600 hover:text-red-600" onClick={() => removeField(field.id)}>
+              <X className="h-4 w-4" />
+            </ButtonCN>
+          )}
 
         </div>
-        {field.type === "object" && field.isExpanded && (
-          <div className="flex flex-col ml-8 border-l-2 pl-6 mb-3 border-gray-300 mt-2 gap-1">
-            {field.fields && field.fields.map((subField) => renderField(subField, depth + 1))}
-            <ButtonCN variant="outline" size="sm" onClick={() => addField(field.id)} className="mt-2 h-8 w-min">
-              Add Nested Field
-            </ButtonCN>
+        {(field.type === "object" || field.type === "array") && field.isExpanded && (
+          <div className="flex flex-col ml-8 border-l-2 pl-4 mb-3 border-gray-300 mt-2 gap-1">
+            {field.fields && field.fields.map((subField) => renderField(subField, depth + 1, field.type == "array"))}
+            {field.type === "object" && (
+              <ButtonCN variant="outline" size="sm" onClick={() => addField(field.id)} className="mt-2 h-8 w-min">
+                Add Nested Field
+              </ButtonCN>
+            )}
           </div>
         )}
       </div>
@@ -179,7 +183,7 @@ export default function JsonBuilder( { outputStructure, setOutputStructure }:{ o
     return fields.reduce(
       (obj, field) => {
         if (field.name) {
-          if (field.type === "object" && field.fields) {
+          if ((field.type === "object" || field.type === "array") && field.fields) {
             obj[field.name] = getJsonObject(field.fields)
           } else {
             obj[field.name] = getDefaultValue(field.type)
@@ -201,6 +205,8 @@ export default function JsonBuilder( { outputStructure, setOutputStructure }:{ o
         return false
       case "object":
         return {}
+      case "array":
+        return []
       default:
         return null
     }

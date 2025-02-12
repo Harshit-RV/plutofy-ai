@@ -223,7 +223,7 @@ const AgentCreate = ({ isTestMode = false } : { isTestMode: boolean }) => {
                         )}
                       </div>
                       <div className="flex flex-col-reverse gap-2 shadow-sm">
-                        <pre className="bg-white border p-4 min-h-[230px] h-full text-sm rounded-md overflow-auto">{output}</pre>
+                        <pre className="bg-white border p-4 min-h-[230px] max-h-[265px] h-full text-sm rounded-md overflow-auto">{output}</pre>
                         
                       </div>
                     </div>
