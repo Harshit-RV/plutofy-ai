@@ -25,6 +25,14 @@ export function generateDynamicZodSchema(fields: OutputStructure[]): ZodObject<Z
         schema = z.boolean();
         break;
 
+      case "array":
+        if (!field.fields || field.fields.length === 0) {
+          throw new Error(`Field of type "array" must have subfields defined`);
+        }
+        let arraySchema = generateDynamicZodSchema(field.fields);
+        schema = z.array(arraySchema);
+        break;
+
       case "object":
         // Recursively generate schema for nested objects
         if (!field.fields || field.fields.length === 0) {
