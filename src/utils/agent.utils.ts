@@ -160,7 +160,7 @@ export const updateAgent = async ({ agentId, updateFields, token } : { agentId: 
 };
 
 interface CompletionResponse {
-  completion: JSON;
+  completion: JSON | null;
   statusCode: number;
 }
 
@@ -183,6 +183,16 @@ export const getCompletion = async <T>(body: T, token: string): Promise<Completi
     };
   } catch (error) {
     console.log(`Error getting completion:`, error);
-    throw error;
+    if (axios.isAxiosError(error)) {
+      return {
+        completion: null,
+        statusCode: error.response?.status ?? 500,
+      };
+    }
+
+    return {
+      completion: null,
+      statusCode: 500,
+    };
   }
 };
