@@ -14,7 +14,7 @@ const app: Application = express();
 // Middleware
 app.use(express.json());
 
-app.use(cors( { origin: "https://app.plutofy.live" } ));
+app.use(cors());
 
 // Connect to MongoDB
 mongoose.connect(config.mongoURI);
