@@ -1,4 +1,4 @@
-import { z, ZodObject, ZodRawShape, ZodSchema } from "zod";
+import { z, ZodArray, ZodObject, ZodRawShape, ZodSchema, ZodTypeAny } from "zod";
 import { OutputStructure } from "../models/Agent.model";
 
 /**
@@ -6,7 +6,12 @@ import { OutputStructure } from "../models/Agent.model";
  * @param fields - Array of field definitions
  * @returns - A Zod schema object
  */
-export function generateDynamicZodSchema(fields: OutputStructure[]): ZodObject<ZodRawShape> {
+/**
+ * Function to generate a Zod schema dynamically
+ * @param fields - Array of field definitions
+ * @returns - A Zod schema object
+ */
+export function generateDynamicObjectZodSchema(fields: OutputStructure[]): ZodObject<ZodRawShape> {
   const schemaShape: ZodRawShape = {};
 
   fields.forEach((field) => {
@@ -27,18 +32,17 @@ export function generateDynamicZodSchema(fields: OutputStructure[]): ZodObject<Z
 
       case "array":
         if (!field.fields || field.fields.length === 0) {
-          throw new Error(`Field of type "array" must have subfields defined`);
+          throw new Error(`Field of type "array" must have fields defined`);
         }
-        let arraySchema = generateDynamicZodSchema(field.fields);
-        schema = z.array(arraySchema);
+        schema = generateDynamicArrayZodSchema(field.fields[0]);
         break;
 
       case "object":
         // Recursively generate schema for nested objects
         if (!field.fields || field.fields.length === 0) {
-          throw new Error(`Field of type "object" must have subfields defined`);
+          throw new Error(`Field of type "object" must have fields defined`);
         }
-        schema = generateDynamicZodSchema(field.fields); // Recursion for nested object
+        schema = generateDynamicObjectZodSchema(field.fields); // Recursion for nested object
         break;
 
       default:
@@ -49,4 +53,34 @@ export function generateDynamicZodSchema(fields: OutputStructure[]): ZodObject<Z
   });
 
   return z.object(schemaShape);
+}
+
+
+export function generateDynamicArrayZodSchema(field: OutputStructure): ZodArray<ZodTypeAny> {
+  switch (field.type) {
+    case "string":
+      return z.array(z.string());
+
+    case "number":
+      return z.array(z.number());
+
+    case "boolean":
+      return z.array(z.boolean());
+
+    case "array":
+      if (!field.fields || field.fields.length === 0) {
+        throw new Error(`Field of type "array" must have fields defined`);
+      }
+      return z.array(generateDynamicArrayZodSchema(field.fields[0]));
+
+    case "object":
+      // Recursively generate schema for nested objects
+      if (!field.fields || field.fields.length === 0) {
+        throw new Error(`Field of type "object" must have fields defined`);
+      }
+      return z.array(generateDynamicObjectZodSchema(field.fields)); // Recursion for nested object
+
+    default:
+      throw new Error(`Unsupported field type: ${field.type}`);
+}
 }
