@@ -59,13 +59,19 @@ export default function JsonBuilder( { outputStructure, setOutputStructure }:{ o
     setFields((prev) =>
       updateFieldsRecursively(prev, id, (field) => ({
         ...field,
+        fields: undefined,
         ...updates,
-        // fields: undefined,
-        // fields: updates.type === "object" || updates.type === "array" ? field.fields || [] : undefined,
       })),
     )
-    if (updates.type === "array") addField(id, "array<child>")
-    if (updates.type === "object") addField(id)
+    // if ((updates.fields == undefined || updates.fields.length == 0) && (updates.type === "array" || updates.type === "object")){
+    //   addField(id, updates.type === "array" ? "array<child>" : "")
+    // }
+    // if (updates.type === "object") {
+    //   if (updates.fields == undefined || updates.fields.length === 0){
+    //     addField(id)
+    //   }
+    // }
+
   }
 
   const removeField = (id: string) => {
