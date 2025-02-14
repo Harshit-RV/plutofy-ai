@@ -34,11 +34,11 @@ export default function JsonBuilder( { outputStructure, setOutputStructure }:{ o
   
   const [fields, setFields] = useState<Field[]>(convertOutputStructureToFields(outputStructure))
 
-  const addField = (parentId: string | null = null) => {
+  const addField = (parentId: string | null = null, name: string = "") => {
     const newField: Field = {
       // TODO: add UUID here
       id: Date.now().toString(),
-      name: "",
+      name: name ? name : "",
       type: "string",
       isExpanded: true,
     }
@@ -60,11 +60,12 @@ export default function JsonBuilder( { outputStructure, setOutputStructure }:{ o
       updateFieldsRecursively(prev, id, (field) => ({
         ...field,
         ...updates,
-        isExpanded: updates.type === "object" || updates.type === "array" ? true : undefined,
-        fields: updates.type === "object" || updates.type === "array" ? field.fields || [] : undefined,
+        // fields: undefined,
+        // fields: updates.type === "object" || updates.type === "array" ? field.fields || [] : undefined,
       })),
     )
-    if (updates.type === "array") addField(id)
+    if (updates.type === "array") addField(id, "array<child>")
+    if (updates.type === "object") addField(id)
   }
 
   const removeField = (id: string) => {
@@ -129,21 +130,23 @@ export default function JsonBuilder( { outputStructure, setOutputStructure }:{ o
       <div key={field.id}>
         <div className={`flex gap-1 h-min items-center font-mono`}>
           
+         
+          
+          {/* {field.type !== "object" && <div className="" />} */}
+          {isArraySubfield && <div className="text-nowrap font-black text-gray-500 px-3 tracking-widest text-sm"> array of </div>}
+          
           {(field.type === "object" || field.type === "array") && (
             <ButtonCN variant="secondary" size="icon" className="h-10 hover:border hover:bg-white" onClick={() => toggleExpand(field.id)}>
               {field.isExpanded ? <ChevronDown size={20} /> : <ChevronRight size={20} />}
             </ButtonCN>
           )}
-          
-          {/* {field.type !== "object" && <div className="" />} */}
-          {isArraySubfield && <div className="text-nowrap font-black text-gray-500 pr-2 text-sm"> array of </div>}
-          
-          <InputAnt
+
+          {!isArraySubfield && <InputAnt
             value={field.name}
             onChange={(e) => updateField(field.id, { name: e.target.value })}
             placeholder="Enter field name"
             className="w-full h-10 tracking-widest font-bold shadow-sm font-mono bg-white rounded-sm focus-visible:ring-1 focus-visible:outline-none" 
-          />
+          />}
           
           <Select value={field.type} onValueChange={(value) => updateField(field.id, { type: value })}>
             <SelectTrigger className="w-[120px] h-10 bg-white">
@@ -160,19 +163,25 @@ export default function JsonBuilder( { outputStructure, setOutputStructure }:{ o
           
           {!isArraySubfield && (
             <ButtonCN variant="outline" size="sm" className="h-10 text-red-600 hover:text-red-600" onClick={() => removeField(field.id)}>
-              <X className="h-4 w-4" />
+              <X className="h-4 w-4" /> 
             </ButtonCN>
           )}
 
         </div>
+        
         {(field.type === "object" || field.type === "array") && field.isExpanded && (
           <div className="flex flex-col ml-8 border-l-2 pl-4 mb-3 border-gray-300 mt-2 gap-1">
             {field.fields && field.fields.map((subField) => renderField(subField, depth + 1, field.type == "array"))}
-            {field.type === "object" && (
+            
+            {field.type === "object" ? (
               <ButtonCN variant="outline" size="sm" onClick={() => addField(field.id)} className="mt-2 h-8 w-min">
                 Add Nested Field
               </ButtonCN>
-            )}
+            ) : field.fields == undefined || field.fields.length == 0 ? (
+              <ButtonCN variant="outline" size="sm" onClick={() => addField(field.id, "array<child>")} className="mt-2 h-8 w-min">
+                Add Array Element Definition
+              </ButtonCN>
+            ) : null}
           </div>
         )}
       </div>

@@ -22,7 +22,7 @@ const JsonTable: React.FC<JsonTableProps> = ({ data }) => {
     if (Array.isArray(obj)) {
       return obj.map((item, index) => (
         <TableRow key={index}>
-          <TableCell className="font-bold">{index}</TableCell>
+          <TableCell className="font-bold">{index+1}</TableCell>
           <TableCell>{renderValue(item)}</TableCell>
         </TableRow>
       ))
