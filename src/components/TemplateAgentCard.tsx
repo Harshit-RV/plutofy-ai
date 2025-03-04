@@ -42,7 +42,7 @@ const TemplateAgentCard = ({ data, refetch } : { data: Omit<AgentProps, "userId"
   }
 
   return (
-      <Card className="hover:cursor-pointer overflow-hidden">
+      <Card className="overflow-hidden">
           <div className=' h-8 w-full rounded-t-xl bg-gray-100 bg-gradient-to-br from-gray-700 via-gray-500 to-gray-700'>
           </div>
           <CardHeader className="pt-5 pb-3 px-5">

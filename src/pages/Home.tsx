@@ -86,6 +86,7 @@ export const Home = () => {
                                 description={agent.description}
                                 agentDocId={agent._id}
                                 onDelete={onDelete}
+                                agentId={agent.agentId}
                             />
                         )
                     ) 
@@ -106,10 +107,10 @@ export const Home = () => {
     )
 }
 
-const AgentCard = ({ name, description, agentDocId, onDelete } : { name: string, description: string, agentDocId: string, onDelete: (agentId: string) => void }) => {
+const AgentCard = ({ name, agentId, description, agentDocId, onDelete } : { name: string, agentId: string, description: string, agentDocId: string, onDelete: (agentId: string) => void }) => {
     const navigate = useNavigate();
     return (
-        <Card className="hover:cursor-pointer" onClick={() => navigate(`/agent/${agentDocId}`)}>
+        <Card>
             <CardHeader className="pt-6 pb-3">
                 <CardTitle className="flex justify-between">
                     <h2 className="font-black text-md">{name}</h2>
@@ -132,28 +133,21 @@ const AgentCard = ({ name, description, agentDocId, onDelete } : { name: string,
             <CardFooter className="flex gap-4 pb-4 w-full justify-between">
                 <div className="flex gap-4">
                     <ButtonCN 
-                        onClick={(event) => {
-                            event.stopPropagation();
-                            navigate(`/agent/${agentDocId}/test`);
-                        }}
+                        onClick={() => navigate(`/agent/${agentDocId}/test`)}
                         variant={'secondary'} 
                         size={'sm'} 
                         className=" border-gray-400 px-4 sm:px-7 h-7"
                     > Test</ButtonCN>
 
                     <ButtonCN 
-                        onClick={(event) => {
-                            event.stopPropagation();
-                            navigate(`/edit/${agentDocId}`);
-                        }}
+                        onClick={() => navigate(`/agent/${agentDocId}`)}
                         variant={'secondary'}
                         size={'sm'} 
                         className="border-gray-400 px-4 sm:px-7 h-7"
-                    >Edit</ButtonCN>
+                    >View</ButtonCN>
 
                 </div>
-                {/* <ButtonCN variant={'default'} size={'sm'} className="h-8 px-4">Connect</ButtonCN> */}
-                <ConnectToAgentDialogBox />
+                <ConnectToAgentDialogBox agentId={agentId} />
             </CardFooter>
         </Card>
     )
