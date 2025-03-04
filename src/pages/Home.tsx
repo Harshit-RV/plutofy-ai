@@ -27,7 +27,7 @@ import { useAuth } from "@clerk/clerk-react";
 import { AgentCardSkeleton } from "@/components/AgentCardSkeleton";
 import { ConnectToAgentDialogBox } from "@/components/ConnectToAgentDialogBox";
 
-import { truncateString } from "@/utils/truncateString";
+import { truncateString } from "@/utils/utils";
 import TemplatesSection from "@/components/TemplatesSection";
 
 export const Home = () => {
@@ -60,9 +60,9 @@ export const Home = () => {
     return (
         <div className='flex justify-center font-mono min-h-screen bg-gray-100 px-2.5 sm:px-6 md:px-10'>
            
-            <div className="py-8 sm:py-9 w-full lg:w-[1100px]">
+            <div className="py-8 w-full lg:w-[1100px]">
                 {/* {JSON.stringify(agents)} */}
-                
+
                 <div className="flex justify-between h-8 ">
                     <h1 className='font-black text-[21px] sm:text-lg font-poppins mt-0.5 sm:mt-1.5'>Your Agents</h1>
                     <div className="flex gap-5">

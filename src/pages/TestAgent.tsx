@@ -1,7 +1,6 @@
 import { ButtonCN } from "@/components/ui/buttoncn";
 import { useEffect, useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
-import { OutputStructure } from "@/types/agent";
 import { ChevronsUpDown, AlertCircle, Loader2 } from "lucide-react"
 import { getAgentByDocId, getCompletion } from "@/utils/agent.utils";
 import {
@@ -11,7 +10,6 @@ import {
 } from "@/components/ui/collapsible"
 import { useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "react-query";
-import { JsonValue } from "@/components/JsonInput";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { useAuth } from "@clerk/clerk-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -19,6 +17,7 @@ import JsonTable from "@/components/JsonToTable";
 import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { getJsonObject } from "@/utils/utils";
 
 enum TestingMode {
   DEVELOPER_MODE = "developer_mode",
@@ -41,37 +40,6 @@ const AgentCreate = ({ isTestMode = false } : { isTestMode: boolean }) => {
     const token = await getToken();
     if (!token) return;
     return await getAgentByDocId({ agentDocId: agentDocId ?? 'something-random', token: token });
-  }
-
-  const getJsonObject = (fields: OutputStructure[]): { [key: string]: JsonValue } => {
-    return fields.reduce(
-      (obj, field) => {
-        if (field.name) {
-          if (field.type === "object" && field.fields) {
-            obj[field.name] = getJsonObject(field.fields)
-          } else {
-            obj[field.name] = getDefaultValue(field.type)
-          }
-        }
-        return obj
-      },
-      {} as { [key: string]: JsonValue },
-    )
-  }
-
-  const getDefaultValue = (type: string): JsonValue => {
-    switch (type) {
-      case "string":
-        return ""
-      case "number":
-        return 0
-      case "boolean":
-        return false
-      case "object":
-        return {}
-      default:
-        return null
-    }
   }
 
   const { data: agent, isLoading: agentLoading, isError: agentError } = useQuery(`agent-${agentDocId}`, fetchAgent);
