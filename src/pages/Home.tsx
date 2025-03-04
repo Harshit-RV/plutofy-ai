@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/card"
   
 import { Button } from "antd"
-import { Bot } from "lucide-react"
+import { Bot,  } from "lucide-react"
 import { Link, useNavigate } from "react-router-dom"
 import { MoreOutlined } from '@ant-design/icons';
 // import { useAuth } from "@clerk/clerk-react";
@@ -26,6 +26,9 @@ import { deleteAgent, getAgentsByUserId } from "@/utils/agent.utils";
 import { useAuth } from "@clerk/clerk-react";
 import { AgentCardSkeleton } from "@/components/AgentCardSkeleton";
 import { ConnectToAgentDialogBox } from "@/components/ConnectToAgentDialogBox";
+
+import { truncateString } from "@/utils/truncateString";
+import TemplatesSection from "@/components/TemplatesSection";
 
 export const Home = () => {
     const { getToken } = useAuth();
@@ -59,9 +62,9 @@ export const Home = () => {
            
             <div className="py-8 sm:py-9 w-full lg:w-[1100px]">
                 {/* {JSON.stringify(agents)} */}
-
+                
                 <div className="flex justify-between h-8 ">
-                    <h1 className='font-black text-[21px] sm:text-xl font-poppins mt-0.5 sm:mt-1.5'>Your Agents</h1>
+                    <h1 className='font-black text-[21px] sm:text-lg font-poppins mt-0.5 sm:mt-1.5'>Your Agents</h1>
                     <div className="flex gap-5">
                         <Link to='/create'>
                             <Button type="primary" size="large" className="px-6 sm:px-8 h-9">Create</Button>
@@ -71,7 +74,7 @@ export const Home = () => {
                 </div>
                 
 
-                <div className="mt-6 sm:mt-7 grid md:grid-cols-2 gap-5">
+                <div className="mt-6 grid md:grid-cols-2 gap-5">
                 {
                     !agentsLoading || agents != undefined
                     ?
@@ -93,13 +96,14 @@ export const Home = () => {
                     </>
                 }
                 </div>
+               
+                <div className="mt-8">
+                    <TemplatesSection collapsible={agents?.length != 0} refetch={refetchAgents}/>
+                </div>
+
             </div>
         </div>
     )
-}
-
-function truncateString(str: string): string {
-    return str.length > 50 ? str.slice(0, 50) + "..." : str;
 }
 
 const AgentCard = ({ name, description, agentDocId, onDelete } : { name: string, description: string, agentDocId: string, onDelete: (agentId: string) => void }) => {
@@ -157,11 +161,11 @@ const AgentCard = ({ name, description, agentDocId, onDelete } : { name: string,
 
 const NoAgentYetCard = () => {
     return (
-        <Card className="w-full col-span-2 shadow-none">
+        <Card className="w-full col-span-2">
             <CardContent className="flex flex-col items-center justify-center space-y-4 py-8">
                 <Bot className="w-16 h-16 text-gray-400" />
-                <h2 className="text-2xl font-semibold text-gray-800">No agents yet</h2>
-                <p className="text-gray-500 pb-2">Create your first agent to get started</p>
+                <h2 className="text-xl font-semibold text-gray-800">No agents yet</h2>
+                <p className="text-gray-500 pb-2 text-sm">Create your first agent to get started</p>
                 
                 <Link to="/create">
                     <ButtonCN className="px-5">
@@ -169,6 +173,7 @@ const NoAgentYetCard = () => {
                     </ButtonCN>
                 </Link>
             </CardContent>
+
         </Card>
     )
 }
