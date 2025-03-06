@@ -46,7 +46,7 @@ const TemplateAgentCard = ({
   };
 
   return (
-    <Card className="overflow-hidden">
+    <Card className="overflow-hidden flex flex-col justify-between">
       <div className=" h-8 w-full rounded-t-xl bg-gray-100 bg-gradient-to-br from-gray-700 via-gray-500 to-gray-700"></div>
       <CardHeader className="pt-5 pb-3 px-5">
         <CardTitle className="flex justify-between">
@@ -55,7 +55,7 @@ const TemplateAgentCard = ({
       </CardHeader>
       <CardContent className="py-0 pb-4 px-5">
         <p className="text-[13px] text-gray-500">
-          {truncateString(data.description)}{" "}
+          {truncateString(data.description, 100)}{" "}
         </p>
       </CardContent>
       <CardFooter className="flex gap-4 px-5 pb-4 w-full justify-between">

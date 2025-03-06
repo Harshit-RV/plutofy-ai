@@ -53,6 +53,32 @@ const TemplatesSection = ({
         },
       ],
     },
+    {
+      name: "Marketing Email Generator",
+      description:
+        "Creates a persuasive marketing email tailored for your product and audience.",
+      modelName: "gpt-4o-2024-08-06",
+      modelCategory: "OpenAI",
+      instruction: "Write a marketing email for the following product:",
+      outputStructure: [
+        { id: "1738662132509", name: "subject_line", type: "string" },
+        { id: "1738662137249", name: "email_body", type: "string" },
+        { id: "1738662143387", name: "call_to_action", type: "string" },
+      ],
+    },
+    {
+      name: "Extract Personal Info from Paragraphs",
+      description:
+        "Extracts personal information such as name, email, and phone number from a given paragraph.",
+      modelName: "gpt-4o-2024-08-06",
+      modelCategory: "OpenAI",
+      instruction: "Extract personal information from the following paragraph:",
+      outputStructure: [
+        { id: "1738662132509", name: "name", type: "string" },
+        { id: "1738662137249", name: "email", type: "string" },
+        { id: "1738662143387", name: "phone_number", type: "number" },
+      ],
+    },
   ];
 
   if (collapsible) {
