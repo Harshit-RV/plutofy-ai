@@ -89,14 +89,14 @@ export const Home = () => {
           </div>
         )}
 
-        <div className="mt-6 grid md:grid-cols-3 gap-5">
+        <div className="mt-6 grid md:grid-cols-2 lg:grid-cols-3 gap-5">
           {!agentsLoading || agents != undefined ? (
             agents?.length == 0 ? (
               <NoAgentYetCard />
             ) : (
               agents?.map((agent) => (
                 <AgentCard
-                key={agent._id}
+                  key={agent._id}
                   name={agent.name}
                   description={agent.description}
                   agentDocId={agent._id}
@@ -168,8 +168,8 @@ const AgentCard = ({
         <p className="text-sm text-gray-500">{truncateString(description)} </p>
       </CardContent>
       <CardFooter className="flex gap-4 pb-4 w-full justify-between">
-        <p className="bg-gray-100 border border-gray-200 px-4 rounded-full flex items-center justify-center text-xs h-7">{model}</p>
-        <div className="flex gap-2 bg-gray-50 border border-gray-200 rounded-full items-center h-7 px-4">
+        <p className="bg-gray-100 border border-gray-200 px-3 xl:px-4 rounded-full flex items-center justify-center text-xs h-7">{model}</p>
+        <div className="flex gap-2 bg-gray-50 border border-gray-200 rounded-full items-center h-7 px-3 xl:px-4">
           <div className="w-2 h-2 bg-green-600 rounded-full"></div>
           <p className="flex items-center text-green-600 font-black text-xs">Active</p>
         </div>
