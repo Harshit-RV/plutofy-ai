@@ -33,7 +33,7 @@ enum TestingMode {
 const AgentCreate = ({ isTestMode = false }: { isTestMode: boolean }) => {
   const { getToken } = useAuth();
   const { agentDocId } = useParams();
-  const [input, setInput] = useState<string>("");
+  const [input, setInput] = useState<string>('{"message": ""}');
   const [output, setOutput] = useState<string>("");
   const [testingMode, setTestingMode] = useState<TestingMode>(
     TestingMode.NORMAL_MODE,
