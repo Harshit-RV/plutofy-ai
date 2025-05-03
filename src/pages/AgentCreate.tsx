@@ -176,12 +176,12 @@ const AgentCreate = ({ mode } : { mode: Mode }) => {
                   </SelectTrigger>
                   <SelectContent>
                     {
-                      llmsList.map((llms) => (
-                        <SelectGroup>
+                      llmsList.map((llms, index) => (
+                        <SelectGroup key={index}>
                           <SelectLabel>{llms.modelCategory} models</SelectLabel>
                           {
-                            llms.models.map((model) => (
-                              <SelectItem value={model}>{model}</SelectItem>
+                            llms.models.map((model, index) => (
+                              <SelectItem key={index} value={model}>{model}</SelectItem>
                             ))
                           }
                         </SelectGroup>

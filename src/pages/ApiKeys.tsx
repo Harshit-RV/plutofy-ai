@@ -88,8 +88,8 @@ export default function ApiKeysPage() {
                           </TableCell>
                         </TableRow>
                       ) : (
-                        apiKeys?.map((apiKey) => (
-                          <TableRow>
+                        apiKeys?.map((apiKey, index) => (
+                          <TableRow key={index}>
                             <TableCell className="p-4 pl-5">
                                 <span className="font-medium text-md mb-0.5 text-gray-800">{apiKey.name}</span>
                             </TableCell>

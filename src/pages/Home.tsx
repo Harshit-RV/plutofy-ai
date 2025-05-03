@@ -6,9 +6,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Button } from "antd";
 import { Bot } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { MoreOutlined } from "@ant-design/icons";
 // import { useAuth } from "@clerk/clerk-react";
 import { useQuery } from "react-query";
@@ -25,7 +24,7 @@ import { ButtonCN } from "@/components/ui/buttoncn";
 import { deleteAgent, getAgentsByUserId } from "@/utils/agent.utils";
 import { useAuth } from "@clerk/clerk-react";
 import { AgentCardSkeleton } from "@/components/AgentCardSkeleton";
-import { ConnectToAgentDialogBox } from "@/components/ConnectToAgentDialogBox";
+// import { ConnectToAgentDialogBox } from "@/components/ConnectToAgentDialogBox";
 
 import { truncateString } from "@/utils/utils";
 import TemplatesSection from "@/components/TemplatesSection";
@@ -60,7 +59,7 @@ export const Home = () => {
 
   return (
     <div className="flex justify-center font-mono min-h-screen bg-gray-100 px-2.5 sm:px-6 md:px-10">
-      <div className="py-8 w-full lg:w-[1100px]">
+      <div className="py-8 w-full lg:max-w-[1300px]">
         {/* {JSON.stringify(agents)} */}
 
         <div className="flex justify-between h-8 ">
@@ -75,10 +74,9 @@ export const Home = () => {
           </h1>
           <div className="flex gap-5">
             <Link to="/create">
-              <Button type="primary" size="large" className="px-6 sm:px-8 h-9">
+              <ButtonCN size={'lg'} className="px-6 sm:px-8 h-9">
                 Create
-              </Button>
-              {/* <ButtonCN variant={'outline'} size={'lg'} className="text-md h-9">Create</ButtonCN> */}
+              </ButtonCN>
             </Link>
           </div>
         </div>
@@ -91,18 +89,19 @@ export const Home = () => {
           </div>
         )}
 
-        <div className="mt-6 grid md:grid-cols-2 gap-5">
+        <div className="mt-6 grid md:grid-cols-3 gap-5">
           {!agentsLoading || agents != undefined ? (
             agents?.length == 0 ? (
               <NoAgentYetCard />
             ) : (
               agents?.map((agent) => (
                 <AgentCard
+                key={agent._id}
                   name={agent.name}
                   description={agent.description}
                   agentDocId={agent._id}
+                  model={agent.modelName}
                   onDelete={onDelete}
-                  agentId={agent.agentId}
                 />
               ))
             )
@@ -129,19 +128,19 @@ export const Home = () => {
 
 const AgentCard = ({
   name,
-  agentId,
   description,
   agentDocId,
+  model,
   onDelete,
 }: {
   name: string;
-  agentId: string;
   description: string;
   agentDocId: string;
+  model: string;
   onDelete: (agentId: string) => void;
 }) => {
-  const navigate = useNavigate();
   return (
+    <Link to={`/agent/${agentDocId}`}>
     <Card>
       <CardHeader className="pt-6 pb-3">
         <CardTitle className="flex justify-between">
@@ -169,29 +168,14 @@ const AgentCard = ({
         <p className="text-sm text-gray-500">{truncateString(description)} </p>
       </CardContent>
       <CardFooter className="flex gap-4 pb-4 w-full justify-between">
-        <div className="flex gap-4">
-          <ButtonCN
-            onClick={() => navigate(`/agent/${agentDocId}/test`)}
-            variant={"secondary"}
-            size={"sm"}
-            className=" border-gray-400 px-4 sm:px-7 h-7"
-          >
-            {" "}
-            Test
-          </ButtonCN>
-
-          <ButtonCN
-            onClick={() => navigate(`/agent/${agentDocId}`)}
-            variant={"secondary"}
-            size={"sm"}
-            className="border-gray-400 px-4 sm:px-7 h-7"
-          >
-            View
-          </ButtonCN>
+        <p className="bg-gray-100 border border-gray-200 px-4 rounded-full flex items-center justify-center text-xs h-7">{model}</p>
+        <div className="flex gap-2 bg-gray-50 border border-gray-200 rounded-full items-center h-7 px-4">
+          <div className="w-2 h-2 bg-green-600 rounded-full"></div>
+          <p className="flex items-center text-green-600 font-black text-xs">Active</p>
         </div>
-        <ConnectToAgentDialogBox agentId={agentId} />
       </CardFooter>
     </Card>
+    </Link>
   );
 };
 

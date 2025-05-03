@@ -97,8 +97,9 @@ const TemplatesSection = ({
         </CollapsibleTrigger>
         <CollapsibleContent className="flex flex-col lg:flex-row gap-4">
           <div className="grid gap-5 sm:grid-cols-2 md:grid-cols-3">
-            {templateAgents.map((agent) => (
+            {templateAgents.map((agent, index) => (
               <TemplateAgentCard
+                key={index}
                 data={agent}
                 blackCta={!collapsible}
                 refetch={refetch}
@@ -112,8 +113,9 @@ const TemplatesSection = ({
   return (
     <div className="w-full space-y-4">
       <div className="grid gap-5 sm:grid-cols-2 md:grid-cols-3">
-        {templateAgents.map((agent) => (
+        {templateAgents.map((agent, index) => (
           <TemplateAgentCard
+            key={index}
             data={agent}
             blackCta={!collapsible}
             refetch={refetch}
