@@ -24,6 +24,7 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { getJsonObject } from "@/utils/utils";
+import { ConnectToAgentDialogBox } from "@/components/ConnectToAgentDialogBox";
 
 enum TestingMode {
   DEVELOPER_MODE = "developer_mode",
@@ -126,7 +127,7 @@ const AgentCreate = ({ isTestMode = false }: { isTestMode: boolean }) => {
         <Card className="w-full max-w-lg">
           <CardHeader>
             <div className="flex items-center justify-center mb-2">
-              <AlertCircle className="h-12 w-12 text-destructive" />
+              <AlertCircle className="h-8 w-8 text-destructive" />
             </div>
             <CardTitle className="text-center text-2xl font-bold">
               400 Bad Request
@@ -149,7 +150,7 @@ const AgentCreate = ({ isTestMode = false }: { isTestMode: boolean }) => {
   return !agentLoading || agent != undefined ? (
     <div className="flex flex-col font-mono min-h-screen bg-gray-100">
       <div
-        className={`flex justify-between items-center bg-white border ${pagePadding} pt-5 w-full py-5`}
+        className={`flex justify-between items-center bg-white border ${pagePadding} pt-5 w-full py-5 gap-3`}
       >
         <div className="flex flex-col w-full pr-20">
           <h2 className="w-full bg-white mx-1 my-1 sm:my-2 font-bold text-lg sm:text-xl border-none">
@@ -159,7 +160,7 @@ const AgentCreate = ({ isTestMode = false }: { isTestMode: boolean }) => {
             {agent?.description}
           </p>
         </div>
-
+        <ConnectToAgentDialogBox agentId={agent?.agentId ?? ""} />
         <ButtonCN
           onClick={() => navigate(`/edit/${agentDocId}`)}
           variant={"outline"}

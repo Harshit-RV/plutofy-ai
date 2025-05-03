@@ -24,7 +24,7 @@ export const ConnectToAgentDialogBox = ({ agentId } : { agentId: string}) => {
   return (
     <Dialog>
       <DialogTrigger >
-        <ButtonCN variant={'default'} size={'sm'} className="h-8 px-4">Connect</ButtonCN>
+        <ButtonCN variant={'default'} size={'lg'} className="h-10 px-6">Connect</ButtonCN>
       </DialogTrigger>
       <DialogContent className="min-w-[650px] gap-2">
         <DialogHeader className="flex flex-col gap-2">
