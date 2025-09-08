@@ -112,7 +112,7 @@ export function ConnectCard() {
           <div className="bg-gray-800 h-full mb-16 text-gray-100 p-4 rounded-md overflow-auto relative">
             <pre className="text-sm font-mono">
               <code>
-{`curl -X GET "https://api.plutofy.live/v1/<agent-id>" \\
+{`curl -X GET "https://plutofy-ai-api-f6887ac1a9d2.herokuapp.com/v1/<agent-id>" \\
   -H "Content-Type: application/json" \\
   -H "Authorization: Bearer your-api-key-here" \\
   --data '{

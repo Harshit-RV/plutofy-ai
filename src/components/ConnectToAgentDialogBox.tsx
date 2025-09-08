@@ -10,7 +10,7 @@ import { ButtonCN } from "@/components/ui/buttoncn"
 import { Copy } from "lucide-react"
 
 const returnCodeSamples = (agentId: string) => {
-  return `curl -X GET "https://api.plutofy.live/v1/completion" \\
+  return `curl -X GET "https://plutofy-ai-api-f6887ac1a9d2.herokuapp.com/v1/completion" \\
   -H "Content-Type: application/json" \\
   -H "Authorization: Bearer your-api-key-here" \\
   --data '{

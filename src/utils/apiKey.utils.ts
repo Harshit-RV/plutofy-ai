@@ -1,7 +1,7 @@
 import { ApiKeyDoc } from '@/types/apiKey';
 import axios from 'axios';
 
-const API_URL = "https://api.plutofy.live";
+const API_URL = "https://plutofy-ai-api-f6887ac1a9d2.herokuapp.com";
 
 /**
  * Function to create a new API key
