@@ -9,7 +9,7 @@ import { ButtonCN } from "@/components/ui/buttoncn"
 
 import { Copy } from "lucide-react"
 
-const returnCodeSamples = (agentId: string) => {
+export const returnCodeSamples = (agentId: string) => {
   return `curl -X GET "https://plutofy-ai-api-f6887ac1a9d2.herokuapp.com/v1/completion" \\
   -H "Content-Type: application/json" \\
   -H "Authorization: Bearer your-api-key-here" \\
@@ -30,7 +30,7 @@ export const ConnectToAgentDialogBox = ({ agentId } : { agentId: string}) => {
         <DialogHeader className="flex flex-col gap-2">
           <DialogTitle className="text-xl">Connect to Agent</DialogTitle>
         </DialogHeader>
-        <div className="flex flex-col gap-1 mb-4">
+        <div className="flex flex-col gap-1 mb-4 overflow-y-scroll">
           <div className="flex flex-col gap-2">
             <h3 className="text-sm font-bold text-gray-500 mt-4">Agent ID</h3>
             <div className="bg-gray-100 text-sm py-2 px-4 border rounded-md">{agentId}</div>

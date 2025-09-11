@@ -7,6 +7,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { Terminal, Copy, CheckCircle, Rocket, ChevronRight, ChevronLeft } from "lucide-react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Link } from "react-router-dom"
+import { returnCodeSamples } from "@/components/ConnectToAgentDialogBox"
 
 export default function AIDeploymentSuccess( { agentId, name } : { agentId: string, name: string} ) {
   const [isExpanded, setIsExpanded] = useState(false)
@@ -109,21 +110,19 @@ export function ConnectCard() {
 
 
           {/* <h3 className="font-semibold text-lg">Step 2: Connect to your agent</h3> */}
-          <div className="bg-gray-800 h-full mb-16 text-gray-100 p-4 rounded-md overflow-auto relative">
-            <pre className="text-sm font-mono">
-              <code>
-{`curl -X GET "https://plutofy-ai-api-f6887ac1a9d2.herokuapp.com/v1/<agent-id>" \\
-  -H "Content-Type: application/json" \\
-  -H "Authorization: Bearer your-api-key-here" \\
-  --data '{
-    "person": "harshit",
-    "age": 14
-  }'`}
-</code>
-            </pre>
-            <ButtonCN variant="ghost" size="sm" className="absolute bottom-2 right-2 text-gray-400 hover:text-white">
-              <Copy className="h-4 w-4" />
-            </ButtonCN>
+          <div className="flex flex-col h-full gap-1 mb-4 overflow-y-scroll">
+            <div className="flex flex-col gap-2">            
+              <div className="bg-gray-800 h-full text-gray-100 p-4 rounded-md overflow-auto relative">
+                <pre className="text-sm font-mono">
+                  <code>
+                    {returnCodeSamples("<agent-Id>")}
+                  </code>
+                </pre>
+                <ButtonCN variant="ghost" size="sm" className="absolute bottom-2 right-2 text-gray-400 hover:text-white">
+                  <Copy className="h-4 w-4" />
+                </ButtonCN>
+              </div>
+            </div>
           </div>
       </CardContent>
     </Card>
