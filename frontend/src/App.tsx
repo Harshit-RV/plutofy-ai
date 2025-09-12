@@ -12,6 +12,7 @@ import { Toaster } from "react-hot-toast";
 import AgentCreate from "./pages/AgentCreate";
 import TestAgent from "./pages/TestAgent";
 import ApiKeys from "./pages/ApiKeys";
+import WorkflowBuilder from "./pages/WorkflowBuilder";
 
 function App() {
   const location = useLocation();
@@ -32,6 +33,7 @@ function App() {
           <Route path="/sign-up" element={<SignUpPage/>} />
           <Route path="/agent/:agentDocId" element={<ProtectedRoute child={<TestAgent isTestMode={false} />} />} />
           <Route path="/agent/:agentDocId/test" element={<ProtectedRoute child={<TestAgent isTestMode/>} />} />
+          <Route path="/workflow" element={<ProtectedRoute child={<WorkflowBuilder />} />} />
           <Route path="/api" element={<ProtectedRoute child={<ApiKeys/>} />} />
         </Routes>
       {/* </ScrollArea> */}
