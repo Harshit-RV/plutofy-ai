@@ -1,56 +1,20 @@
-import { AgentCard } from "@/pages/Home";
 import { Handle, Position } from "@xyflow/react";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Input } from "@/components/ui/input"
+import { MdOutlineEmail, MdOutlineWebhook } from "react-icons/md";
+import { ReactNode } from "react";
+import { FaGoogle, FaProjectDiagram, FaTelegram } from "react-icons/fa";
+import { Bot } from "lucide-react";
 
 // import { Input } from "./ui/input";
 
-const LlmNode = ({ data : { llm } }: { data : { llm: string } }) => {
+// const 
+
+const LlmNode = () => {
   return (
-    <div className='h-full w-full'>
-      <Handle type="target" position={Position.Top} />
-      {/* <AgentCard 
-          name={'agent.name'} 
-          description={'agent.description'}
-          agentDocId={'agent._id'}
-          onDelete={() => {}}
-          onEdit={() => {}}
-      /> */}
-      <Card className="w-96 max-w-lg">
-        <CardHeader>
-          <CardTitle>LLM Playground {llm}</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <Select>
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Select LLM model" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="gpt-4">GPT-4</SelectItem>
-              <SelectItem value="gpt-3.5-turbo">GPT-3.5 Turbo</SelectItem>
-              <SelectItem value="claude-2">Claude 2</SelectItem>
-              <SelectItem value="llama-2">LLaMA 2</SelectItem>
-            </SelectContent>
-          </Select>
-          <Input
-            placeholder="Enter your prompt here..."
-          />
-          <div className="border p-2 px-3 rounded">
-            <pre className="w-full h-40 font-mono text-sm overflow-auto">
-              {"Output will appear here..."}
-            </pre>
-            {/* <ChevronDown className="absolute right-3 bottom-3 text-gray-400" /> */}
-          </div>
-        </CardContent>
-        <CardFooter className="text-xs">Model: | Tokens: 0 | Time: 0ms</CardFooter>
-      </Card>
-      <Handle type="source" position={Position.Bottom} id="a" />
-      <Handle
-        type="source"
-        position={Position.Bottom}
-        id="b"
-        // style={handleStyle}
+    <div className='size-full rounded-full border p-2 bg-white'>
+      <FaGoogle />
+      <Handle 
+        type="target" 
+        position={Position.Top}
       />
     </div>
   )
@@ -59,22 +23,115 @@ const LlmNode = ({ data : { llm } }: { data : { llm: string } }) => {
 
 export const AgentNode = () => {
   return (
-    <div className='h-full w-full'>
-      <Handle type="target" position={Position.Top} />
-      <AgentCard 
-          name={'agent.name'} 
-          description={'agent.description'}
-          agentDocId={'agent._id'}
-          onDelete={() => {}}
-          onEdit={() => {}}
-      />
-      <Handle type="source" position={Position.Bottom} id="a" />
+    <div className='h-full w-full bg-white border rounded-lg p-3'>
+      <Handle type="target" position={Position.Left}/>
+      
+      <div className="flex gap-2 items-center ">
+        <Bot className="size-6" />
+        <p className="text-[10px]">AI Agent</p>
+      </div>
+
+      <Handle type="source" position={Position.Bottom}/>
       <Handle
         type="source"
-        position={Position.Bottom}
-        id="b"
+        position={Position.Right}
         // style={handleStyle}
       />
+    </div>
+  )
+}
+
+
+export const WebhookTriggerNode = () => {
+  return (
+    <GeneralTriggerNode>
+      <MdOutlineWebhook size={24}/>
+      <p className="text-[6px] mx-0">Webhook</p>
+
+      <Handle
+        type="source"
+        position={Position.Right}
+        id="b"
+      />
+    </GeneralTriggerNode>
+  )
+}
+
+export const EmailNode = () => {
+  return (
+    <GeneralActionNode>
+      <MdOutlineEmail size={24}/>
+
+      <Handle
+        type="source"
+        position={Position.Right}
+      />
+      <Handle
+        type="target"
+        position={Position.Left}
+      />
+    </GeneralActionNode>
+  )
+}
+
+export const TelegramNode = () => {
+  return (
+    <GeneralActionNode> 
+      <FaTelegram size={24}/>
+
+      <Handle
+        type="source"
+        position={Position.Right}
+        id="b"
+      />
+      <Handle
+        type="target"
+        position={Position.Left}
+        id="a"
+      />
+    </GeneralActionNode>
+  )
+}
+
+
+export const ConditionNode = () => {
+  return (
+    <GeneralActionNode>
+      <FaProjectDiagram size={20}/>
+      <p className="text-[6px] pt-0.5">if/else</p>
+      <Handle
+        type="source"
+        position={Position.Right}
+        id="1"
+        style={{ top: '30%' }}
+      />
+      <Handle
+        type="source"
+        position={Position.Right}
+        id="2"
+        style={{ bottom: '30%' }}
+      />
+      <Handle
+        type="target"
+        position={Position.Left}
+      />
+    </GeneralActionNode>
+  )
+}
+
+
+const GeneralActionNode = ({ children } : { children: ReactNode}) => {
+  return (
+    <div className="size-14 bg-white border rounded-lg px-5 flex flex-col justify-center items-center">
+      {children}
+    </div>
+  )
+}
+
+const GeneralTriggerNode = ({ children } : { children: ReactNode}) => {
+  return (
+    <div className="size-14 bg-white border rounded-lg px-5 pl-7 flex flex-col justify-center items-center rounded-l-full">
+      {children}
     </div>
   )
 }
