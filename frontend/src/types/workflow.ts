@@ -17,6 +17,7 @@ export interface IConnection {
 export interface IWorkflow {
   name: string,
   userId: string, // refs to user
+  description?: string,
 
   nodes: Node[],
   connections: IConnection[],

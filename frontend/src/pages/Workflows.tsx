@@ -26,6 +26,7 @@ import {
 import { truncateString } from "@/utils/utils";
 import toast from "react-hot-toast";
 import getRelativeTimeFromDate from "@/utils/getRelativeTimeFromDate";
+import WorkflowTemplates from "@/components/WorkflowTemplates";
 
 const Workflows = () => {
   const { getToken } = useAuth();
@@ -90,7 +91,7 @@ const Workflows = () => {
             </ButtonCN>
           </div>
         </div>
-
+       
         <Tabs defaultValue="workflows" className="mt-4">
           <TabsList className="border bg-gray-300">
             <TabsTrigger value="workflows">Workflows</TabsTrigger>
@@ -99,6 +100,15 @@ const Workflows = () => {
           </TabsList>
           
           <TabsContent value="workflows">
+            {workflows?.length == 0 && (
+              <div className="mt-4">
+                <p className="mb-2 font-bold">Templates</p>
+                <WorkflowTemplates
+                  collapsible={workflows?.length != 0}
+                  refetch={refetchWorkflows}
+                />
+              </div>
+            )}
             <div className="mt-4 grid md:grid-cols-2 lg:grid-cols-3 gap-5">
               {!workflowsLoading || workflows != undefined ? (
                 workflows?.length == 0 ? (
@@ -121,10 +131,18 @@ const Workflows = () => {
                 </>
               )}
             </div>
+            {workflows?.length != 0 && (
+              <div className="mt-6">
+                <WorkflowTemplates
+                  collapsible={workflows?.length != 0}
+                  refetch={refetchWorkflows}
+                />
+              </div>
+            )}
           </TabsContent>
-          <TabsContent value="credentials">Change your password here.</TabsContent>
+          <TabsContent value="credentials" className="mt-4 text-sm text-gray-700">Coming soon..</TabsContent>
+          <TabsContent value="executions" className="mt-4 text-sm text-gray-700">Coming soon..</TabsContent>
         </Tabs>
-
       </div>
     </div>
   )
