@@ -10,7 +10,7 @@ export interface OutputStructure {
   fields?: OutputStructure[];
 }
 
-export interface AgentProps {
+export interface Agent {
   name: string;
   userId: string;
   description: string;
@@ -20,18 +20,14 @@ export interface AgentProps {
   outputStructure: OutputStructure[];
 }
 
-export interface AgentDoc extends Document {
-  name: string;
-  userId: string;
+// mongoose doc
+export interface AgentDoc extends Agent, Document {
   agentId: string;
-  description: string;
-  modelName: string;
-  modelCategory: string;
-  instruction: string;
-  outputStructure: OutputStructure[];
   createdAt: Date;
   updatedAt: Date;
 }
+
+export type AgentProps = Agent;
 
 const outputSchema: Schema = new Schema({
   id: { type: String, required: true },
