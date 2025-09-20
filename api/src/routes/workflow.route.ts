@@ -25,7 +25,7 @@ router.get("/:id", async (req, res) : Promise<any> => {
 
     const workflow = await WorkflowService.getWorkflowById(id, userId!);
 
-    return res.status(200).json(workflow)
+    return res.status(200).json(workflow[0])
   } catch (error) {
     console.error(error)
   }
@@ -49,7 +49,20 @@ router.post("/", async (req, res) : Promise<any> => {
 })
 
 router.put("/:id", async (req, res) : Promise<any> => {
+  try {
+    const { userId } = getAuth(req);
+    const { id } = req.params;
+    const workflowBody = req.body;
+    console.log("control reached here")
+    console.log(workflowBody)
 
+    // TODO: body validation based on NodeType
+    const newWorkflow = await WorkflowService.updateWorkflow(id, workflowBody);
+
+    return res.status(200).json(newWorkflow)
+  } catch (error) {
+    console.error(error)
+  }
 })
 
 export default router;

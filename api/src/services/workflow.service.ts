@@ -8,7 +8,9 @@ class WorkflowService {
     return workflow.save();
   } 
 
-  static async updateWorkflow(id: string) {} 
+  static async updateWorkflow(id: string, data: WorkflowProps) {
+    return await WorkflowEntity.updateOne({ _id: id }, { $set: { nodes: data.nodes, name: data.name, connections: data.connections } })
+  } 
 
   static async deleteWorkflow(id: string) {} 
 
