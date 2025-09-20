@@ -3,8 +3,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { useAuth } from "@clerk/clerk-react";
 import { useQuery } from "react-query";
 import { Link, useNavigate } from "react-router-dom";
-import { NoAgentYetCard } from "./Home";
-import { FaChevronDown } from "react-icons/fa";
+import { FaChevronDown, FaProjectDiagram } from "react-icons/fa";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import WorkflowService from "@/utils/workflow.util";
 import { AgentCardSkeleton } from "@/components/AgentCardSkeleton";
@@ -26,6 +25,7 @@ import {
 } from "@/components/ui/card";
 import { truncateString } from "@/utils/utils";
 import toast from "react-hot-toast";
+import getRelativeTimeFromDate from "@/utils/getRelativeTimeFromDate";
 
 const Workflows = () => {
   const { getToken } = useAuth();
@@ -79,11 +79,7 @@ const Workflows = () => {
           <h1 className="font-black text-[21px] sm:text-lg font-poppins mt-0.5 sm:mt-1.5">
             {workflowsLoading ? (
               <Skeleton className="w-40 h-6 bg-gray-200"></Skeleton>
-            ) : workflows?.length == 0 ? (
-              "Templates"
-            ) : (
-              "Your Workflows"
-            )}
+            ) : "Your Workflows"}
           </h1>
           <div className="flex">
             <ButtonCN onClick={createNewWorkflow} size={'lg'} className="px-6 sm:px-8 h-9 rounded-r-none">
@@ -103,17 +99,17 @@ const Workflows = () => {
           </TabsList>
           
           <TabsContent value="workflows">
-            <div className="mt-4 grid grid-cols-2 gap-5">
+            <div className="mt-4 grid md:grid-cols-2 lg:grid-cols-3 gap-5">
               {!workflowsLoading || workflows != undefined ? (
                 workflows?.length == 0 ? (
-                  <NoAgentYetCard />
+                  <NoWorkflowYetCard createNewWorkflow={createNewWorkflow}/>
                 ) : (
                   workflows?.map((workflow) => (
                     <WorkflowCard 
                       name={workflow.name} 
-                      description={workflow._id as string} 
+                      description={""} 
                       workflowDocId={workflow._id as string} 
-                      model={""} 
+                      updatedAt={workflow.updatedAt}
                       onDelete={onDelete}         
                     />
                   ))
@@ -138,18 +134,18 @@ export const WorkflowCard = ({
   name,
   description,
   workflowDocId,
-  model,
+  updatedAt,
   onDelete,
 }: {
   name: string;
   description: string;
+  updatedAt: Date,
   workflowDocId: string;
-  model: string;
   onDelete: (agentId: string) => void;
 }) => {
   return (
     <Link to={`/workflow/${workflowDocId}`}>
-      <Card className="pb-5 h-full flex flex-col justify-between">
+      <Card className="pb-4 h-full flex flex-col justify-between">
         <CardHeader className="pt-6 pb-3">
           <CardTitle className="flex justify-between">
             <h2 className="font-black text-md">{name}</h2>
@@ -172,11 +168,13 @@ export const WorkflowCard = ({
             </DropdownMenu>
           </CardTitle>
         </CardHeader>
-        <CardContent className="py-0 pb-4">
-          <p className="text-sm text-gray-500">{truncateString(description)} </p>
-        </CardContent>
+        {description ?? (
+          <CardContent className="py-0 pb-4">
+            <p className="text-sm text-gray-500">{truncateString(description)} </p>
+          </CardContent>
+        )}
         <CardFooter className="flex gap-4 py-0 w-full justify-between">
-          <p className="bg-gray-100 border border-gray-200 px-3 xl:px-4 rounded-full flex items-center justify-center text-xs h-7">{model}</p>
+          <div className="text-xs text-gray-500">Last updated {getRelativeTimeFromDate(updatedAt)}</div>
           <div className="flex gap-2 bg-gray-50 border border-gray-200 rounded-full items-center h-7 px-3 xl:px-4">
             <div className="w-2 h-2 bg-green-600 rounded-full"></div>
             <p className="flex items-center text-green-600 font-black text-xs">Active</p>
@@ -184,6 +182,23 @@ export const WorkflowCard = ({
         </CardFooter>
       </Card>
     </Link>
+  );
+};
+
+export const NoWorkflowYetCard = ({ createNewWorkflow } : { createNewWorkflow: () => void }) => {
+  return (
+    <Card className="w-full col-span-3">
+      <CardContent className="flex flex-col items-center justify-center space-y-4 py-8">
+        <FaProjectDiagram className="w-16 h-16 text-gray-400" />
+        
+        <h2 className="text-xl font-semibold text-gray-800">No workflows yet</h2>
+        <p className="text-gray-500 pb-2 text-sm">
+          Create your first workflow to get started
+        </p>
+
+        <ButtonCN onClick={createNewWorkflow} className="px-5">Create Workflow</ButtonCN>
+      </CardContent>
+    </Card>
   );
 };
 

@@ -25,8 +25,8 @@ export interface IWorkflow {
 export type WorkflowProps = Omit<IWorkflow, "userId">
 
 export interface WorkflowDoc extends IWorkflow, Document {
-  created_at: Date,
-  updated_at: Date,
+  createdAt: Date,
+  updatedAt: Date,
 }
 
 export enum NodeType {
