@@ -1,31 +1,31 @@
 import LlmNode, { AgentNode, ConditionNode, EmailNode, TelegramNode, WebhookTriggerNode } from '@/components/LlmNode';
 import { ButtonCN } from '@/components/ui/buttoncn';
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuPortal } from '@/components/ui/dropdown-menu';
-import { Background, Connection, ReactFlow, ReactFlowProvider, useEdgesState, useNodesState, useReactFlow } from '@xyflow/react';
+import { Input } from '@/components/ui/input';
+import WorkflowService from '@/utils/workflow.util';
+import { useAuth } from '@clerk/clerk-react';
+import { Background, Connection, ReactFlow, ReactFlowProvider, useEdgesState, useNodesState, useReactFlow, Node } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import { useCallback } from 'react';
 import { FaPlus } from 'react-icons/fa';
+import { useQuery } from 'react-query';
+import { useParams } from 'react-router-dom';
+import {
+  Card,
+  CardContent,
+} from "@/components/ui/card"
+import { Loader2 } from "lucide-react";
+import { IConnection } from '@/types/workflow';
  
-const initialNodes = [
-  // { id: '1', position: { x: 0, y: 0 }, data: { label: 'first block' } },
-  // { id: '2', position: { x: 0, y: 100 }, data: { label: '2' } },
-  // { id: '3', position: { x: 100, y: 0 }, data: { label: 'third block' }, type: 'agentCard', },
-  { id: '1', position: { x: 0, y: 0 }, data: { label: 'third block' }, type: 'webhookTriggerNode', },
-  { id: '2', position: { x: 100, y: 0 }, data: { label: 'third block' }, type: 'emailNode', },
-  { id: '3', position: { x: 100, y: 100 }, data: { label: 'third block' }, type: 'telegramNode', },
-  { id: '4', position: { x: 200, y: 100 }, data: { label: 'third block' }, type: 'agentNode', },
-  { id: '5', position: { x: 200, y: 200 }, data: { label: 'third block' }, type: 'llmNode', },
-  { id: '6', position: { x: 200, y: 300 }, data: { label: 'third block' }, type: 'conditionNode', },
-  // { 
-  //   id: '4-123213',
-  //   position: { x: 0, y: 0 },
-  //   data: { 
-  //     llm: 'GPT',
-  //   }, 
-  //   type: 'llmNode',
-  // },
-];
-const initialEdges = [{ id: 'e1-2', source: '1', target: '2' }];
+// const initialNodes: Node[] = [
+//   { id: '1', position: { x: 0, y: 0 }, data: { label: 'third block' }, type: 'webhookTriggerNode', },
+//   { id: '2', position: { x: 100, y: 0 }, data: { label: 'third block' }, type: 'emailNode', },
+//   { id: '3', position: { x: 100, y: 100 }, data: { label: 'third block' }, type: 'telegramNode', },
+//   { id: '4', position: { x: 200, y: 100 }, data: { label: 'third block' }, type: 'agentNode', },
+//   { id: '5', position: { x: 200, y: 200 }, data: { label: 'third block' }, type: 'llmNode', },
+//   { id: '6', position: { x: 200, y: 300 }, data: { label: 'third block' }, type: 'conditionNode', },
+// ];
+// const initialEdges: IConnection[] = [{ id: 'e1-2', source: '1', target: '2' }];
  
 
 const nodeTypes = {
@@ -45,8 +45,9 @@ export enum NodeType {
   agentNode = "agentNode",
   conditionNode = "conditionNode" 
 }
+type Mode = 'CREATE' | 'EDIT';
 
-const WorkflowBuilder = () => {
+const WorkflowBuilder = ({ initialEdges, initialNodes, syncWorkflowWithDB } : { mode: Mode, initialEdges: IConnection[], initialNodes: Node[], syncWorkflowWithDB: () => void }) => {
   const [ nodes,, onNodesChange ] = useNodesState(initialNodes);
   const [ edges, setEdges, onEdgesChange ] = useEdgesState(initialEdges);
   const { getNode } = useReactFlow();
@@ -84,12 +85,15 @@ const WorkflowBuilder = () => {
         </DropdownMenuPortal>
       </DropdownMenu>
 
+      <Input className='absolute w-min left-10 top-10 z-10' >
+      
+      </Input>
 
       <ReactFlow 
         nodes={nodes} 
         edges={edges} 
-        onNodesChange={onNodesChange} 
-        onEdgesChange={onEdgesChange} 
+        onNodesChange={(changes) => {onNodesChange(changes); syncWorkflowWithDB()}} 
+        onEdgesChange={(changes) => {onEdgesChange(changes); syncWorkflowWithDB()}} 
         onConnect={onConnect}
         nodeTypes={nodeTypes}
         isValidConnection={(connection) => {
@@ -116,10 +120,56 @@ const WorkflowBuilder = () => {
 }
 
 
-export default function WorkflowBuilderPage() {
+export default function WorkflowBuilderPage({ mode } : { mode: Mode }) {
+  const { workflowDocId } = useParams(); 
+  const { getToken } = useAuth();
+
+  const fetchWorkflow = async () => {
+    const token = await getToken();
+    if (!token) return;
+    if (!workflowDocId) return;
+    await new Promise((r) =>  setTimeout(r, 4000))
+    return await WorkflowService.getWorkflowById(workflowDocId, token);
+  };
+
+  const syncWorkflowWithDB = async () => {
+    const token = await getToken();
+    if (!token) return;
+    if (!workflow) return;
+    await WorkflowService.updateWorkflow(String(workflow._id), {
+      ...workflow,
+      nodes: workflow.nodes || [],
+      connections: workflow.connections || []
+    }, token)
+  }
+
+  const {
+    data: workflow,
+    isLoading: workflowLoading,
+    // refetch: refetchWorkflows,
+  } = useQuery(`workflow-${workflowDocId}`, fetchWorkflow);
+
+  if (workflowLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[200px] w-full">
+        <Card className="w-[300px]">
+          <CardContent className="flex flex-col items-center justify-center p-6">
+            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            <p className="mt-4 text-center text-sm text-muted-foreground">Loading...</p>
+          </CardContent>
+        </Card>
+      </div>
+    )
+  }
+
   return (
     <ReactFlowProvider>
-      <WorkflowBuilder/>
+      <WorkflowBuilder 
+        syncWorkflowWithDB={syncWorkflowWithDB} 
+        mode={mode}
+        initialEdges={workflow?.connections ?? []} 
+        initialNodes={workflow?.nodes ?? []}
+      />
     </ReactFlowProvider>
   )
 }

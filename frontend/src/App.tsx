@@ -13,6 +13,8 @@ import AgentCreate from "./pages/AgentCreate";
 import TestAgent from "./pages/TestAgent";
 import ApiKeys from "./pages/ApiKeys";
 import WorkflowBuilder from "./pages/WorkflowBuilder";
+import Workflows from "./pages/Workflows";
+
 
 function App() {
   const location = useLocation();
@@ -28,12 +30,20 @@ function App() {
         <Routes>
           <Route path="/" element= { <ProtectedRoute child={<Home/>} /> }/>
           <Route path="/sign-in" element={<SignInPage/>} />
-          <Route path="/create" element={ <ProtectedRoute child={<AgentCreate mode="CREATE"/>} />} />
-          <Route path="/edit/:agentDocId" element={ <ProtectedRoute child={<AgentCreate mode="EDIT"/>} />} />
           <Route path="/sign-up" element={<SignUpPage/>} />
+
+
+          <Route path="/agent/create" element={ <ProtectedRoute child={<AgentCreate mode="CREATE"/>} />} />
+          <Route path="/agent/edit/:agentDocId" element={ <ProtectedRoute child={<AgentCreate mode="EDIT"/>} />} />
           <Route path="/agent/:agentDocId" element={<ProtectedRoute child={<TestAgent isTestMode={false} />} />} />
           <Route path="/agent/:agentDocId/test" element={<ProtectedRoute child={<TestAgent isTestMode/>} />} />
-          <Route path="/workflow" element={<ProtectedRoute child={<WorkflowBuilder />} />} />
+
+
+          <Route path="/workflow" element={<ProtectedRoute child={<Workflows />} />} />
+          <Route path="/workflow/create" element={<ProtectedRoute child={<WorkflowBuilder mode="CREATE"/>} />} />
+          <Route path="/workflow/:workflowDocId" element={<ProtectedRoute child={<WorkflowBuilder mode="EDIT"/>} />} />
+
+
           <Route path="/api" element={<ProtectedRoute child={<ApiKeys/>} />} />
         </Routes>
       {/* </ScrollArea> */}

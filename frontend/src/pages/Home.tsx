@@ -73,7 +73,7 @@ export const Home = () => {
             )}
           </h1>
           <div className="flex gap-5">
-            <Link to="/create">
+            <Link to="/agent/create">
               <ButtonCN size={'lg'} className="px-6 sm:px-8 h-9">
                 Create
               </ButtonCN>
@@ -179,7 +179,7 @@ export const AgentCard = ({
   );
 };
 
-const NoAgentYetCard = () => {
+export const NoAgentYetCard = () => {
   return (
     <Card className="w-full col-span-2">
       <CardContent className="flex flex-col items-center justify-center space-y-4 py-8">
@@ -189,7 +189,7 @@ const NoAgentYetCard = () => {
           Create your first agent to get started
         </p>
 
-        <Link to="/create">
+        <Link to="/agent/create">
           <ButtonCN className="px-5">Create Agent</ButtonCN>
         </Link>
       </CardContent>

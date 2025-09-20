@@ -162,7 +162,7 @@ const AgentCreate = ({ isTestMode = false }: { isTestMode: boolean }) => {
         </div>
         <ConnectToAgentDialogBox agentId={agent?.agentId ?? ""} />
         <ButtonCN
-          onClick={() => navigate(`/edit/${agentDocId}`)}
+          onClick={() => navigate(`/agent/edit/${agentDocId}`)}
           variant={"outline"}
           className="w-[130px] sm:flex hidden border-gray-300"
         >
