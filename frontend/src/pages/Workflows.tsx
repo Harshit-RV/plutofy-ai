@@ -32,7 +32,6 @@ const Workflows = () => {
   const fetchList = async () => {
     const token = await getToken();
     if (!token) return;
-    await new Promise((r) =>  setTimeout(r, 4000))
     return await WorkflowService.getAllWorkflowsByUser(token);
   };
 

@@ -44,7 +44,6 @@ export default function WorkflowBuilderPage({ mode } : { mode: Mode }) {
     const token = await getToken();
     if (!token) return;
     if (!workflowDocId) return;
-    await new Promise((r) =>  setTimeout(r, 4000))
     return await WorkflowService.getWorkflowById(workflowDocId, token);
   };
 
