@@ -1,25 +1,44 @@
-import { Handle, Position } from "@xyflow/react";
+import { Handle, Position, useNodeConnections, useNodeId, useReactFlow } from "@xyflow/react";
 import { MdOutlineEmail, MdOutlineWebhook } from "react-icons/md";
 import { ReactNode } from "react";
-import { FaGoogle, FaProjectDiagram, FaTelegram } from "react-icons/fa";
-import { Bot } from "lucide-react";
-
+import { FaCode, FaGoogle, FaProjectDiagram, FaTelegram } from "react-icons/fa";
+import { Bot, Plus } from "lucide-react";
+import { ButtonHandle } from "@/components/button-handle";
+import { ButtonCN } from "./ui/buttoncn";
+import { v4 as uuid } from "uuid";
+import { NodeType } from "@/pages/WorkflowBuilder";
 // import { Input } from "./ui/input";
 
 // const 
 
 const LlmNode = () => {
   return (
-    <div className='size-full rounded-full border p-2 bg-white'>
+    <GeneralDependentNode>
       <FaGoogle />
       <Handle 
         type="target" 
         position={Position.Top}
       />
-    </div>
+    </GeneralDependentNode>
   )
 }
 
+// const toolLogo = {
+//   code: <FaCode />,
+//   httpRequest: <TbWorld />
+// }
+
+export const AgentToolNode = () => {
+  return (
+    <GeneralDependentNode>
+      <FaCode />
+      <Handle 
+        type="target" 
+        position={Position.Top}
+      />
+    </GeneralDependentNode>
+  )
+}
 
 export const AgentNode = () => {
   return (
@@ -45,7 +64,7 @@ export const AgentNode = () => {
 export const WebhookTriggerNode = () => {
   return (
     <GeneralTriggerNode>
-      <MdOutlineWebhook size={24}/>
+      <MdOutlineWebhook size={24} color="purple"/>
       <p className="text-[6px] mx-0">Webhook</p>
 
       <Handle
@@ -58,18 +77,64 @@ export const WebhookTriggerNode = () => {
 }
 
 export const EmailNode = () => {
+
   return (
     <GeneralActionNode>
-      <MdOutlineEmail size={24}/>
+      <MdOutlineEmail size={24} color="#8a0000"/>
 
-      <Handle
-        type="source"
-        position={Position.Right}
-      />
       <Handle
         type="target"
         position={Position.Left}
       />
+      <Handle
+        type="source"
+        position={Position.Right}
+      />
+    </GeneralActionNode>
+  )
+}
+
+
+export const EmailNodeWithHandleButton = () => {
+  const nodeId = useNodeId();
+  const connections = useNodeConnections({ id: nodeId! });
+  const { addNodes, addEdges } = useReactFlow();
+  
+  return (
+    <GeneralActionNode>
+      <MdOutlineEmail size={24}/>
+
+      <ButtonHandle
+        type="source"
+        position={Position.Right}
+        isConnectable
+        showButton={connections.length < 2}
+      >
+        <ButtonCN
+          onClick={() => {
+            const newNodeId = uuid();
+            addNodes(
+              { id: newNodeId, position: { x: 200, y: 0 }, data: { label: 'third block' }, type: NodeType.telegramNode, },
+            )
+            addEdges(
+              { id: uuid(), source: nodeId!, target: newNodeId }
+            )
+          }}
+          variant="outline"
+          className="rounded-full bg-transparent p-0 h-5 w-5"
+        >
+          <Plus size={10} color="white" />
+        </ButtonCN>
+      </ButtonHandle>
+
+      <Handle
+        type="target"
+        position={Position.Left}
+      />
+      {/* <Handle
+        type="target"
+        position={Position.Left}
+      /> */}
     </GeneralActionNode>
   )
 }
@@ -77,7 +142,7 @@ export const EmailNode = () => {
 export const TelegramNode = () => {
   return (
     <GeneralActionNode> 
-      <FaTelegram size={24}/>
+      <FaTelegram size={24} className="text-[#24A1DE]"/>
 
       <Handle
         type="source"
@@ -93,24 +158,23 @@ export const TelegramNode = () => {
   )
 }
 
-
 export const ConditionNode = () => {
   return (
     <GeneralActionNode>
       <FaProjectDiagram size={20}/>
       <p className="text-[6px] pt-0.5">if/else</p>
-      <Handle
-        type="source"
-        position={Position.Right}
-        id="1"
-        style={{ top: '30%' }}
-      />
-      <Handle
-        type="source"
-        position={Position.Right}
-        id="2"
-        style={{ bottom: '30%' }}
-      />
+      <div className="handles sources">
+        <Handle
+          id="1"
+          type="source"
+          position={Position.Right}
+        />
+        <Handle
+          id="2"
+          type="source"
+          position={Position.Right}
+        />
+      </div>
       <Handle
         type="target"
         position={Position.Left}
@@ -118,7 +182,6 @@ export const ConditionNode = () => {
     </GeneralActionNode>
   )
 }
-
 
 const GeneralActionNode = ({ children } : { children: ReactNode}) => {
   return (
@@ -135,6 +198,15 @@ const GeneralTriggerNode = ({ children } : { children: ReactNode}) => {
     </div>
   )
 }
+
+const GeneralDependentNode = ({ children } : { children: ReactNode}) => {
+  return (
+    <div className='size-full rounded-full border p-2 bg-white'>
+      {children}
+    </div>
+  )
+}
+
 
 
 export default LlmNode;

@@ -1,5 +1,6 @@
 import LlmNode, { AgentNode, ConditionNode, EmailNode, TelegramNode, WebhookTriggerNode } from '@/components/LlmNode';
 import { ButtonCN } from '@/components/ui/buttoncn';
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuPortal } from '@/components/ui/dropdown-menu';
 import { Background, Connection, ReactFlow, ReactFlowProvider, useEdgesState, useNodesState, useReactFlow } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import { useCallback } from 'react';
@@ -59,9 +60,31 @@ const WorkflowBuilder = () => {
 
   return (
     <div className='relative h-screen w-full p-4 bg-gray-100 pb-20'>
-      <ButtonCN className='absolute right-10 top-10 z-10 flex gap-3 border'>
-        <FaPlus/> Add node
-      </ButtonCN>
+      
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <ButtonCN
+            className="absolute right-10 top-10 z-10 flex gap-3 border"
+            variant="outline"
+          >
+            <FaPlus /> Add node
+          </ButtonCN>
+        </DropdownMenuTrigger>
+        <DropdownMenuPortal>
+          <DropdownMenuContent
+            side="bottom"
+            align="end"
+            className="z-10 bg-white shadow-lg"
+          >
+            <DropdownMenuItem>Profile</DropdownMenuItem>
+            <DropdownMenuItem>Billing</DropdownMenuItem>
+            <DropdownMenuItem>Team</DropdownMenuItem>
+            <DropdownMenuItem>Subscription</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenuPortal>
+      </DropdownMenu>
+
+
       <ReactFlow 
         nodes={nodes} 
         edges={edges} 
@@ -83,7 +106,8 @@ const WorkflowBuilder = () => {
         fitView
         className='rounded-2xl border bg-white'
       > 
-        <Background />
+        <Background color='#919191' bgColor='#333333'/>
+        {/* <Background color='white' bgColor='#F3F4F6'/> */}
          {/* <Controls/>  
           <MiniMap /> */}
       </ReactFlow>
