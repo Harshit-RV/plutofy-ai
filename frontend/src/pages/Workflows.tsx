@@ -2,7 +2,7 @@ import { ButtonCN } from "@/components/ui/buttoncn";
 import { Skeleton } from "@/components/ui/skeleton"
 import { useAuth } from "@clerk/clerk-react";
 import { useQuery } from "react-query";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { NoAgentYetCard } from "./Home";
 import { FaChevronDown } from "react-icons/fa";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -25,9 +25,11 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { truncateString } from "@/utils/utils";
+import toast from "react-hot-toast";
 
 const Workflows = () => {
   const { getToken } = useAuth();
+  const navigate = useNavigate();
 
   const fetchList = async () => {
     const token = await getToken();
@@ -35,23 +37,36 @@ const Workflows = () => {
     return await WorkflowService.getAllWorkflowsByUser(token);
   };
 
-  // const onDelete = async (agentId: string) => {
-  //   const token = await getToken();
-  //   if (!token) return;
+  const createNewWorkflow = async () => {
+    const token = await getToken();
+    if (!token) return;
 
-  //   // await toast.promise(deleteAgent({ agentId: agentId, token: token }), {
-  //   //   loading: "Deleting...",
-  //   //   success: <b>Agent Deleted</b>,
-  //   //   error: <b>Could not delete agent.</b>,
-  //   // });
+    const newWorkflow = await WorkflowService.createWorkflow({
+      name: `Untitled Workflow #${(workflows?.length ?? 0) + 1}`,
+      nodes: [],
+      connections: [],
+    }, token);
 
-  //   refetchWorkflows();
-  // };
+    navigate(`/workflow/${newWorkflow._id}`)
+  }
+
+  const onDelete = async (workflowDocId: string) => {
+    const token = await getToken();
+    if (!token) return;
+
+    await toast.promise(WorkflowService.deleteWorkflow(workflowDocId, token), {
+      loading: "Deleting...",
+      success: <b>Workflow Deleted</b>,
+      error: <b>Could not delete workflow.</b>,
+    });
+
+    refetchWorkflows();
+  };
 
   const {
     data: workflows,
     isLoading: workflowsLoading,
-    // refetch: refetchWorkflows,
+    refetch: refetchWorkflows,
   } = useQuery("workflows", fetchList);
 
 
@@ -71,11 +86,9 @@ const Workflows = () => {
             )}
           </h1>
           <div className="flex">
-            <Link to="/workflow/create">
-              <ButtonCN size={'lg'} className="px-6 sm:px-8 h-9 rounded-r-none">
-                Create
-              </ButtonCN>
-            </Link>
+            <ButtonCN onClick={createNewWorkflow} size={'lg'} className="px-6 sm:px-8 h-9 rounded-r-none">
+              Create
+            </ButtonCN>
             <ButtonCN size={'lg'} className="px-2 h-9 border-l-[0.5px] border-white rounded-l-none">
               <FaChevronDown />
             </ButtonCN>
@@ -101,7 +114,7 @@ const Workflows = () => {
                       description={workflow._id as string} 
                       workflowDocId={workflow._id as string} 
                       model={""} 
-                      onDelete={() => {}}           
+                      onDelete={onDelete}         
                     />
                   ))
                 )
@@ -148,7 +161,7 @@ export const WorkflowCard = ({
                 <DropdownMenuLabel>Options</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
-                  onClick={(event) => {
+                  onClick={async (event) => {
                     event.stopPropagation();
                     onDelete(workflowDocId);
                   }}

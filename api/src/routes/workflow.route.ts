@@ -15,6 +15,7 @@ router.get("/", async (req, res) : Promise<any> => {
     return res.status(200).json(workflows)
   } catch (error) {
     console.error(error)
+    return res.status(500).json({error :'Something went wrong'});
   }
 })
 
@@ -28,6 +29,7 @@ router.get("/:id", async (req, res) : Promise<any> => {
     return res.status(200).json(workflow[0])
   } catch (error) {
     console.error(error)
+    return res.status(500).json({error :'Something went wrong'});
   }
 })
 
@@ -35,9 +37,6 @@ router.post("/", async (req, res) : Promise<any> => {
   try {
     const { userId } = getAuth(req);
     const workflowBody = req.body;
-    console.log("control reached here")
-    console.log(workflowBody)
-
     // TODO: body validation based on NodeType
 
     const newWorkflow = await WorkflowService.createWorkflow(workflowBody, userId!);
@@ -45,23 +44,34 @@ router.post("/", async (req, res) : Promise<any> => {
     return res.status(200).json(newWorkflow)
   } catch (error) {
     console.error(error)
+    return res.status(500).json({error :'Something went wrong'});
   }
 })
 
 router.put("/:id", async (req, res) : Promise<any> => {
   try {
-    const { userId } = getAuth(req);
     const { id } = req.params;
     const workflowBody = req.body;
-    console.log("control reached here")
-    console.log(workflowBody)
-
     // TODO: body validation based on NodeType
     const newWorkflow = await WorkflowService.updateWorkflow(id, workflowBody);
 
     return res.status(200).json(newWorkflow)
   } catch (error) {
     console.error(error)
+    return res.status(500).json({error :'Something went wrong'});
+  }
+})
+
+router.delete("/:id", async (req, res) : Promise<any> => {
+  try {
+    const { id } = req.params;
+    // TODO: body validation based on NodeType
+    const newWorkflow = await WorkflowService.deleteWorkflow(id);
+
+    return res.status(200).json(newWorkflow)
+  } catch (error) {
+    console.error(error)
+    return res.status(500).json({error :'Something went wrong'});
   }
 })
 

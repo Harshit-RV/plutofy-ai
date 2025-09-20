@@ -12,7 +12,9 @@ class WorkflowService {
     return await WorkflowEntity.updateOne({ _id: id }, { $set: { nodes: data.nodes, name: data.name, connections: data.connections } })
   } 
 
-  static async deleteWorkflow(id: string) {} 
+  static async deleteWorkflow(id: string) {
+    return await WorkflowEntity.findOneAndDelete({ _id: id })
+  } 
 
   static async getWorkflowsByUser(userId: string) {
     return WorkflowEntity.find({ userId });

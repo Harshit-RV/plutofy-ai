@@ -78,6 +78,23 @@ class WorkflowService {
       throw error;
     }
   };
+
+  static deleteWorkflow = async (id: string, token : string) : Promise<WorkflowDoc> => {
+    try {
+      const response = await axios.delete(
+        `${this.baseUrl}/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching API keys:', error);
+      throw error;
+    }
+  };
 }
 
 export default WorkflowService
