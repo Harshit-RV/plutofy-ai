@@ -82,40 +82,40 @@ const Workflows = () => {
           </div>
         </div>
 
-        <div className="mt-4">
-          <Tabs defaultValue="workflows" className="w-[400px]">
-            <TabsList className="border">
-              <TabsTrigger value="workflows">Workflows</TabsTrigger>
-              <TabsTrigger value="credentials">Credentials</TabsTrigger>
-              <TabsTrigger value="executions">Executions</TabsTrigger>
-            </TabsList>
-            <TabsContent value="workflows">Make changes to your account here.</TabsContent>
-            <TabsContent value="credentials">Change your password here.</TabsContent>
-          </Tabs>
-        </div>
+        <Tabs defaultValue="workflows" className="mt-4">
+          <TabsList className="border bg-gray-300">
+            <TabsTrigger value="workflows">Workflows</TabsTrigger>
+            <TabsTrigger value="credentials">Credentials</TabsTrigger>
+            <TabsTrigger value="executions">Executions</TabsTrigger>
+          </TabsList>
+          
+          <TabsContent value="workflows">
+            <div className="mt-4 grid grid-cols-2 gap-5">
+              {!workflowsLoading || workflows != undefined ? (
+                workflows?.length == 0 ? (
+                  <NoAgentYetCard />
+                ) : (
+                  workflows?.map((workflow) => (
+                    <WorkflowCard 
+                      name={workflow.name} 
+                      description={workflow._id as string} 
+                      workflowDocId={workflow._id as string} 
+                      model={""} 
+                      onDelete={() => {}}           
+                    />
+                  ))
+                )
+              ) : (
+                <>
+                  <AgentCardSkeleton />
+                  <AgentCardSkeleton />
+                </>
+              )}
+            </div>
+          </TabsContent>
+          <TabsContent value="credentials">Change your password here.</TabsContent>
+        </Tabs>
 
-        <div className="mt-6 grid grid-cols-2 gap-5">
-          {!workflowsLoading || workflows != undefined ? (
-            workflows?.length == 0 ? (
-              <NoAgentYetCard />
-            ) : (
-              workflows?.map((workflow) => (
-                <WorkflowCard 
-                  name={workflow.name} 
-                  description={workflow._id as string} 
-                  workflowDocId={workflow._id as string} 
-                  model={""} 
-                  onDelete={() => {}}           
-                />
-              ))
-            )
-          ) : (
-            <>
-              <AgentCardSkeleton />
-              <AgentCardSkeleton />
-            </>
-          )}
-        </div>
       </div>
     </div>
   )

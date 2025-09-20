@@ -6,7 +6,7 @@ import WorkflowService from '@/utils/workflow.util';
 import { useAuth } from '@clerk/clerk-react';
 import { Background, Connection, ReactFlow, ReactFlowProvider, useEdgesState, useNodesState, useReactFlow, Node } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { FaPlus } from 'react-icons/fa';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/card"
 import { Loader2 } from "lucide-react";
 import { IConnection } from '@/types/workflow';
+import { throttle } from 'lodash';
 
 const nodeTypes = {
   llmNode: LlmNode,
@@ -104,9 +105,15 @@ const WorkflowBuilder = ({ workflowName, initialEdges, initialNodes, syncWorkflo
     [setEdges]
   );
 
+  
+  const throttledSync = useMemo(
+    () => throttle((n, e, nm) => syncWorkflowWithDB(n, e, nm), 2000, { trailing: true }),
+    [syncWorkflowWithDB]
+  );
+
   useEffect(() => {
-    syncWorkflowWithDB(nodes, edges, name);
-  }, [nodes, edges, name, syncWorkflowWithDB])
+    throttledSync(nodes, edges, name);
+  }, [nodes, edges, name, throttledSync]);
 
   return (
     <div className='relative h-screen w-full p-4 bg-gray-100 pb-20'>
