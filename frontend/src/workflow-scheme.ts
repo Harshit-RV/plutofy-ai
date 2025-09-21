@@ -3,6 +3,7 @@ type NodeGeneralType =  "llmNode" | "webhookTriggerNode" | "emailNode" | "telegr
 interface NodeInfo {
   name: string,
   description: string,
+  image: string,
   type: NodeGeneralType,
   category: "trigger" | "action",
   credentials: object
@@ -23,6 +24,7 @@ const workflowScheme: WorkflowScheme  = {
       name: "Telegram DM",
       description: "Send a message on Telegram",
       type: "telegramNode", 
+      image: "/telegram.svg",
       category: "action",
       credentials: {
         botToken: "string"
@@ -36,6 +38,7 @@ const workflowScheme: WorkflowScheme  = {
       name: "Webhook Trigger",
       description: "Trigger by making a call to Webhook URL",
       type: "webhookTriggerNode",
+      image: "/webhook.svg",
       category: "trigger",
       credentials: {},
       data: [
@@ -46,6 +49,7 @@ const workflowScheme: WorkflowScheme  = {
       name: "Email",
       description: "Send an email",
       type: "emailNode",
+      image: "/mail.svg",
       category: "action", 
       credentials: {
         smtpServer: "string",
@@ -76,6 +80,7 @@ const workflowScheme: WorkflowScheme  = {
       name: "AI Agent",
       description: "An AI agent that can use tools and make decisions",
       type: "agentNode",
+      image: "/bot.svg",
       category: "action",
       credentials: {},
       data: [
@@ -90,6 +95,7 @@ const workflowScheme: WorkflowScheme  = {
       name: "Condition",
       description: "Branch workflow based on conditions",
       type: "conditionNode",
+      image: "/condition.svg",
       category: "action",
       credentials: {},
       data: [

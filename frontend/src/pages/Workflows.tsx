@@ -114,8 +114,9 @@ const Workflows = () => {
                 workflows?.length == 0 ? (
                   <NoWorkflowYetCard createNewWorkflow={createNewWorkflow}/>
                 ) : (
-                  workflows?.map((workflow) => (
+                  workflows?.map((workflow, index) => (
                     <WorkflowCard 
+                      key={index}
                       name={workflow.name} 
                       description={""} 
                       workflowDocId={workflow._id as string} 

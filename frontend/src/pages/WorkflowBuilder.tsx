@@ -17,7 +17,6 @@ import {
 import { Loader2 } from "lucide-react";
 import { IConnection, NodeType } from '@/types/workflow';
 import { throttle } from 'lodash';
-import { MdOutlineWebhook } from 'react-icons/md';
 import workflowScheme from '@/workflow-scheme';
 import { v4 as uuid } from "uuid";
 
@@ -122,7 +121,7 @@ const WorkflowBuilder = ({ workflowName, initialEdges, initialNodes, syncWorkflo
     const newNode = {
       id: uuid(),
       type: type,
-      position: { x: 100, y: 100 },
+      position: { x: 0, y: 0 },
       data: {},
     };
     setNodes((nds) => nds.concat(newNode));
@@ -185,10 +184,10 @@ const WorkflowBuilder = ({ workflowName, initialEdges, initialNodes, syncWorkflo
             <h1 className='my-7 ml-3 font-bold text-gray-900'>Available Nodes</h1>
 
             {
-              workflowScheme.nodes.map((node) => (
-                <div onClick={() => onAddNode(node.type as NodeType)} className='flex hover:shadow-md items-center h-20 cursor-pointer px-4 py-3 border-y gap-4'>
+              workflowScheme.nodes.map((node, index) => (
+                <div key={index} onClick={() => onAddNode(node.type as NodeType)} className='flex hover:shadow-md items-center h-20 cursor-pointer px-4 py-3 border-y gap-5'>
                   
-                  <MdOutlineWebhook size={30} color="purple"/>
+                  <img src={node.image} className='size-8' alt="" />
                   
                   <div className='flex w-4/5 flex-col gap-1'>
                     <h1 className='text-sm font-bold'>{node.name}</h1>

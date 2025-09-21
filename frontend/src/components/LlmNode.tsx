@@ -1,15 +1,21 @@
 import { Handle, Position, useNodeConnections, useNodeId, useReactFlow } from "@xyflow/react";
-import { MdOutlineEmail, MdOutlineWebhook } from "react-icons/md";
 import { ReactNode } from "react";
-import { FaCode, FaGoogle, FaProjectDiagram, FaTelegram } from "react-icons/fa";
-import { Bot, Plus } from "lucide-react";
+import { FaGoogle } from "react-icons/fa";
+import { Plus } from "lucide-react";
 import { ButtonHandle } from "@/components/button-handle";
 import { ButtonCN } from "./ui/buttoncn";
 import { v4 as uuid } from "uuid";
 import { NodeType } from "@/types/workflow";
-// import { Input } from "./ui/input";
 
-// const 
+
+const logos: Record<NodeType, string> = {
+  [NodeType.telegramNode]: "/telegram.svg",
+  [NodeType.agentNode]: "/bot.svg",
+  [NodeType.conditionNode]: "/condition.svg",
+  [NodeType.emailNode]: "/mail.svg",
+  [NodeType.llmNode]: "/telegram.svg",
+  [NodeType.webhookTriggerNode]: "/webhook.svg",
+}
 
 const LlmNode = () => {
   return (
@@ -31,7 +37,11 @@ const LlmNode = () => {
 export const AgentToolNode = () => {
   return (
     <GeneralDependentNode>
-      <FaCode />
+      <img
+        src={logos.emailNode}
+        alt="Telegram"
+        className="w-6 h-6 object-contain"
+      />
       <Handle 
         type="target" 
         position={Position.Top}
@@ -45,8 +55,12 @@ export const AgentNode = () => {
     <div className='h-full w-full bg-white border rounded-lg p-3'>
       <Handle type="target" position={Position.Left}/>
       
-      <div className="flex gap-2 items-center ">
-        <Bot className="size-6" />
+      <div className="flex gap-2 items-center">
+        <img
+          src={logos.agentNode}
+          alt="Telegram"
+          className="w-6 h-6 object-contain"
+        />
         <p className="text-[10px]">AI Agent</p>
       </div>
 
@@ -64,8 +78,14 @@ export const AgentNode = () => {
 export const WebhookTriggerNode = () => {
   return (
     <GeneralTriggerNode>
-      <MdOutlineWebhook size={24} color="purple"/>
-      <p className="text-[6px] mx-0">Webhook</p>
+      <div className="flex pl-2 flex-col w-full items-center">
+        <img
+          src={logos.webhookTriggerNode}
+          alt="Telegram"
+          className="w-6 h-6 object-contain"
+        />
+        <p className="text-[6px] mx-0">Webhook</p>
+      </div>
 
       <Handle
         type="source"
@@ -80,8 +100,11 @@ export const EmailNode = () => {
 
   return (
     <GeneralActionNode>
-      <MdOutlineEmail size={24} color="#8a0000"/>
-
+      <img
+        src={logos.emailNode}
+        alt="Telegram"
+        className="w-6 h-6 object-contain"
+      />
       <Handle
         type="target"
         position={Position.Left}
@@ -102,7 +125,11 @@ export const EmailNodeWithHandleButton = () => {
   
   return (
     <GeneralActionNode>
-      <MdOutlineEmail size={24}/>
+      <img
+        src={logos.emailNode}
+        alt="Telegram"
+        className="w-6 h-6 object-contain"
+      />
 
       <ButtonHandle
         type="source"
@@ -142,7 +169,11 @@ export const EmailNodeWithHandleButton = () => {
 export const TelegramNode = () => {
   return (
     <GeneralActionNode> 
-      <FaTelegram size={24} className="text-[#24A1DE]"/>
+      <img
+        src={logos.telegramNode}
+        alt="Telegram"
+        className="w-6 h-6 object-contain"
+      />
 
       <Handle
         type="source"
@@ -161,7 +192,11 @@ export const TelegramNode = () => {
 export const ConditionNode = () => {
   return (
     <GeneralActionNode>
-      <FaProjectDiagram size={20}/>
+      <img
+        src={logos.conditionNode}
+        alt="Telegram"
+        className="w-6 h-6 object-contain"
+      />
       <p className="text-[6px] pt-0.5">if/else</p>
       <div className="handles sources">
         <Handle
@@ -185,7 +220,7 @@ export const ConditionNode = () => {
 
 const GeneralActionNode = ({ children } : { children: ReactNode}) => {
   return (
-    <div className="size-14 bg-white border rounded-lg px-5 flex flex-col justify-center items-center">
+    <div className="size-14 bg-white border rounded-lg flex flex-col justify-center items-center">
       {children}
     </div>
   )
@@ -193,7 +228,7 @@ const GeneralActionNode = ({ children } : { children: ReactNode}) => {
 
 const GeneralTriggerNode = ({ children } : { children: ReactNode}) => {
   return (
-    <div className="size-14 bg-white border rounded-lg px-5 pl-7 flex flex-col justify-center items-center rounded-l-full">
+    <div className="size-14 bg-white border rounded-lg flex flex-col justify-center items-center rounded-l-full">
       {children}
     </div>
   )
