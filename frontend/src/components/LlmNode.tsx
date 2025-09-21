@@ -6,7 +6,7 @@ import { Bot, Plus } from "lucide-react";
 import { ButtonHandle } from "@/components/button-handle";
 import { ButtonCN } from "./ui/buttoncn";
 import { v4 as uuid } from "uuid";
-import { NodeType } from "@/pages/WorkflowBuilder";
+import { NodeType } from "@/types/workflow";
 // import { Input } from "./ui/input";
 
 // const 

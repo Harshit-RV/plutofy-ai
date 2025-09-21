@@ -8,14 +8,14 @@ import { Background, Connection, ReactFlow, ReactFlowProvider, useEdgesState, us
 import '@xyflow/react/dist/style.css';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { FaPlus } from 'react-icons/fa';
-import { useQuery } from 'react-query';
+import { useQuery, useQueryClient } from 'react-query';
 import { useParams } from 'react-router-dom';
 import {
   Card,
   CardContent,
 } from "@/components/ui/card"
 import { Loader2 } from "lucide-react";
-import { IConnection } from '@/types/workflow';
+import { IConnection, NodeType } from '@/types/workflow';
 import { throttle } from 'lodash';
 
 const nodeTypes = {
@@ -27,19 +27,13 @@ const nodeTypes = {
   conditionNode: ConditionNode,
 }
 
-export enum NodeType {
-  llmNode = "llmNode",
-  webhookTriggerNode = "webhookTriggerNode",
-  emailNode = "emailNode",
-  telegramNode = "telegramNode",
-  agentNode = "agentNode",
-  conditionNode = "conditionNode" 
-}
+
 type Mode = 'CREATE' | 'EDIT';
 
 export default function WorkflowBuilderPage({ mode } : { mode: Mode }) {
   const { workflowDocId } = useParams(); 
   const { getToken } = useAuth();
+  const queryClient = useQueryClient();
 
   const fetchWorkflow = async () => {
     const token = await getToken();
@@ -52,8 +46,19 @@ export default function WorkflowBuilderPage({ mode } : { mode: Mode }) {
     const token = await getToken();
     if (!token) return;
     if (!workflow) return;
+
+    queryClient.setQueryData<unknown>([`workflow-${workflowDocId}`], (oldData: unknown) => {
+      if (!oldData) return oldData;
+      
+      return {
+        ...oldData,
+        name: name,
+        nodes: nodes,
+        connections: edges
+      }
+    });
+    
     await WorkflowService.updateWorkflow(String(workflow._id), {
-      ...workflow,
       name: name,
       nodes: nodes,
       connections: edges
