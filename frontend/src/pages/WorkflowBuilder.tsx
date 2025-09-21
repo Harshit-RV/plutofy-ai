@@ -17,6 +17,9 @@ import {
 import { Loader2 } from "lucide-react";
 import { IConnection, NodeType } from '@/types/workflow';
 import { throttle } from 'lodash';
+import { MdOutlineWebhook } from 'react-icons/md';
+import workflowScheme from '@/workflow-scheme';
+import { v4 as uuid } from "uuid";
 
 const nodeTypes = {
   llmNode: LlmNode,
@@ -88,21 +91,24 @@ export default function WorkflowBuilderPage({ mode } : { mode: Mode }) {
 
   return (
     <ReactFlowProvider>
-      <WorkflowBuilder 
-        syncWorkflowWithDB={syncWorkflowWithDB} 
-        mode={mode}
-        workflowName={workflow?.name ?? ""}
-        initialEdges={workflow?.connections ?? []} 
-        initialNodes={workflow?.nodes ?? []}
-      />
+      <div className='h-screen w-full p-4 bg-gray-100 pb-20'>
+        <WorkflowBuilder 
+          syncWorkflowWithDB={syncWorkflowWithDB} 
+          mode={mode}
+          workflowName={workflow?.name ?? ""}
+          initialEdges={workflow?.connections ?? []} 
+          initialNodes={workflow?.nodes ?? []}
+        />
+      </div>
     </ReactFlowProvider>
   )
 }
 
 const WorkflowBuilder = ({ workflowName, initialEdges, initialNodes, syncWorkflowWithDB } : { workflowName: string, mode: Mode, initialEdges: IConnection[], initialNodes: Node[], syncWorkflowWithDB: (nodes: Node[], edges: IConnection[], name: string) => void }) => {
-  const [ nodes,, onNodesChange ] = useNodesState(initialNodes);
+  const [ nodes, setNodes, onNodesChange ] = useNodesState(initialNodes);
   const [ edges, setEdges, onEdgesChange ] = useEdgesState(initialEdges);
   const [ name, setName ] = useState(workflowName);
+  const [ isSidebarVisible, setIsSidebarVisible ] = useState(true)
   const { getNode } = useReactFlow();
 
   const onConnect = useCallback(
@@ -112,6 +118,15 @@ const WorkflowBuilder = ({ workflowName, initialEdges, initialNodes, syncWorkflo
     [setEdges]
   );
 
+  const onAddNode = useCallback((type: NodeType) => {
+    const newNode = {
+      id: uuid(),
+      type: type,
+      position: { x: 100, y: 100 },
+      data: {},
+    };
+    setNodes((nds) => nds.concat(newNode));
+  }, [setNodes]);
   
   const throttledSync = useMemo(
     () => throttle((n, e, nm) => syncWorkflowWithDB(n, e, nm), 2000, { trailing: true }),
@@ -127,12 +142,14 @@ const WorkflowBuilder = ({ workflowName, initialEdges, initialNodes, syncWorkflo
   }, [throttledSync]);
 
   return (
-    <div className='relative h-screen w-full p-4 bg-gray-100 pb-20'>
-      
+    <div className='relative h-full w-full'>
+
+      <Input className='absolute w-min left-4 top-4 z-10' value={name} onChange={(e) => setName(e.target.value)} /> 
+
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <ButtonCN
-            className="absolute right-10 top-10 z-10 flex gap-3 border"
+            className="absolute hidden bottom-10 left-10 z-10 gap-3 border"
             variant="outline"
           >
             <FaPlus /> Add node
@@ -151,8 +168,40 @@ const WorkflowBuilder = ({ workflowName, initialEdges, initialNodes, syncWorkflo
           </DropdownMenuContent>
         </DropdownMenuPortal>
       </DropdownMenu>
+      
+      <ButtonCN
+        onClick={() => setIsSidebarVisible(!isSidebarVisible)}
+        className="flex gap-3 border absolute top-4 right-4 z-10"
+        variant="outline"
+      >
+        <FaPlus /> Add node
+      </ButtonCN>
 
-      <Input className='absolute w-min left-10 top-10 z-10' value={name} onChange={(e) => setName(e.target.value)} />
+      {isSidebarVisible &&
+        <div className='top-16 bottom-4 right-4 absolute rounded-lg border-gray-200 z-10 bg-white w-[400px] shadow-xl'>
+
+          <div className='flex flex-col h-full w-full'>
+
+            <h1 className='my-7 ml-3 font-bold text-gray-900'>Available Nodes</h1>
+
+            {
+              workflowScheme.nodes.map((node) => (
+                <div onClick={() => onAddNode(node.type as NodeType)} className='flex hover:shadow-md items-center h-20 cursor-pointer px-4 py-3 border-y gap-4'>
+                  
+                  <MdOutlineWebhook size={30} color="purple"/>
+                  
+                  <div className='flex w-4/5 flex-col gap-1'>
+                    <h1 className='text-sm font-bold'>{node.name}</h1>
+                    <p className='text-xs text-gray-400'>{node.description}</p>
+                  </div>
+                </div>
+              ))
+            }
+            
+          </div>
+        </div>
+      }
+
 
       <ReactFlow 
         nodes={nodes} 
@@ -183,5 +232,4 @@ const WorkflowBuilder = ({ workflowName, initialEdges, initialNodes, syncWorkflo
     </div>
   );
 }
-
 
