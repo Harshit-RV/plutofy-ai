@@ -42,28 +42,30 @@ export default function WorkflowBuilderPage({ mode } : { mode: Mode }) {
     return await WorkflowService.getWorkflowById(workflowDocId, token);
   };
 
-  const syncWorkflowWithDB = async (nodes: Node[], edges: IConnection[], name: string) => {
-    const token = await getToken();
-    if (!token) return;
-    if (!workflow) return;
-
-    queryClient.setQueryData<unknown>([`workflow-${workflowDocId}`], (oldData: unknown) => {
-      if (!oldData) return oldData;
-      
-      return {
-        ...oldData,
-        name: name,
-        nodes: nodes,
-        connections: edges
-      }
-    });
-    
-    await WorkflowService.updateWorkflow(String(workflow._id), {
-      name: name,
-      nodes: nodes,
-      connections: edges
-    }, token)
-  }
+  const syncWorkflowWithDB = useCallback(
+    async (nodes: Node[], edges: IConnection[], name: string) => {
+      const token = await getToken();
+      if (!token) return;
+      if (!workflowDocId) return;
+  
+      queryClient.setQueryData([`workflow-${workflowDocId}`], (oldData: unknown) => {
+        if (!oldData) return oldData;
+        return {
+          ...oldData,
+          name,
+          nodes,
+          connections: edges,
+        };
+      });
+  
+      await WorkflowService.updateWorkflow(workflowDocId, {
+        name,
+        nodes,
+        connections: edges,
+      }, token);
+    },
+    [getToken, queryClient, workflowDocId]
+  );
 
   const {
     data: workflow,
@@ -119,6 +121,10 @@ const WorkflowBuilder = ({ workflowName, initialEdges, initialNodes, syncWorkflo
   useEffect(() => {
     throttledSync(nodes, edges, name);
   }, [nodes, edges, name, throttledSync]);
+
+  useEffect(() => {
+    return () => throttledSync.cancel();
+  }, [throttledSync]);
 
   return (
     <div className='relative h-screen w-full p-4 bg-gray-100 pb-20'>
