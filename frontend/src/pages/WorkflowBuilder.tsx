@@ -5,7 +5,7 @@ import WorkflowService from '@/utils/workflow.util';
 import { useAuth } from '@clerk/clerk-react';
 import { Background, Connection, ReactFlow, ReactFlowProvider, useEdgesState, useNodesState, useReactFlow, Node, useOnSelectionChange } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
-import { Dispatch, ReactNode, SetStateAction, useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { FaPlus } from 'react-icons/fa';
 import { useQuery, useQueryClient } from 'react-query';
 import { useParams } from 'react-router-dom';
@@ -16,8 +16,8 @@ import {
 import { Loader2 } from "lucide-react";
 import { IConnection, NodeType } from '@/types/workflow';
 import { throttle } from 'lodash';
-import workflowScheme, { InputField } from '@/workflow-scheme';
 import { v4 as uuid } from "uuid";
+import WorkflowSidebar from '@/components/workflows/sidebar/WorkflowSidebar';
 
 const nodeTypes = {
   llmNode: LlmNode,
@@ -27,7 +27,6 @@ const nodeTypes = {
   agentNode: AgentNode,
   conditionNode: ConditionNode,
 }
-
 
 type Mode = 'CREATE' | 'EDIT';
 
@@ -71,7 +70,6 @@ export default function WorkflowBuilderPage({ mode } : { mode: Mode }) {
   const {
     data: workflow,
     isLoading: workflowLoading,
-    // refetch: refetchWorkflows,
   } = useQuery(`workflow-${workflowDocId}`, fetchWorkflow);
 
   if (workflowLoading) {
@@ -162,22 +160,17 @@ const WorkflowBuilder = ({ workflowName, initialEdges, initialNodes, syncWorkflo
       >
         <FaPlus /> Add node
       </ButtonCN>
+      
 
       {(isSidebarVisible || selectedNodes.length !=0) &&
         <div className='top-16 bottom-4 right-4 absolute rounded-lg border-gray-200 z-10 bg-white w-[400px] shadow-xl'>
-
-          <div className='flex flex-col h-full w-full'>
-
-            { selectedNodes.length !=0 ? (
-              <NodeExpanded node={selectedNodes[0]} setNodes={setNodes} />
-            ) : (
-              <AddNodeSection onAddNode={onAddNode}></AddNodeSection>
-            )}
-            
-          </div>
+          <WorkflowSidebar 
+            selectedNodes={selectedNodes}
+            onAddNode={onAddNode}
+            setNodes={setNodes}
+          />
         </div>
       }
-
 
       <ReactFlow 
         nodes={nodes} 
@@ -208,151 +201,3 @@ const WorkflowBuilder = ({ workflowName, initialEdges, initialNodes, syncWorkflo
     </div>
   );
 }
-
-const NodeExpanded = ({ node, setNodes } : { node: Node, setNodes: Dispatch<SetStateAction<Node[]>> }) => {
-
-  const nodeInfoFromScheme = workflowScheme.nodes.find(wf => wf.type == node.type);
-
-  return (
-    <div className='flex flex-col w-full py-5 px-4'>
-      
-      <div className='flex items-center gap-3'>
-        <img src={nodeInfoFromScheme?.image} className='size-10' alt="" />
-        <h1 className='font-bold text-lg'>{nodeInfoFromScheme?.name}</h1>
-      </div>
-
-      <p className='text-sm mt-3'>{nodeInfoFromScheme?.description}</p>
-      
-      <div className='mt-5'>
-        {
-          nodeInfoFromScheme?.data.map((inputField, index) => (
-            <div key={index} className='mt-4'>
-              <p className='text-sm'>{inputField.displayName}</p>
-              <SingleInputField 
-                type={inputField.type} 
-                value={(node.data || {})[inputField.name] as string} 
-                
-                onValueChange={(val) => {
-                  setNodes((nodes) =>
-                    nodes.map((singleNode) => {
-                      if (singleNode.id === node.id) {
-                        return {
-                          ...singleNode,
-                          data: {
-                            ...(singleNode.data || {}),
-                            [inputField.name]: val
-                          }
-                        };
-                      }
-                      
-                      return singleNode;
-                    }),
-                  );
-                }}
-
-                name={inputField.name} 
-                displayName={inputField.displayName} 
-              />
-            </div>
-          ))
-        }
-      </div>
-      
-    </div>
-  )
-}
-
-interface InputFieldProps extends InputField {
-  value: string,
-  onValueChange: (value: string) => void
-}
-
-const SingleInputField = ( props : InputFieldProps): ReactNode => {
-  if (props.type === "string") {
-    return (
-      <Input 
-        value={props.value as string}
-        onChange={(e) => props.onValueChange(e.target.value)}
-        className=''
-      />
-    )
-  }
-
-  if (props.type === "number") {
-    return (
-      <Input
-        type="number"
-        value={Number(props.value)} 
-        onChange={(e) => props.onValueChange(e.target.value)}
-        className=''
-      />
-    )
-  }
-
-  if (props.type === "boolean") {
-    return (
-      <input
-        type="checkbox"
-        checked={Boolean(props.value)}
-        onChange={(e) => props.onValueChange(String(e.target.checked))}
-        className=''
-      />
-    )
-  }
-
-  if (props.type === "object") {
-    return (
-      <textarea
-        value={JSON.stringify(props.value, null, 2)}
-        onChange={(e) => {
-          try {
-            props.onValueChange(JSON.parse(e.target.value))
-          } catch (err) {
-            console.log(err)
-          }
-        }}
-        className=''
-      />
-    )
-  }
-
-  if (props.type === "array") {
-    return (
-      <textarea 
-        value={JSON.stringify(props.value, null, 2)}
-        onChange={(e) => {
-          try {
-            props.onValueChange(JSON.parse(e.target.value))
-          } catch (err) {
-            console.log(err)
-          }
-        }}
-        className=''
-      />
-    )
-  }
-
-  return null
-}
-
-const AddNodeSection = ( { onAddNode } : { onAddNode: (type: NodeType) => void } ) => {
-  return (
-    <div>
-      <h1 className='my-7 ml-3 font-bold text-gray-900'>Available Nodes</h1>
-      {
-        workflowScheme.nodes.map((node, index) => (
-          <div key={index} onClick={() => onAddNode(node.type as NodeType)} className='flex hover:shadow-md items-center h-20 cursor-pointer px-4 py-3 border-y gap-5'>
-            
-            <img src={node.image} className='size-8' alt="" />
-            
-            <div className='flex w-4/5 flex-col gap-1'>
-              <h1 className='text-sm font-bold'>{node.name}</h1>
-              <p className='text-xs text-gray-400'>{node.description}</p>
-            </div>
-          </div>
-        ))
-      }
-    </div>
-  )
-}
-
