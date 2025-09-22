@@ -1,4 +1,4 @@
-import { PrimitiveType } from "./common-types"
+import { PrimitiveType } from "./types/common-types"
 
 type NodeGeneralType =  "llmNode" | "webhookTriggerNode" | "emailNode" | "telegramNode" | "agentNode" | "conditionNode"
 

@@ -15,12 +15,6 @@ type Field = {
   fields?: Field[]
   isExpanded?: boolean
 }
-// export interface OutputStructure {
-//   id: string;
-//   name: string;
-//   type: string;
-//   fields?: OutputStructure[];
-// }
 
 export default function JsonBuilder( { outputStructure, setOutputStructure }:{ outputStructure:OutputStructure[], setOutputStructure : (outputStructure: OutputStructure[]) => void } ) {
   const convertOutputStructureToFields = (outputStructure: OutputStructure[]): Field[] => {

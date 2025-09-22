@@ -1,4 +1,4 @@
-import { JsonValue } from "@/components/JsonInput";
+import { JsonValue } from "@/components/json-forms/JsonInput";
 import { OutputStructure } from "@/types/agent";
 
 function truncateString(str: string, length: number = 50): string {

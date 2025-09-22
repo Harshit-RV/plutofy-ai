@@ -8,7 +8,7 @@ import TemplateAgentCard from "./TemplateAgentCard";
 import { ButtonCN } from "@/components/ui/buttoncn";
 import { AgentProps } from "@/types/agent";
 
-const TemplatesSection = ({
+const AgentTemplatesSection = ({
   collapsible = true,
   refetch,
 }: {
@@ -126,4 +126,4 @@ const TemplatesSection = ({
   );
 };
 
-export default TemplatesSection;
+export default AgentTemplatesSection;

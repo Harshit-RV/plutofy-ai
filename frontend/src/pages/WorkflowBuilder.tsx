@@ -1,4 +1,4 @@
-import LlmNode, { AgentNode, ConditionNode, EmailNode, TelegramNode, WebhookTriggerNode } from '@/components/LlmNode';
+import LlmNode, { AgentNode, ConditionNode, EmailNode, TelegramNode, WebhookTriggerNode } from '@/components/workflows/nodes/LlmNode';
 import { ButtonCN } from '@/components/ui/buttoncn';
 import { Input } from '@/components/ui/input';
 import WorkflowService from '@/utils/workflow.util';

@@ -17,6 +17,7 @@ const JsonInput = ({ onChange } : JsonInputProps) => {
       const parsed = JSON.parse(input);
       setError(null);
       onChange(parsed);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (_) {
       setError("Invalid JSON");
       onChange(null);
@@ -29,6 +30,7 @@ const JsonInput = ({ onChange } : JsonInputProps) => {
       const formatted = JSON.stringify(parsed, null, 2);
       setJsonString(formatted);
       setError(null);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (_) {
       setError("Invalid JSON");
     }

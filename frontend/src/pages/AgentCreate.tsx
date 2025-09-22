@@ -13,7 +13,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea";
-import JsonBuilder from "@/components/JsonInput";
+import JsonBuilder from "@/components/json-forms/JsonInput";
 import {
   Card,
   CardContent,
@@ -23,10 +23,10 @@ import {
 import { AgentDoc, AgentProps, OutputStructure } from "@/types/agent";
 import toast from "react-hot-toast";
 import { createAgent, getAgentByDocId, updateAgent } from "@/utils/agent.utils";
-import AIDeploymentSuccess from "./Success";
 import { useAuth } from "@clerk/clerk-react";
 import { useParams } from "react-router-dom";
 import { Loader2 } from "lucide-react";
+import AgentDeploymentSuccessCard from "@/components/agents/AgentDeploymentSuccessCard";
 
 const llmsList = [
   { modelCategory: "OpenAI", models: ["gpt-3.5", "gpt-4o-2024-08-06", "gpt-babbage"] },
@@ -139,7 +139,7 @@ const AgentCreate = ({ mode } : { mode: Mode }) => {
 
   return (
     createdAgent ? (
-      <AIDeploymentSuccess name={createdAgent.name} agentId={createdAgent.agentId} />
+      <AgentDeploymentSuccessCard name={createdAgent.name} agentId={createdAgent.agentId} />
     ) : 
     <div className='flex flex-col font-mono min-h-screen bg-gray-100'>
           <div className="flex justify-between items-center sm:gap-10 bg-white border px-2 sm:px-10 md:px-20 xl:px-48 pt-5 w-full py-5">

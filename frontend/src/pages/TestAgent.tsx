@@ -19,12 +19,12 @@ import {
 } from "@/components/ui/card";
 import { useAuth } from "@clerk/clerk-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import JsonTable from "@/components/JsonToTable";
+import JsonTable from "@/components/json-forms/JsonToTable";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { getJsonObject } from "@/utils/utils";
-import { ConnectToAgentDialogBox } from "@/components/ConnectToAgentDialogBox";
+import { ConnectToAgentDialogBox } from "@/components/agents/ConnectToAgentDialogBox";
 
 enum TestingMode {
   DEVELOPER_MODE = "developer_mode",

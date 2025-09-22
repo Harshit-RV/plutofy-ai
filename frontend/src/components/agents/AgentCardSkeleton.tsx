@@ -1,4 +1,4 @@
-import { Skeleton } from "./ui/skeleton"
+import { Skeleton } from "@/components/ui/skeleton"
 import {
     Card,
     CardContent,
@@ -7,7 +7,6 @@ import {
     CardTitle,
 } from "@/components/ui/card"
 
-export 
 const AgentCardSkeleton = () => {
     return (
         <Card className="shadow-none">
@@ -30,3 +29,5 @@ const AgentCardSkeleton = () => {
         </Card>
     )
 }
+
+export default AgentCardSkeleton;

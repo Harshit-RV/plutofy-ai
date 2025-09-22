@@ -3,7 +3,7 @@ import { ReactNode } from "react";
 import { FaGoogle } from "react-icons/fa";
 import { Plus } from "lucide-react";
 import { ButtonHandle } from "@/components/button-handle";
-import { ButtonCN } from "./ui/buttoncn";
+import { ButtonCN } from "@/components/ui/buttoncn";
 import { v4 as uuid } from "uuid";
 import { NodeType } from "@/types/workflow";
 
