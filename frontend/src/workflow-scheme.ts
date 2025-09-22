@@ -1,3 +1,5 @@
+import { PrimitiveType } from "./common-types"
+
 type NodeGeneralType =  "llmNode" | "webhookTriggerNode" | "emailNode" | "telegramNode" | "agentNode" | "conditionNode"
 
 interface NodeInfo {
@@ -7,11 +9,17 @@ interface NodeInfo {
   type: NodeGeneralType,
   category: "trigger" | "action",
   credentials: object
-  data: object,
+  data: InputField[],
   connections?: {
     required?: NodeGeneralType[]
   }
 }
+
+export interface InputField {
+  name: string,
+  displayName: string,
+  type: PrimitiveType,
+} 
 
 interface WorkflowScheme { 
   nodes: NodeInfo[]
@@ -30,8 +38,8 @@ const workflowScheme: WorkflowScheme  = {
         botToken: "string"
       },
       data: [
-        { name: "chatId", type: "string" },
-        { name: "message", type: "string" },
+        { name: "chatId", displayName: "Chat ID", type: "string" },
+        { name: "message", displayName: "Message", type: "string" },
       ]
     },
     {
@@ -42,7 +50,7 @@ const workflowScheme: WorkflowScheme  = {
       category: "trigger",
       credentials: {},
       data: [
-        { name: "payload", type: "object" }
+        { displayName:"", name: "Payload", type: "object" }
       ]
     },
     {
@@ -57,9 +65,10 @@ const workflowScheme: WorkflowScheme  = {
         password: "string"
       },
       data: [
-        { name: "to", type: "string" },
-        { name: "subject", type: "string" },
-        { name: "body", type: "string" }
+        { name: "from", displayName: "From", type: "string"},
+        { name: "to", displayName: "To", type: "string" },
+        { name: "subject", displayName: "Subject", type: "string" },
+        { name: "HTML Body", displayName: "HTML Body", type: "string" }
       ]
     },
     // {
@@ -84,8 +93,8 @@ const workflowScheme: WorkflowScheme  = {
       category: "action",
       credentials: {},
       data: [
-        { name: "goal", type: "string" },
-        { name: "tools", type: "array" }
+        // { name: "goal", type: "string" },
+        // { name: "tools", type: "array" }
       ],
       connections: {
         required: ["llmNode"]
@@ -99,9 +108,9 @@ const workflowScheme: WorkflowScheme  = {
       category: "action",
       credentials: {},
       data: [
-        { name: "condition", type: "string" },
-        { name: "truePathLabel", type: "string" },
-        { name: "falsePathLabel", type: "string" }
+        // { name: "condition", type: "string" },
+        // { name: "truePathLabel", type: "string" },
+        // { name: "falsePathLabel", type: "string" }
       ]
     }
   ]

@@ -1,12 +1,11 @@
 import LlmNode, { AgentNode, ConditionNode, EmailNode, TelegramNode, WebhookTriggerNode } from '@/components/LlmNode';
 import { ButtonCN } from '@/components/ui/buttoncn';
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuPortal } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
 import WorkflowService from '@/utils/workflow.util';
 import { useAuth } from '@clerk/clerk-react';
-import { Background, Connection, ReactFlow, ReactFlowProvider, useEdgesState, useNodesState, useReactFlow, Node } from '@xyflow/react';
+import { Background, Connection, ReactFlow, ReactFlowProvider, useEdgesState, useNodesState, useReactFlow, Node, useOnSelectionChange } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { Dispatch, ReactNode, SetStateAction, useCallback, useEffect, useMemo, useState } from 'react';
 import { FaPlus } from 'react-icons/fa';
 import { useQuery, useQueryClient } from 'react-query';
 import { useParams } from 'react-router-dom';
@@ -17,7 +16,7 @@ import {
 import { Loader2 } from "lucide-react";
 import { IConnection, NodeType } from '@/types/workflow';
 import { throttle } from 'lodash';
-import workflowScheme from '@/workflow-scheme';
+import workflowScheme, { InputField } from '@/workflow-scheme';
 import { v4 as uuid } from "uuid";
 
 const nodeTypes = {
@@ -106,6 +105,8 @@ export default function WorkflowBuilderPage({ mode } : { mode: Mode }) {
 const WorkflowBuilder = ({ workflowName, initialEdges, initialNodes, syncWorkflowWithDB } : { workflowName: string, mode: Mode, initialEdges: IConnection[], initialNodes: Node[], syncWorkflowWithDB: (nodes: Node[], edges: IConnection[], name: string) => void }) => {
   const [ nodes, setNodes, onNodesChange ] = useNodesState(initialNodes);
   const [ edges, setEdges, onEdgesChange ] = useEdgesState(initialEdges);
+  const [ selectedNodes, setSelectedNodes ] = useState<Node[]>([]);
+  // const [ selectedEdges, setSelectedEdges ] = useState<IConnection[]>([]);
   const [ name, setName ] = useState(workflowName);
   const [ isSidebarVisible, setIsSidebarVisible ] = useState(true)
   const { getNode } = useReactFlow();
@@ -119,9 +120,9 @@ const WorkflowBuilder = ({ workflowName, initialEdges, initialNodes, syncWorkflo
 
   const onAddNode = useCallback((type: NodeType) => {
     const newNode = {
-      id: uuid(),
+      id: `${type}-${uuid()}`,
       type: type,
-      position: { x: 0, y: 0 },
+      position: { x: Math.floor(Math.random() * 101), y: Math.floor(Math.random() * 101) },
       data: {},
     };
     setNodes((nds) => nds.concat(newNode));
@@ -140,33 +141,19 @@ const WorkflowBuilder = ({ workflowName, initialEdges, initialNodes, syncWorkflo
     return () => throttledSync.cancel();
   }, [throttledSync]);
 
+  const onSelectionChange = useCallback(({ nodes } : { nodes: Node[] }) => {
+    setSelectedNodes(nodes);
+    // setSelectedEdges(edges);
+  }, []);
+
+  useOnSelectionChange({
+    onChange: onSelectionChange,
+  });
+
   return (
     <div className='relative h-full w-full'>
 
       <Input className='absolute w-min left-4 top-4 z-10' value={name} onChange={(e) => setName(e.target.value)} /> 
-
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <ButtonCN
-            className="absolute hidden bottom-10 left-10 z-10 gap-3 border"
-            variant="outline"
-          >
-            <FaPlus /> Add node
-          </ButtonCN>
-        </DropdownMenuTrigger>
-        <DropdownMenuPortal>
-          <DropdownMenuContent
-            side="bottom"
-            align="end"
-            className="z-10 bg-white shadow-lg"
-          >
-            <DropdownMenuItem>Profile</DropdownMenuItem>
-            <DropdownMenuItem>Billing</DropdownMenuItem>
-            <DropdownMenuItem>Team</DropdownMenuItem>
-            <DropdownMenuItem>Subscription</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenuPortal>
-      </DropdownMenu>
       
       <ButtonCN
         onClick={() => setIsSidebarVisible(!isSidebarVisible)}
@@ -176,26 +163,16 @@ const WorkflowBuilder = ({ workflowName, initialEdges, initialNodes, syncWorkflo
         <FaPlus /> Add node
       </ButtonCN>
 
-      {isSidebarVisible &&
+      {(isSidebarVisible || selectedNodes.length !=0) &&
         <div className='top-16 bottom-4 right-4 absolute rounded-lg border-gray-200 z-10 bg-white w-[400px] shadow-xl'>
 
           <div className='flex flex-col h-full w-full'>
 
-            <h1 className='my-7 ml-3 font-bold text-gray-900'>Available Nodes</h1>
-
-            {
-              workflowScheme.nodes.map((node, index) => (
-                <div key={index} onClick={() => onAddNode(node.type as NodeType)} className='flex hover:shadow-md items-center h-20 cursor-pointer px-4 py-3 border-y gap-5'>
-                  
-                  <img src={node.image} className='size-8' alt="" />
-                  
-                  <div className='flex w-4/5 flex-col gap-1'>
-                    <h1 className='text-sm font-bold'>{node.name}</h1>
-                    <p className='text-xs text-gray-400'>{node.description}</p>
-                  </div>
-                </div>
-              ))
-            }
+            { selectedNodes.length !=0 ? (
+              <NodeExpanded node={selectedNodes[0]} setNodes={setNodes} />
+            ) : (
+              <AddNodeSection onAddNode={onAddNode}></AddNodeSection>
+            )}
             
           </div>
         </div>
@@ -230,5 +207,152 @@ const WorkflowBuilder = ({ workflowName, initialEdges, initialNodes, syncWorkflo
       </ReactFlow>
     </div>
   );
+}
+
+const NodeExpanded = ({ node, setNodes } : { node: Node, setNodes: Dispatch<SetStateAction<Node[]>> }) => {
+
+  const nodeInfoFromScheme = workflowScheme.nodes.find(wf => wf.type == node.type);
+
+  return (
+    <div className='flex flex-col w-full py-5 px-4'>
+      
+      <div className='flex items-center gap-3'>
+        <img src={nodeInfoFromScheme?.image} className='size-10' alt="" />
+        <h1 className='font-bold text-lg'>{nodeInfoFromScheme?.name}</h1>
+      </div>
+
+      <p className='text-sm mt-3'>{nodeInfoFromScheme?.description}</p>
+      
+      <div className='mt-5'>
+        {
+          nodeInfoFromScheme?.data.map((inputField, index) => (
+            <div key={index} className='mt-4'>
+              <p className='text-sm'>{inputField.displayName}</p>
+              <SingleInputField 
+                type={inputField.type} 
+                value={(node.data || {})[inputField.name] as string} 
+                
+                onValueChange={(val) => {
+                  setNodes((nodes) =>
+                    nodes.map((singleNode) => {
+                      if (singleNode.id === node.id) {
+                        return {
+                          ...singleNode,
+                          data: {
+                            ...(singleNode.data || {}),
+                            [inputField.name]: val
+                          }
+                        };
+                      }
+                      
+                      return singleNode;
+                    }),
+                  );
+                }}
+
+                name={inputField.name} 
+                displayName={inputField.displayName} 
+              />
+            </div>
+          ))
+        }
+      </div>
+      
+    </div>
+  )
+}
+
+interface InputFieldProps extends InputField {
+  value: string,
+  onValueChange: (value: string) => void
+}
+
+const SingleInputField = ( props : InputFieldProps): ReactNode => {
+  if (props.type === "string") {
+    return (
+      <Input 
+        value={props.value as string}
+        onChange={(e) => props.onValueChange(e.target.value)}
+        className=''
+      />
+    )
+  }
+
+  if (props.type === "number") {
+    return (
+      <Input
+        type="number"
+        value={Number(props.value)} 
+        onChange={(e) => props.onValueChange(e.target.value)}
+        className=''
+      />
+    )
+  }
+
+  if (props.type === "boolean") {
+    return (
+      <input
+        type="checkbox"
+        checked={Boolean(props.value)}
+        onChange={(e) => props.onValueChange(String(e.target.checked))}
+        className=''
+      />
+    )
+  }
+
+  if (props.type === "object") {
+    return (
+      <textarea
+        value={JSON.stringify(props.value, null, 2)}
+        onChange={(e) => {
+          try {
+            props.onValueChange(JSON.parse(e.target.value))
+          } catch (err) {
+            console.log(err)
+          }
+        }}
+        className=''
+      />
+    )
+  }
+
+  if (props.type === "array") {
+    return (
+      <textarea 
+        value={JSON.stringify(props.value, null, 2)}
+        onChange={(e) => {
+          try {
+            props.onValueChange(JSON.parse(e.target.value))
+          } catch (err) {
+            console.log(err)
+          }
+        }}
+        className=''
+      />
+    )
+  }
+
+  return null
+}
+
+const AddNodeSection = ( { onAddNode } : { onAddNode: (type: NodeType) => void } ) => {
+  return (
+    <div>
+      <h1 className='my-7 ml-3 font-bold text-gray-900'>Available Nodes</h1>
+      {
+        workflowScheme.nodes.map((node, index) => (
+          <div key={index} onClick={() => onAddNode(node.type as NodeType)} className='flex hover:shadow-md items-center h-20 cursor-pointer px-4 py-3 border-y gap-5'>
+            
+            <img src={node.image} className='size-8' alt="" />
+            
+            <div className='flex w-4/5 flex-col gap-1'>
+              <h1 className='text-sm font-bold'>{node.name}</h1>
+              <p className='text-xs text-gray-400'>{node.description}</p>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  )
 }
 

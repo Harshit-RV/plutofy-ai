@@ -32,12 +32,12 @@ const WorkflowTemplates = ({
       name: "Simple Workflow",
       description: "Uses Telegram, AI agent, and Mail nodes with Webhook trigger",
       nodes: [
-        { id: '1', position: { x: 0, y: 0 }, data: { label: 'third block' }, type: 'webhookTriggerNode', },
-        { id: '2', position: { x: 100, y: 0 }, data: { label: 'third block' }, type: 'emailNode', },
-        { id: '3', position: { x: 100, y: 100 }, data: { label: 'third block' }, type: 'telegramNode', },
-        { id: '4', position: { x: 200, y: 100 }, data: { label: 'third block' }, type: 'agentNode', },
-        { id: '5', position: { x: 200, y: 200 }, data: { label: 'third block' }, type: 'llmNode', },
-        { id: '6', position: { x: 200, y: 300 }, data: { label: 'third block' }, type: 'conditionNode', },
+        { id: '1', position: { x: 0, y: 0 }, data: {}, type: 'webhookTriggerNode', },
+        { id: '2', position: { x: 100, y: 0 }, data: {}, type: 'emailNode', },
+        { id: '3', position: { x: 100, y: 100 }, data: {}, type: 'telegramNode', },
+        { id: '4', position: { x: 200, y: 100 }, data: {}, type: 'agentNode', },
+        { id: '5', position: { x: 200, y: 200 }, data: {}, type: 'llmNode', },
+        { id: '6', position: { x: 200, y: 300 }, data: {}, type: 'conditionNode', },
       ],
       connections: [
         { id: 'e1-2', source: '1', target: '2' }

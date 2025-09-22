@@ -47,7 +47,7 @@ const nodeSchema: Schema = new Schema(
       y: { type: Number, required: true },
     }, required: true },
 
-    data: { type: Object },
+    data: { type: Object, required: true, default: {} },
 
     type: { type: String, required: true },
   },
