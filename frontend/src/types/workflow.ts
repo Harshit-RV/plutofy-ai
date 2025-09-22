@@ -1,6 +1,11 @@
 import { Document } from 'mongoose';
 import { Node } from '@xyflow/react';
 
+export type SidebarMode = "ADD-NODE" | "NODE-EXPANDED" | "CLOSED"
+export interface SidebarState {
+  mode: SidebarMode,
+  selectedNodes: Node[]
+}
 // export interface INode extends Node {
 //   // id: string,
 //   // position: { x: number, y: number }, 

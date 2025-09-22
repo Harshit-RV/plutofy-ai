@@ -14,7 +14,7 @@ import {
   CardContent,
 } from "@/components/ui/card"
 import { Loader2 } from "lucide-react";
-import { IConnection, NodeType } from '@/types/workflow';
+import { IConnection, NodeType, SidebarState } from '@/types/workflow';
 import { throttle } from 'lodash';
 import { v4 as uuid } from "uuid";
 import WorkflowSidebar from '@/components/workflows/sidebar/WorkflowSidebar';
@@ -103,10 +103,8 @@ export default function WorkflowBuilderPage({ mode } : { mode: Mode }) {
 const WorkflowBuilder = ({ workflowName, initialEdges, initialNodes, syncWorkflowWithDB } : { workflowName: string, mode: Mode, initialEdges: IConnection[], initialNodes: Node[], syncWorkflowWithDB: (nodes: Node[], edges: IConnection[], name: string) => void }) => {
   const [ nodes, setNodes, onNodesChange ] = useNodesState(initialNodes);
   const [ edges, setEdges, onEdgesChange ] = useEdgesState(initialEdges);
-  const [ selectedNodes, setSelectedNodes ] = useState<Node[]>([]);
-  // const [ selectedEdges, setSelectedEdges ] = useState<IConnection[]>([]);
+  const [ sidebarState, setSidebarState ] = useState<SidebarState>({ mode: "CLOSED", selectedNodes: [] })
   const [ name, setName ] = useState(workflowName);
-  const [ isSidebarVisible, setIsSidebarVisible ] = useState(true)
   const { getNode } = useReactFlow();
 
   const onConnect = useCallback(
@@ -140,8 +138,17 @@ const WorkflowBuilder = ({ workflowName, initialEdges, initialNodes, syncWorkflo
   }, [throttledSync]);
 
   const onSelectionChange = useCallback(({ nodes } : { nodes: Node[] }) => {
-    setSelectedNodes(nodes);
-    // setSelectedEdges(edges);
+    if (nodes.length == 0) {
+      setSidebarState((val) => {
+        if (val.mode == "NODE-EXPANDED") {
+          return { mode: "CLOSED", selectedNodes: [] }
+        }
+        return val;
+      })
+      return
+    }
+
+    setSidebarState( { mode: "NODE-EXPANDED", selectedNodes: nodes } );
   }, []);
 
   useOnSelectionChange({
@@ -154,18 +161,24 @@ const WorkflowBuilder = ({ workflowName, initialEdges, initialNodes, syncWorkflo
       <Input className='absolute w-min left-4 top-4 z-10' value={name} onChange={(e) => setName(e.target.value)} /> 
       
       <ButtonCN
-        onClick={() => setIsSidebarVisible(!isSidebarVisible)}
+        onClick={() => setSidebarState((val) => {
+          if (val.mode == "ADD-NODE") {
+            return { mode: "CLOSED", selectedNodes: [] }
+          }
+
+          return { mode: "ADD-NODE", selectedNodes: [] }
+        })}
         className="flex gap-3 border absolute top-4 right-4 z-10"
         variant="outline"
       >
-        <FaPlus /> Add node
+        <FaPlus className={sidebarState.mode == "ADD-NODE" ? 'rotate-45' : ""}/> Add node
       </ButtonCN>
-      
 
-      {(isSidebarVisible || selectedNodes.length !=0) &&
+
+      {(sidebarState.mode != "CLOSED") &&
         <div className='top-16 bottom-4 right-4 absolute rounded-lg border-gray-200 z-10 bg-white w-[400px] shadow-xl'>
           <WorkflowSidebar 
-            selectedNodes={selectedNodes}
+            sidebarState={sidebarState}
             onAddNode={onAddNode}
             setNodes={setNodes}
           />
