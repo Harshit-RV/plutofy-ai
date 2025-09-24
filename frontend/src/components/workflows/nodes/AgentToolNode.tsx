@@ -1,11 +1,15 @@
 import { Handle, Position } from "@xyflow/react";
-import { FaGoogle } from "react-icons/fa";
 import { GeneralDependentNode } from "./shared/NodeWrappers";
+import logos from "@/utils/logos";
 
-const LlmNode = () => {
+export const AgentToolNode = () => {
   return (
     <GeneralDependentNode>
-      <FaGoogle />
+      <img
+        src={logos.emailNode}
+        alt="Agent Tool"
+        className="w-6 h-6 object-contain"
+      />
       <Handle 
         type="target" 
         position={Position.Top}
@@ -14,6 +18,4 @@ const LlmNode = () => {
   )
 }
 
-
-
-export default LlmNode;
+export default AgentToolNode;

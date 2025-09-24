@@ -34,9 +34,9 @@ const workflowScheme: WorkflowScheme  = {
       type: "telegramNode", 
       image: "/telegram.svg",
       category: "action",
-      credentials: {
-        botToken: "string"
-      },
+      credentials: [
+        { name: "chatId", displayName: "Chat ID", type: "string" },
+      ],
       data: [
         { name: "chatId", displayName: "Chat ID", type: "string" },
         { name: "message", displayName: "Message", type: "string" },
