@@ -1,5 +1,5 @@
-import mongoose, { Schema } from "mongoose";
-
+import mongoose, { Document, Schema } from "mongoose";
+import { NodeType } from "../types";
 
 export interface INode {
   id: string,
@@ -29,15 +29,6 @@ interface WorkflowDoc extends IWorkflow, Document {
   updated_at: Date,
 }
 
-export enum NodeType {
-  llmNode = "llmNode",
-  webhookTriggerNode = "webhookTriggerNode",
-  emailNode = "emailNode",
-  telegramNode = "telegramNode",
-  agentNode = "agentNode",
-  conditionNode = "conditionNode" 
-}
-
 const nodeSchema: Schema = new Schema(
   {
     id: { type: String, required: true },
@@ -49,7 +40,7 @@ const nodeSchema: Schema = new Schema(
 
     data: { type: Object, required: true, default: {} },
 
-    type: { type: String, required: true },
+    type: { type: String, required: true, enum: Object.values(NodeType) },
   },
 );
 

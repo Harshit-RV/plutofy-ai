@@ -4,6 +4,7 @@ import agentRoutes from './routes/agent.route';
 import completionRoutes from './routes/completion.route'
 import apiKeyRoutes from './routes/apiKey.route';
 import workflowRoutes from './routes/workflow.route';
+import credentialsRoutes from './routes/credentials.route';
 import config from './config';
 import "dotenv/config";
 import cors from 'cors'; 
@@ -31,6 +32,7 @@ app.use(clerkMiddleware({ clerkClient }));
 app.use('/agent', agentRoutes);
 app.use('/apikey', apiKeyRoutes);
 app.use('/workflow', workflowRoutes);
+app.use('/credentials', credentialsRoutes);
 app.use('/v1/completion', completionRoutes);
 
 
