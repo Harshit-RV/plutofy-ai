@@ -15,7 +15,12 @@ const WorkflowSidebar = ( props : WorkflowSidebarProps ) => {
     <div className='flex flex-col h-full w-full'>
 
       { (props.sidebarState.mode === "NODE-EXPANDED" && props.sidebarState.selectedNodes.length !=0) ? (
-        <NodeExpanded node={props.sidebarState.selectedNodes[0]} setNodes={props.setNodes} />
+        <NodeExpanded 
+          // force NodeExpanded to rerender when node is changes
+          key={props.sidebarState.selectedNodes[0].id} 
+          node={props.sidebarState.selectedNodes[0]} 
+          setNodes={props.setNodes} 
+        />
       ) : (
         <AddNodeSection onAddNode={props.onAddNode}></AddNodeSection>
       )}

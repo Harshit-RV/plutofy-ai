@@ -8,7 +8,7 @@ import { ButtonCN } from '@/components/ui/buttoncn';
 import { Input } from '@/components/ui/input';
 import WorkflowService from '@/utils/workflow.util';
 import { useAuth } from '@clerk/clerk-react';
-import { Background, Connection, ReactFlow, ReactFlowProvider, useEdgesState, useNodesState, useReactFlow, Node, useOnSelectionChange } from '@xyflow/react';
+import { Background, Connection, ReactFlow, ReactFlowProvider, useEdgesState, useNodesState, useReactFlow, Node, useOnSelectionChange, NodeChange } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { FaPlus } from 'react-icons/fa';
@@ -156,15 +156,21 @@ const WorkflowBuilder = ({ workflowName, initialEdges, initialNodes, syncWorkflo
     setSidebarState( { mode: "NODE-EXPANDED", selectedNodes: nodes } );
   }, []);
 
+  const unselectNodeOnPositionChange = (changes: NodeChange<Node>[]) => {
+    if (changes[0].type == "position") {
+      onSelectionChange({nodes: []})
+    }
+  }
+
   useOnSelectionChange({
-    onChange: onSelectionChange,
+    onChange: onSelectionChange
   });
 
   return (
     <div className='relative h-full w-full'>
 
       <Input className='absolute w-min left-4 top-4 z-10' value={name} onChange={(e) => setName(e.target.value)} /> 
-      
+      {/* <div className='absolute w-min left-4 top-4 z-10 border bg-white'>{JSON.stringify(sidebarState)}</div> */}
       <ButtonCN
         onClick={() => setSidebarState((val) => {
           if (val.mode == "ADD-NODE") {
@@ -193,7 +199,7 @@ const WorkflowBuilder = ({ workflowName, initialEdges, initialNodes, syncWorkflo
       <ReactFlow 
         nodes={nodes} 
         edges={edges} 
-        onNodesChange={onNodesChange} 
+        onNodesChange={(changes) => (onNodesChange(changes), unselectNodeOnPositionChange(changes))}
         onEdgesChange={onEdgesChange} 
         onConnect={onConnect}
         nodeTypes={nodeTypes}
