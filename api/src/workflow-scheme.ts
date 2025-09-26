@@ -1,4 +1,4 @@
-import { PrimitiveType } from "./types/common-types"
+import { PrimitiveType } from "./models/Agent.model"
 
 type NodeGeneralType =  "llmNode" | "webhookTriggerNode" | "emailNode" | "telegramNode" | "agentNode" | "conditionNode"
 
@@ -8,7 +8,7 @@ interface NodeInfo {
   image: string,
   type: NodeGeneralType,
   category: "trigger" | "action",
-  credentials: InputField[],
+  credentials: object
   data: InputField[],
   connections?: {
     required?: NodeGeneralType[]
@@ -35,7 +35,7 @@ const workflowScheme: WorkflowScheme  = {
       image: "/telegram.svg",
       category: "action",
       credentials: [
-        { name: "botToken", displayName: "Bot Token", type: "string" },
+        { name: "chatId", displayName: "Chat ID", type: "string" },
       ],
       data: [
         { name: "chatId", displayName: "Chat ID", type: "string" },
@@ -48,7 +48,7 @@ const workflowScheme: WorkflowScheme  = {
       type: "webhookTriggerNode",
       image: "/webhook.svg",
       category: "trigger",
-      credentials: [],
+      credentials: {},
       data: [
         { displayName:"", name: "Payload", type: "object" }
       ]
@@ -59,12 +59,11 @@ const workflowScheme: WorkflowScheme  = {
       type: "emailNode",
       image: "/mail.svg",
       category: "action", 
-      credentials: [
-        { name: "smtpServer", displayName: "SMTP Server", type: "string" },
-        { name: "port", displayName: "Port", type: "number" },
-        { name: "username", displayName: "Username", type: "string" },
-        { name: "password", displayName: "Password", type: "string" },
-      ],
+      credentials: {
+        smtpServer: "string",
+        username: "string",
+        password: "string"
+      },
       data: [
         { name: "from", displayName: "From", type: "string"},
         { name: "to", displayName: "To", type: "string" },
@@ -92,7 +91,7 @@ const workflowScheme: WorkflowScheme  = {
       type: "agentNode",
       image: "/bot.svg",
       category: "action",
-      credentials: [],
+      credentials: {},
       data: [
         // { name: "goal", type: "string" },
         // { name: "tools", type: "array" }
@@ -107,7 +106,7 @@ const workflowScheme: WorkflowScheme  = {
       type: "conditionNode",
       image: "/condition.svg",
       category: "action",
-      credentials: [],
+      credentials: {},
       data: [
         // { name: "condition", type: "string" },
         // { name: "truePathLabel", type: "string" },

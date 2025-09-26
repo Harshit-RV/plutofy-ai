@@ -6,12 +6,9 @@ export interface SidebarState {
   mode: SidebarMode,
   selectedNodes: Node[]
 }
-// export interface INode extends Node {
-//   // id: string,
-//   // position: { x: number, y: number }, 
-//   // data: object, 
-//   newtype: string, 
-// }
+export interface INode extends Node {
+  credentials?: string 
+}
 
 export interface IConnection {
   id: string, 
@@ -24,7 +21,7 @@ export interface IWorkflow {
   userId: string, // refs to user
   description?: string,
 
-  nodes: Node[],
+  nodes: INode[],
   connections: IConnection[],
 }
 

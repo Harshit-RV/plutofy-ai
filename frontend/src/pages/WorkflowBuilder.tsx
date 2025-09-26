@@ -19,7 +19,7 @@ import {
   CardContent,
 } from "@/components/ui/card"
 import { Loader2 } from "lucide-react";
-import { IConnection, NodeType, SidebarState } from '@/types/workflow';
+import { IConnection, INode, NodeType, SidebarState } from '@/types/workflow';
 import { throttle } from 'lodash';
 import { v4 as uuid } from "uuid";
 import WorkflowSidebar from '@/components/workflows/sidebar/WorkflowSidebar';
@@ -48,7 +48,7 @@ export default function WorkflowBuilderPage({ mode } : { mode: Mode }) {
   };
 
   const syncWorkflowWithDB = useCallback(
-    async (nodes: Node[], edges: IConnection[], name: string) => {
+    async (nodes: INode[], edges: IConnection[], name: string) => {
       const token = await getToken();
       if (!token) return;
       if (!workflowDocId) return;
@@ -105,8 +105,16 @@ export default function WorkflowBuilderPage({ mode } : { mode: Mode }) {
   )
 }
 
-const WorkflowBuilder = ({ workflowName, initialEdges, initialNodes, syncWorkflowWithDB } : { workflowName: string, mode: Mode, initialEdges: IConnection[], initialNodes: Node[], syncWorkflowWithDB: (nodes: Node[], edges: IConnection[], name: string) => void }) => {
-  const [ nodes, setNodes, onNodesChange ] = useNodesState(initialNodes);
+interface WorkflowBuilderProps {
+  workflowName: string,
+  mode: Mode,
+  initialEdges: IConnection[],
+  initialNodes: INode[],
+  syncWorkflowWithDB: (nodes: INode[], edges: IConnection[], name: string) => void
+}
+
+const WorkflowBuilder = ({ workflowName, initialEdges, initialNodes, syncWorkflowWithDB } : WorkflowBuilderProps) => {
+  const [ nodes, setNodes, onNodesChange ] = useNodesState<INode>(initialNodes);
   const [ edges, setEdges, onEdgesChange ] = useEdgesState(initialEdges);
   const [ sidebarState, setSidebarState ] = useState<SidebarState>({ mode: "CLOSED", selectedNodes: [] })
   const [ name, setName ] = useState(workflowName);
@@ -120,7 +128,7 @@ const WorkflowBuilder = ({ workflowName, initialEdges, initialNodes, syncWorkflo
   );
 
   const onAddNode = useCallback((type: NodeType) => {
-    const newNode = {
+    const newNode: INode = {
       id: `${type}-${uuid()}`,
       type: type,
       position: { x: Math.floor(Math.random() * 101), y: Math.floor(Math.random() * 101) },
@@ -170,7 +178,7 @@ const WorkflowBuilder = ({ workflowName, initialEdges, initialNodes, syncWorkflo
     <div className='relative h-full w-full'>
 
       <Input className='absolute w-min left-4 top-4 z-10' value={name} onChange={(e) => setName(e.target.value)} /> 
-      {/* <div className='absolute w-min left-4 top-4 z-10 border bg-white'>{JSON.stringify(sidebarState)}</div> */}
+
       <ButtonCN
         onClick={() => setSidebarState((val) => {
           if (val.mode == "ADD-NODE") {

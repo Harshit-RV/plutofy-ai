@@ -1,19 +1,18 @@
 import workflowScheme from "@/workflow-scheme";
 import { Dispatch, SetStateAction, useState, useEffect } from "react";
-import { Node } from '@xyflow/react';
 import SingleInputField from "./SingleInputField";
 import { ButtonCN } from "@/components/ui/buttoncn";
+import SelectCredentials from "../components/SelectCredentials";
+import { INode } from "@/types/workflow";
 
-const NodeExpanded = ({ node, setNodes } : { node: Node, setNodes: Dispatch<SetStateAction<Node[]>> }) => {
+const NodeExpanded = ({ node, setNodes } : { node: INode, setNodes: Dispatch<SetStateAction<INode[]>> }) => {
   const nodeInfoFromScheme = workflowScheme.nodes.find(wf => wf.type == node.type);
   
-  const [localData, setLocalData] = useState<Record<string, unknown>>(() => 
-    node.data || {}
-  );
+  const [localData, setLocalData] = useState<INode>(() => node || {});
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
   useEffect(() => {
-    setLocalData(node.data || {});
+    setLocalData(node || {});
     setHasUnsavedChanges(false);
   }, [node.id, node.data]);
 
@@ -23,7 +22,8 @@ const NodeExpanded = ({ node, setNodes } : { node: Node, setNodes: Dispatch<SetS
         if (singleNode.id === node.id) {
           return {
             ...singleNode,
-            data: localData
+            credentials: localData.credentials,
+            data: localData.data
           };
         }
         return singleNode;
@@ -32,13 +32,24 @@ const NodeExpanded = ({ node, setNodes } : { node: Node, setNodes: Dispatch<SetS
     setHasUnsavedChanges(false);
   };
 
-  const handleInputChange = (fieldName: string, value: unknown) => {
+  const handleDataInputChange = (fieldName: string, value: unknown) => {
     setLocalData(prev => ({
       ...prev,
-      [fieldName]: value
+      data: {
+        ...prev.data,
+        [fieldName]: value
+      } 
     }));
     setHasUnsavedChanges(true);
   };
+
+  const handleCredentialsChange = (value: string) => {
+    setLocalData(prev => ({
+      ...prev,
+      credentials: value
+    }))
+    setHasUnsavedChanges(true);
+  }
 
   return (
     <div className='flex flex-col w-full py-5 px-4'>
@@ -49,19 +60,22 @@ const NodeExpanded = ({ node, setNodes } : { node: Node, setNodes: Dispatch<SetS
       </div>
 
       <p className='text-sm mt-3'>{nodeInfoFromScheme?.description}</p>
-      
-      <div className='mt-5'>
+
+      <div className="border-y py-4 my-3">
+        <p className="text-xs mb-2">Credentials</p>
+        <SelectCredentials value={localData.credentials} setValue={(val) => handleCredentialsChange(val)} nodeType={node.type ?? ""}/>
+      </div>
+
+      <div>
         {
           nodeInfoFromScheme?.data.map((inputField, index) => (
             <div key={index} className='mt-4'>
-              <p className='text-sm'>{inputField.displayName}</p>
+              <p className='text-xs mb-1'>{inputField.displayName}</p>
               <SingleInputField 
                 key={`${index}-${nodeInfoFromScheme.type}-${inputField.name}`}
                 type={inputField.type} 
-                value={localData[inputField.name] as string} 
-                
-                onValueChange={(val) => handleInputChange(inputField.name, val)}
-
+                value={(localData.data ?? {})[inputField.name] as string} 
+                onValueChange={(val) => handleDataInputChange(inputField.name, val)}
                 name={inputField.name} 
                 displayName={inputField.displayName} 
               />

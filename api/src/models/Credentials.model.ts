@@ -4,6 +4,7 @@ import { NodeType } from "../types";
 export interface ICredentials {
   userId: string,
   data: object,
+  name: string,
   type: NodeType,
 }
 
@@ -17,6 +18,7 @@ interface CredentialsDoc extends ICredentials, Document {
 const credentialsSchema: Schema = new Schema(
   {
     userId: { type: String, required: true },
+    name: { type: String, required: true },
     data: { type: Object, required: true, default: {} },
     type: { type: String, required: true, enum: Object.values(NodeType) },
   },

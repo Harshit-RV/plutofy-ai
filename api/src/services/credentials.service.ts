@@ -16,6 +16,10 @@ class CredentialsService {
     return CredentialsEntity.find({ userId });
   }
 
+  static async getAllCredentialsByUserAndNodeType(userId: string, nodeType: string) {
+    return CredentialsEntity.find({ userId, type: nodeType });
+  }
+
   static async getCredentialsById(id: string, userId: string) {
     return CredentialsEntity.find({ _id: id, userId: userId});
   }

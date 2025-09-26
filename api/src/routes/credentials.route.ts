@@ -8,11 +8,16 @@ router.use(requireAuth())
 
 router.get("/", async (req, res) : Promise<any> => {
   try {
+    const { nodeType } = req.query;
     const { userId } = getAuth(req);
 
-    const allCredentials = await CredentialsService.getAllCredentialsByUser(userId!);
-
-    return res.status(200).json(allCredentials)
+    if (nodeType) {
+      const allCredentials = await CredentialsService.getAllCredentialsByUserAndNodeType(userId!, String(nodeType));
+      return res.status(200).json(allCredentials)
+    } else {
+      const allCredentials = await CredentialsService.getAllCredentialsByUser(userId!);
+      return res.status(200).json(allCredentials)
+    }
   } catch (error) {
     console.error(error)
     return res.status(500).json({error :'Something went wrong'});

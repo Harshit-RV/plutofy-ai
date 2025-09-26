@@ -5,6 +5,7 @@ export interface INode {
   id: string,
   position: { x: number, y: number }, 
   data: object, 
+  credentials?: string, // refs to credentials
   type: NodeType, 
 }
 
@@ -24,9 +25,9 @@ export interface IWorkflow {
 
 export type WorkflowProps = Omit<IWorkflow, "userId">
 
-interface WorkflowDoc extends IWorkflow, Document {
-  created_at: Date,
-  updated_at: Date,
+export interface WorkflowDoc extends IWorkflow, Document {
+  createdAt: Date,
+  updatedAt: Date,
 }
 
 const nodeSchema: Schema = new Schema(
@@ -39,6 +40,8 @@ const nodeSchema: Schema = new Schema(
     }, required: true },
 
     data: { type: Object, required: true, default: {} },
+
+    credentials: { type: mongoose.Schema.Types.ObjectId, ref: 'Credentials', required: false },
 
     type: { type: String, required: true, enum: Object.values(NodeType) },
   },
