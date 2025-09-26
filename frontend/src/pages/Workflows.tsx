@@ -11,6 +11,7 @@ import toast from "react-hot-toast";
 import WorkflowTemplates from "@/components/workflows/WorkflowTemplates";
 import NoWorkflowYetCard from "@/components/workflows/NoWorkflowYetCard";
 import WorkflowCard from "@/components/workflows/WorkflowCard";
+import PageWrapper from "@/components/PageWrapper";
 
 const Workflows = () => {
   const { getToken } = useAuth();
@@ -56,7 +57,7 @@ const Workflows = () => {
 
 
   return (
-    <div className="flex justify-center font-mono min-h-screen bg-gray-100 px-2.5 sm:px-6 md:px-10">
+   <PageWrapper>
       <div className="py-8 w-full lg:max-w-[1300px]">
         {/* {JSON.stringify(agents)} */}
 
@@ -129,7 +130,7 @@ const Workflows = () => {
           <TabsContent value="executions" className="mt-4 text-sm text-gray-700">Coming soon..</TabsContent>
         </Tabs>
       </div>
-    </div>
+   </PageWrapper>
   )
 }
 

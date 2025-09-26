@@ -10,6 +10,7 @@ import AgentCardSkeleton from "@/components/agents/AgentCardSkeleton";
 import TemplatesSection from "@/components/agents/AgentTemplatesSection";
 import AgentCard from "@/components/agents/AgentCard";
 import NoAgentYetCard from "@/components/agents/NoAgentYetCard";
+import PageWrapper from "@/components/PageWrapper";
 
 export const Home = () => {
   const { getToken } = useAuth();
@@ -40,7 +41,7 @@ export const Home = () => {
   } = useQuery("agents", fetchList);
 
   return (
-    <div className="flex justify-center font-mono min-h-screen bg-gray-100 px-2.5 sm:px-6 md:px-10">
+    <PageWrapper>
       <div className="py-8 w-full lg:max-w-[1300px]">
         {/* {JSON.stringify(agents)} */}
 
@@ -104,6 +105,6 @@ export const Home = () => {
           </div>
         )}
       </div>
-    </div>
+    </PageWrapper>
   );
 };
