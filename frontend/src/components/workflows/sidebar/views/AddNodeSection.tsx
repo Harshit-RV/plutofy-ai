@@ -1,12 +1,24 @@
-import { NodeType } from "@/types/workflow";
+import { NodeType, INode } from "@/types/workflow";
 import workflowScheme from "@/workflow-scheme";
 
-const AddNodeSection = ( { onAddNode } : { onAddNode: (type: NodeType) => void } ) => {
+const AddNodeSection = ( { onAddNode, currentNodes } : { onAddNode: (type: NodeType) => void, currentNodes: INode[] } ) => {
+  const hasTriggerNode = currentNodes.some(node => {
+    const nodeInfo = workflowScheme.nodes.find(schemeNode => schemeNode.type === node.type);
+    return nodeInfo?.category === "trigger";
+  });
+
+  const availableNodes = workflowScheme.nodes.filter(node => {
+    if (node.category === "trigger" && hasTriggerNode) {
+      return false;
+    }
+    return true;
+  });
+
   return (
     <div>
       <h1 className='my-7 ml-3 font-bold text-gray-900'>Available Nodes</h1>
       {
-        workflowScheme.nodes.map((node, index) => (
+        availableNodes.map((node, index) => (
           <div key={index} onClick={() => onAddNode(node.type as NodeType)} className='flex hover:shadow-md items-center h-20 cursor-pointer px-4 py-3 border-y gap-5'>
             
             <img src={node.image} className='size-8' alt="" />

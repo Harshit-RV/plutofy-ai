@@ -8,8 +8,8 @@ class WebhookService {
     return webhook.save();
   }
 
-  static async deleteWebhook(id: string, userId: string) {
-    return await WebhookEntity.findOneAndDelete({ _id: id, userId: userId })
+  static async deleteWebhookByWorkflowId(id: string, userId: string) {
+    return await WebhookEntity.findOneAndDelete({ workflowId: id, userId: userId })
   }
 
   static async getWebhookById(id: string, userId: string) {

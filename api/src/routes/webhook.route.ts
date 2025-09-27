@@ -49,12 +49,13 @@ router.post("/", async (req, res) : Promise<any> => {
   }
 })
 
+// deletes by workflow ID, not Webhook ID
 router.delete("/:id", async (req, res) : Promise<any> => {
   try {
     const { id } = req.params;
     const { userId } = getAuth(req);
 
-    const deletedWebhook = await WebhookService.deleteWebhook(id, userId ?? "");
+    const deletedWebhook = await WebhookService.deleteWebhookByWorkflowId(id, userId ?? "");
     res.status(200).json(deletedWebhook)
   } catch (error) {
     res.status(500).json({error: "Something went wrong"})

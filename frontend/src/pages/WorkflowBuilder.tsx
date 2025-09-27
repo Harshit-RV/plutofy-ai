@@ -23,6 +23,7 @@ import { IConnection, INode, NodeType, SidebarState } from '@/types/workflow';
 import { throttle } from 'lodash';
 import { v4 as uuid } from "uuid";
 import WorkflowSidebar from '@/components/workflows/sidebar/WorkflowSidebar';
+import WebhookService from '@/utils/webhook.util';
 
 const nodeTypes = {
   llmNode: LlmNode,
@@ -94,6 +95,7 @@ export default function WorkflowBuilderPage({ mode } : { mode: Mode }) {
     <ReactFlowProvider>
       <div className='h-screen w-full p-4 bg-gray-100 pb-20'>
         <WorkflowBuilder 
+          workflowDocId={workflowDocId ?? ""}
           syncWorkflowWithDB={syncWorkflowWithDB} 
           mode={mode}
           workflowName={workflow?.name ?? ""}
@@ -108,17 +110,19 @@ export default function WorkflowBuilderPage({ mode } : { mode: Mode }) {
 interface WorkflowBuilderProps {
   workflowName: string,
   mode: Mode,
+  workflowDocId: string,
   initialEdges: IConnection[],
   initialNodes: INode[],
   syncWorkflowWithDB: (nodes: INode[], edges: IConnection[], name: string) => void
 }
 
-const WorkflowBuilder = ({ workflowName, initialEdges, initialNodes, syncWorkflowWithDB } : WorkflowBuilderProps) => {
+const WorkflowBuilder = ({ workflowName, initialEdges, initialNodes, syncWorkflowWithDB, workflowDocId } : WorkflowBuilderProps) => {
   const [ nodes, setNodes, onNodesChange ] = useNodesState<INode>(initialNodes);
   const [ edges, setEdges, onEdgesChange ] = useEdgesState(initialEdges);
   const [ sidebarState, setSidebarState ] = useState<SidebarState>({ mode: "CLOSED", selectedNodes: [] })
   const [ name, setName ] = useState(workflowName);
   const { getNode } = useReactFlow();
+  const { getToken } = useAuth();
 
   const onConnect = useCallback(
     (connection: Connection) => {
@@ -127,15 +131,32 @@ const WorkflowBuilder = ({ workflowName, initialEdges, initialNodes, syncWorkflo
     [setEdges]
   );
 
-  const onAddNode = useCallback((type: NodeType) => {
+  const onAddNode = useCallback(async (type: NodeType) => {
+    const newId = `${type}-${uuid()}`
+    let nodeData = {}
+    
+    // add entry in Webhook table if webhookTriggerNode is added
+    if (type == NodeType.webhookTriggerNode) {
+      const token = await getToken();
+      if (!token) return;
+      
+      const webhookDoc = await WebhookService.createWebhook({
+        nodeId: newId,
+        workflowId: workflowDocId,
+      }, token)
+
+      nodeData = { webhookId: webhookDoc._id }
+    }
+
     const newNode: INode = {
-      id: `${type}-${uuid()}`,
+      id: newId,
       type: type,
       position: { x: Math.floor(Math.random() * 101), y: Math.floor(Math.random() * 101) },
-      data: {},
+      data: nodeData,
     };
+
     setNodes((nds) => nds.concat(newNode));
-  }, [setNodes]);
+  }, [setNodes, getToken, workflowDocId]);
   
   const throttledSync = useMemo(
     () => throttle((n, e, nm) => syncWorkflowWithDB(n, e, nm), 2000, { trailing: true }),
@@ -164,9 +185,23 @@ const WorkflowBuilder = ({ workflowName, initialEdges, initialNodes, syncWorkflo
     setSidebarState( { mode: "NODE-EXPANDED", selectedNodes: nodes } );
   }, []);
 
-  const unselectNodeOnPositionChange = (changes: NodeChange<Node>[]) => {
+  const unselectNodeOnPositionChange = (changes: NodeChange<INode>[]) => {
     if (changes[0].type == "position") {
       onSelectionChange({nodes: []})
+    }
+  }
+
+  const handleWebhookTriggerNodeChanges = async (changes: NodeChange<INode>[]) => {
+    if (changes[0].type == "remove") {
+      const deletedNode = getNode(changes[0].id)
+      
+      // delete entry from Webhook table when webhookTriggerNode is removed
+      if (deletedNode?.type == NodeType.webhookTriggerNode) {
+        const token = await getToken();
+        if (token) {
+          await WebhookService.deleteWebhookByWorkflowId(workflowDocId, token);
+        }
+      }
     }
   }
 
@@ -200,6 +235,7 @@ const WorkflowBuilder = ({ workflowName, initialEdges, initialNodes, syncWorkflo
             sidebarState={sidebarState}
             onAddNode={onAddNode}
             setNodes={setNodes}
+            currentNodes={nodes}
           />
         </div>
       }
@@ -207,7 +243,7 @@ const WorkflowBuilder = ({ workflowName, initialEdges, initialNodes, syncWorkflo
       <ReactFlow 
         nodes={nodes} 
         edges={edges} 
-        onNodesChange={(changes) => (onNodesChange(changes), unselectNodeOnPositionChange(changes))}
+        onNodesChange={(changes) => (onNodesChange(changes), unselectNodeOnPositionChange(changes), handleWebhookTriggerNodeChanges(changes))}
         onEdgesChange={onEdgesChange} 
         onConnect={onConnect}
         nodeTypes={nodeTypes}

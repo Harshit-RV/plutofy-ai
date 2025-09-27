@@ -1,4 +1,4 @@
-import { NodeType, SidebarState } from "@/types/workflow";
+import { NodeType, SidebarState, INode } from "@/types/workflow";
 import AddNodeSection from "./views/AddNodeSection"
 import NodeExpanded from "./views/NodeExpanded"
 import { Node } from '@xyflow/react';
@@ -7,7 +7,8 @@ import { Dispatch, SetStateAction } from "react";
 interface WorkflowSidebarProps {
   sidebarState: SidebarState,
   onAddNode: (type: NodeType) => void,
-  setNodes: Dispatch<SetStateAction<Node[]>>
+  setNodes: Dispatch<SetStateAction<Node[]>>,
+  currentNodes: INode[]
 }
 
 const WorkflowSidebar = ( props : WorkflowSidebarProps ) => {
@@ -22,7 +23,7 @@ const WorkflowSidebar = ( props : WorkflowSidebarProps ) => {
           setNodes={props.setNodes} 
         />
       ) : (
-        <AddNodeSection onAddNode={props.onAddNode}></AddNodeSection>
+        <AddNodeSection onAddNode={props.onAddNode} currentNodes={props.currentNodes}></AddNodeSection>
       )}
 
     </div>
