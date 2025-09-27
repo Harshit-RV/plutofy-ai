@@ -12,8 +12,8 @@ class WebhookService {
     return await WebhookEntity.findOneAndDelete({ workflowId: id, userId: userId })
   }
 
-  static async getWebhookById(id: string, userId: string) {
-    const records = await WebhookEntity.find({ _id: id, userId: userId});
+  static async getWebhookById(id: string) {
+    const records = await WebhookEntity.find({ _id: id});
     if (records.length == 0) return null
     return records[0]
   }

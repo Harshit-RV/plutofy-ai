@@ -5,27 +5,26 @@ import WebhookService from "../services/webhook.service";
 import WorkflowService from "../services/workflow.service";
 
 const router = Router()
-router.use(requireAuth());
+
 
 // TODO: ideate whether this should accept Workflow ID or Webhook ID
 // TODO: add support for other methods. Users should be able to execute workflow using both POST and GET requests
 router.get("/:id", async (req, res) : Promise<any> => {
   try {
     const { id } = req.params;
-    const { userId } = getAuth(req);
 
-    const webhookRecord = await WebhookService.getWebhookById(id, userId!);
+    const webhookRecord = await WebhookService.getWebhookById(id);
     
     if (!webhookRecord) return res.status(400).json({error: "Workflow not found"})
 
-    const workflowToExecute = await WorkflowService.getWorkflowById(webhookRecord.workflowId, userId!);
+    const workflowToExecute = await WorkflowService.getWorkflowById(webhookRecord.workflowId, webhookRecord.userId);
 
     if (!workflowToExecute) return res.status(400).json({error: "Workflow not found"})
 
     await executeWorkflow({
       workflow: workflowToExecute,
       nodeId: webhookRecord.nodeId,
-      userId: userId!
+      userId: webhookRecord.userId
     })
 
     return res.status(200).json({final: "Execution trigger"})
@@ -33,6 +32,8 @@ router.get("/:id", async (req, res) : Promise<any> => {
     return res.status(500).json({final: "failure"})
   }
 })
+
+router.use(requireAuth());
 
 router.post("/", async (req, res) : Promise<any> => {
   try {
