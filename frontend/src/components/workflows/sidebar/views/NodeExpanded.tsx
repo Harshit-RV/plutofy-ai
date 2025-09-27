@@ -74,7 +74,7 @@ const NodeExpanded = ({ node, setNodes } : { node: INode, setNodes: Dispatch<Set
               <SingleInputField 
                 key={`${index}-${nodeInfoFromScheme.type}-${inputField.name}`}
                 type={inputField.type} 
-                value={(localData.data ?? {})[inputField.name] as string} 
+                value={(localData.data ?? {})[inputField.name] ?? ''} 
                 onValueChange={(val) => handleDataInputChange(inputField.name, val)}
                 name={inputField.name} 
                 displayName={inputField.displayName} 

@@ -2,9 +2,11 @@ import { Input } from "@/components/ui/input"
 import { InputField } from "@/workflow-scheme"
 import { ReactNode } from "react"
 
+type InputValue = string | number | boolean | object | unknown[];
+
 interface InputFieldProps extends InputField {
-  value: string,
-  onValueChange: (value: string) => void
+  value: InputValue,
+  onValueChange: (value: InputValue) => void
 }
 
 const SingleInputField = ( props : InputFieldProps): ReactNode => {
@@ -22,8 +24,8 @@ const SingleInputField = ( props : InputFieldProps): ReactNode => {
     return (
       <Input
         type="number"
-        value={Number(props.value)} 
-        onChange={(e) => props.onValueChange(e.target.value)}
+        value={typeof props.value === 'number' ? props.value : ''} 
+        onChange={(e) => props.onValueChange(Number(e.target.value))}
         className=''
       />
     )
@@ -34,21 +36,27 @@ const SingleInputField = ( props : InputFieldProps): ReactNode => {
       <input
         type="checkbox"
         checked={Boolean(props.value)}
-        onChange={(e) => props.onValueChange(String(e.target.checked))}
+        onChange={(e) => props.onValueChange(e.target.checked)}
         className=''
       />
     )
   }
 
   if (props.type === "object") {
+    const displayValue = typeof props.value === 'string' 
+      ? props.value 
+      : JSON.stringify(props.value, null, 2);
+    
     return (
       <textarea
-        value={JSON.stringify(props.value, null, 2)}
+        value={displayValue}
         onChange={(e) => {
           try {
-            props.onValueChange(JSON.parse(e.target.value))
-          } catch (err) {
-            console.log(err)
+            const parsed = JSON.parse(e.target.value);
+            props.onValueChange(parsed);
+          } catch {
+            // Keep the string value if parsing fails, so user can continue editing
+            props.onValueChange(e.target.value);
           }
         }}
         className=''
@@ -57,14 +65,20 @@ const SingleInputField = ( props : InputFieldProps): ReactNode => {
   }
 
   if (props.type === "array") {
+    const displayValue = typeof props.value === 'string' 
+      ? props.value 
+      : JSON.stringify(props.value, null, 2);
+    
     return (
       <textarea 
-        value={JSON.stringify(props.value, null, 2)}
+        value={displayValue}
         onChange={(e) => {
           try {
-            props.onValueChange(JSON.parse(e.target.value))
-          } catch (err) {
-            console.log(err)
+            const parsed = JSON.parse(e.target.value);
+            props.onValueChange(parsed);
+          } catch {
+            // Keep the string value if parsing fails, so user can continue editing
+            props.onValueChange(e.target.value);
           }
         }}
         className=''

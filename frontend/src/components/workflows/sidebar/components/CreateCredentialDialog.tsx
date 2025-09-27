@@ -71,7 +71,7 @@ const CreateCredentialDialog = ( props: CreateCredentialDialogProps ) => {
               <SingleInputField 
                 key={`${index}-${nodeInfoFromScheme.type}-${inputField.name}`}
                 type={inputField.type} 
-                value={localData[inputField.name] as string} 
+                value={localData[inputField.name] ?? ''} 
                 
                 onValueChange={(val) => handleInputChange(inputField.name, val)}
 
