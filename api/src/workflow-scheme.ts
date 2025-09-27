@@ -70,7 +70,6 @@ const workflowScheme: WorkflowScheme  = {
         { id: "2", name: "to", displayName: "To", type: "string" },
         { id: "3", name: "subject", displayName: "Subject", type: "string" },
         { id: "4", name: "html", displayName: "HTML Body", type: "string" },
-        { id: "5", name: "text", displayName: "Text", type: "string" }
       ]
     },
     // {

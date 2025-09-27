@@ -8,12 +8,12 @@ class WorkflowService {
     return workflow.save();
   } 
 
-  static async updateWorkflow(id: string, data: WorkflowProps) {
-    return await WorkflowEntity.updateOne({ _id: id }, { $set: { nodes: data.nodes, name: data.name, connections: data.connections } })
+  static async updateWorkflow(id: string, userId: string, data: WorkflowProps) {
+    return await WorkflowEntity.updateOne({ _id: id, userId: userId }, { $set: { nodes: data.nodes, name: data.name, connections: data.connections } })
   } 
 
-  static async deleteWorkflow(id: string) {
-    return await WorkflowEntity.findOneAndDelete({ _id: id })
+  static async deleteWorkflow(id: string, userId: string) {
+    return await WorkflowEntity.findOneAndDelete({ _id: id, userId: userId })
   } 
 
   static async getWorkflowsByUser(userId: string) {
@@ -21,7 +21,9 @@ class WorkflowService {
   }
 
   static async getWorkflowById(id: string, userId: string) {
-    return WorkflowEntity.find({ _id: id, userId: userId});
+    const records = await WorkflowEntity.find({ _id: id, userId: userId});
+    if (records.length == 0) return null
+    return records[0]
   }
 }
 

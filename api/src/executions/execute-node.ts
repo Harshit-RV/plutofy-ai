@@ -24,6 +24,7 @@ const executeNode = async (input: ExecuteWorkflowInput) => {
     // TODO: implement execution logic
     default:
       console.log("Execution unimplemented for node type ", node.type)
+      break;
   }
 }
 

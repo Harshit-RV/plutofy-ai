@@ -5,6 +5,7 @@ import completionRoutes from './routes/completion.route'
 import apiKeyRoutes from './routes/apiKey.route';
 import workflowRoutes from './routes/workflow.route';
 import credentialsRoutes from './routes/credentials.route';
+import webhookRoute from './routes/webhook.route';
 import config from './config';
 import "dotenv/config";
 import cors from 'cors'; 
@@ -33,6 +34,7 @@ app.use('/agent', agentRoutes);
 app.use('/apikey', apiKeyRoutes);
 app.use('/workflow', workflowRoutes);
 app.use('/credentials', credentialsRoutes);
+app.use('/webhook', webhookRoute);
 app.use('/v1/completion', completionRoutes);
 
 
