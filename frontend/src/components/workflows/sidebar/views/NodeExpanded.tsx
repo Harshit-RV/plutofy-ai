@@ -3,9 +3,22 @@ import { Dispatch, SetStateAction, useState, useEffect } from "react";
 import SingleInputField from "./SingleInputField";
 import { ButtonCN } from "@/components/ui/buttoncn";
 import SelectCredentials from "../components/SelectCredentials";
-import { INode } from "@/types/workflow";
+import { INode, NodeType } from "@/types/workflow";
+import { API_URL } from "@/config";
 
 const NodeExpanded = ({ node, setNodes } : { node: INode, setNodes: Dispatch<SetStateAction<INode[]>> }) => {
+  const nodeInfoFromScheme = workflowScheme.nodes.find(wf => wf.type == node.type);
+
+  if (nodeInfoFromScheme?.category == "trigger") {
+    return <TriggerNodeExpanded node={node}/>
+  }
+
+  return (
+    <GeneralNodeExpanded node={node} setNodes={setNodes}/>
+  )
+}
+
+const GeneralNodeExpanded = ({ node, setNodes } : { node: INode, setNodes: Dispatch<SetStateAction<INode[]>> }) => {
   const nodeInfoFromScheme = workflowScheme.nodes.find(wf => wf.type == node.type);
   
   const [localData, setLocalData] = useState<INode>(() => node || {});
@@ -97,4 +110,31 @@ const NodeExpanded = ({ node, setNodes } : { node: INode, setNodes: Dispatch<Set
   )
 }
 
+const TriggerNodeExpanded = ({ node } : { node: INode }) => {
+  const nodeInfoFromScheme = workflowScheme.nodes.find(wf => wf.type == node.type);
+  
+  return (
+    <div className='flex flex-col w-full py-10 px-4'>
+      
+      <div className='flex flex-col items-center gap-3 pb-10 border-b'>
+        <img src={nodeInfoFromScheme?.image} className='size-32' alt="" />
+        <h1 className='font-bold text-lg'>{nodeInfoFromScheme?.name}</h1>
+      </div>
+      
+      <p className='text-sm mt-5'>{nodeInfoFromScheme?.description}</p>
+      
+      {
+        node.type == NodeType.webhookTriggerNode && (
+          <div className="flex flex-col mt-4 gap-1">
+            <p className="text-xs">URL</p>
+            <div className="border rounded-md p-1 break-all">{API_URL}/webhook/{node.data.webhookId}</div>
+          </div>
+        )
+      }
+     
+    </div>
+  )
+}
+
 export default NodeExpanded;
+
