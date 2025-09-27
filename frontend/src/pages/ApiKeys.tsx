@@ -1,28 +1,14 @@
-"use client"
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { useState } from "react"
-import { ButtonCN } from "@/components/ui/buttoncn"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { MoreOutlined } from "@ant-design/icons"
 import { useQuery } from 'react-query'
 import { useAuth } from "@clerk/clerk-react"
-import { Skeleton } from "@/components/ui/skeleton"
-import { createApiKey, deleteApiKey, getApiKeys } from "@/utils/apiKey.utils"
+import { deleteApiKey, getApiKeys } from "@/utils/apiKey.utils"
 import toast from "react-hot-toast"
-import { ApiKeyDoc } from "@/types/apiKey"
 import { convertMongoTimestampToLocal } from "@/utils/convertMongoTimestampToLocal"
+import PageWrapper from "@/components/PageWrapper"
+import ApiCreateDialog from "@/components/api-keys/ApiCreateDialog"
+import ApiKeySkeleton from "@/components/api-keys/ApiKeySkeleton"
 
 export default function ApiKeysPage() {
   const { getToken } = useAuth();
@@ -52,7 +38,7 @@ export default function ApiKeysPage() {
   const { data: apiKeys, isLoading: apiKeysLoading, refetch: refetchApiKeys } = useQuery('apiKeys', fetchList);
 
   return (
-    <div className="flex justify-center font-mono min-h-screen bg-gray-100 px-2.5 sm:px-6 md:px-10">
+    <PageWrapper>
         <div className="py-8 flex flex-col gap-2 sm:py-12 w-full lg:w-[1100px]">
 
           <div className="flex justify-between h-8 px-2 items-center">
@@ -129,113 +115,6 @@ export default function ApiKeysPage() {
           </div>
           
         </div>
-    </div>
-  )
-}
-
-const ApiKeySkeleton = () => {
-  return (
-    <TableRow>
-      <TableCell className="p-4 pl-5">
-        <Skeleton className="w-full max-w-60 h-6 bg-gray-200"></Skeleton>
-      </TableCell>
-      <TableCell className="p-4">
-        <Skeleton className="w-full max-w-24 h-6 bg-gray-200"></Skeleton>
-      </TableCell>
-      <TableCell className="p-2">
-        <Skeleton className="w-full max-w-32 h-6 bg-gray-200"></Skeleton>
-      </TableCell>
-      <TableCell className="p-2">
-        <Skeleton className="w-full max-w-32 h-6 bg-gray-200"></Skeleton>
-      </TableCell>
-      
-      <TableCell className="flex justify-end p-4 pr-4">
-        <Skeleton className="w-4 h-6 bg-gray-200"></Skeleton>
-      </TableCell>
-    </TableRow>
-  )
-}
-
-export const ApiCreateDialog = ( { getToken, refetchApiKeys } : { getToken: () => (Promise<string | null>), refetchApiKeys: () => void}) => {
-  const [ generatedKey, setGeneratedKey ] = useState<ApiKeyDoc | null>(null);
-  const [ name, setName ] = useState<string>('');
-  
-  const onClick = async () => {
-    const token: string | null = await getToken();
-    if (!token) return;
-
-    if (!name || name == '') {
-      toast.error('Please enter a name for API Key');
-      return;
-    }
-
-    const apiKey = await toast.promise(
-      createApiKey({ name: name, token: token }),
-      {
-        loading: 'Creating...',
-        success: <b>API Key Created</b>,
-        error: <b>Could not create API key.</b>,
-      }
-    );
-    setGeneratedKey(apiKey);
-    refetchApiKeys();
-  }
-
-  return (
-    <Dialog>
-      <DialogTrigger asChild>
-          <ButtonCN className="px-6 sm:px-8 h-9">Create</ButtonCN>
-      </DialogTrigger>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Create API Key</DialogTitle>
-          <DialogDescription className="pt-1.5">
-            Create an API key to access your agents.
-          </DialogDescription>
-        </DialogHeader>
-          <div className="flex flex-col gap-6 py-2">
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="name">
-                Name
-              </Label>
-              <Input id="name" disabled={generatedKey != null} value={name} onChange={(e) => setName(e.target.value)} />
-            </div>
-
-            { generatedKey && (
-              <div className="flex max-w-full">
-                <div className="flex items-center border-[#FA824C] gap-3 border-2 p-2 px-4 rounded-md">
-                  <p className="no-scrollbar overflow-scroll max-w-[200px] sm:max-w-[300px] lg:max-w-[350px] w-full">{generatedKey.secretKey}</p>
-                  
-                  <div>
-                    <ButtonCN 
-                      variant={'outline'} 
-                      className="border-2" 
-                      onClick={() => {
-                        navigator.clipboard.writeText(generatedKey.secretKey);
-                        toast.success('Copied to clipboard');
-                      }}
-                    >Copy</ButtonCN>
-                  </div>
-                </div>
-                
-              </div>
-            )}
-          </div>
-        <DialogFooter>
-          {
-            generatedKey ? (
-              <DialogClose>
-                <ButtonCN onClick={() => {
-                  setGeneratedKey(null);
-                  setName('');
-                }} className="px-6" variant={'outline'}>Done</ButtonCN>
-              </DialogClose>
-            ) : (
-              <ButtonCN onClick={onClick}>Generate</ButtonCN>
-            )
-          }
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+    </PageWrapper>
   )
 }

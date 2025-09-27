@@ -1,7 +1,6 @@
 import { SignedIn, UserButton } from "@clerk/clerk-react";
 import { Button } from "antd";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-// import { FeedbackComponent } from "./FeedbackComponent";
 
 export const NavBar = () => {
     const location = useLocation();
@@ -12,19 +11,14 @@ export const NavBar = () => {
           <div className="w-full h-14 bg-white items-end flex px-4 sm:px-8 md:px-16 lg:px-20 justify-between">
                 
                 <div className="flex h-full">
-                <img src="/Plutofy-Logo.png" onClick={()=> navigate('/')}  alt="image" className="rounded-t-sm bg-[#553566] min-w-12 flex items-end mt-4 mr-6 px-2.5 aspect-square object-contain hover:cursor-pointer" />
-                {/* <img src="/Plutofy-Logo.png" onClick={()=> window.open("https://plutofy.live/", "_blank")}  alt="image" className="rounded-t-sm bg-[#553566] min-w-12 flex items-end mt-4 mr-6 px-2.5 aspect-square object-contain hover:cursor-pointer" /> */}
+                  <img src="/Plutofy-Logo.png" onClick={()=> navigate('/')}  alt="image" className="rounded-t-sm bg-[#553566] min-w-12 flex items-end mt-4 mr-6 px-2.5 aspect-square object-contain hover:cursor-pointer" />
                   <div className="sm:flex h-full hidden">
-                    <NavBarItem pathname={location.pathname} link="/" title="Home" />
-                    <NavBarItem pathname={location.pathname} link="/create" title="Create Agent" />
-                    <NavBarItem pathname={location.pathname} link="/api" title="API" />
-                    {/* <NavBarItem pathname={location.pathname} link="/test/1" title="Test" /> */}
-                    {/* <NavBarItem pathname={location.pathname} link="/create2" title="Create Agent 2" />
-                    <NavBarItem pathname={location.pathname} link="/test" title="Tests" /> */}
+                    <NavBarItem pathname={location.pathname} link="/" title="Agents" />
+                    <NavBarItem pathname={location.pathname} link="/workflow" title="Workflows" />
+                    <NavBarItem pathname={location.pathname} link="/api" title="API Keys" />
                   </div>
                 </div>
                 
-  
                 <div className="h-full flex items-center gap-5">
                   {/* <FeedbackComponent /> */}
                   <UserButton />

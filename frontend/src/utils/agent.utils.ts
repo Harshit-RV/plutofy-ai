@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { AgentDoc, AgentProps } from '../types/agent';
-
-const API_URL = "https://plutofy-ai-api-f6887ac1a9d2.herokuapp.com"
+import { API_URL } from '@/config';
 
 /**
  * Function to create a new agent

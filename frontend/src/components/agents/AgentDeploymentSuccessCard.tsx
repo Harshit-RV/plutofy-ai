@@ -7,9 +7,9 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { Terminal, Copy, CheckCircle, Rocket, ChevronRight, ChevronLeft } from "lucide-react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Link } from "react-router-dom"
-import { returnCodeSamples } from "@/components/ConnectToAgentDialogBox"
+import { returnCodeSamples } from "@/components/agents/ConnectToAgentDialogBox"
 
-export default function AIDeploymentSuccess( { agentId, name } : { agentId: string, name: string} ) {
+export default function AgentDeploymentSuccessCard( { agentId, name } : { agentId: string, name: string} ) {
   const [isExpanded, setIsExpanded] = useState(false)
 
   return (
