@@ -1,13 +1,13 @@
 import axios from "axios"
 import { SendMessageProps } from "./types";
 
-class TelegramExec {
+class TelegramService {
   static sendMessage = async (data: SendMessageProps) => {
-    await axios.post(`https://api.telegram.org/bot${data.apiKey}/sendMessage`, {
+    await axios.post(`https://api.telegram.org/bot${data.botToken}/sendMessage`, {
         chat_id: data.chatId,
-        text: data.text
+        text: data.message
     })
   } 
 }
 
-export default TelegramExec;
+export default TelegramService;

@@ -1,8 +1,8 @@
 export interface AuthProd {
-  apiKey: string
+  botToken: string
 }
 
 export interface SendMessageProps extends AuthProd { 
   chatId: string,
-  text: string
+  message: string
 }

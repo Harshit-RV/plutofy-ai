@@ -65,11 +65,12 @@ const workflowScheme: WorkflowScheme  = {
         { name: "username", displayName: "Username", type: "string" },
         { name: "password", displayName: "Password", type: "string" },
       ],
-      data: [
+      data:[
         { name: "from", displayName: "From", type: "string"},
         { name: "to", displayName: "To", type: "string" },
         { name: "subject", displayName: "Subject", type: "string" },
-        { name: "HTML Body", displayName: "HTML Body", type: "string" }
+        { name: "html", displayName: "HTML Body", type: "string" },
+        { name: "text", displayName: "Text", type: "string" }
       ]
     },
     // {

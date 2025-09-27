@@ -1,4 +1,4 @@
-import { PrimitiveType } from "./models/Agent.model"
+import { OutputStructure, PrimitiveType } from "./models/Agent.model"
 
 type NodeGeneralType =  "llmNode" | "webhookTriggerNode" | "emailNode" | "telegramNode" | "agentNode" | "conditionNode"
 
@@ -8,18 +8,18 @@ interface NodeInfo {
   image: string,
   type: NodeGeneralType,
   category: "trigger" | "action",
-  credentials: object
-  data: InputField[],
+  credentials: OutputStructure[],
+  data: OutputStructure[],
   connections?: {
     required?: NodeGeneralType[]
   }
 }
 
-export interface InputField {
-  name: string,
-  displayName: string,
-  type: PrimitiveType,
-} 
+// export interface InputField {
+//   name: string,
+//   displayName: string,
+//   type: PrimitiveType,
+// } 
 
 interface WorkflowScheme { 
   nodes: NodeInfo[]
@@ -35,11 +35,11 @@ const workflowScheme: WorkflowScheme  = {
       image: "/telegram.svg",
       category: "action",
       credentials: [
-        { name: "chatId", displayName: "Chat ID", type: "string" },
+        { id: "1", name: "botToken", displayName: "Bot Token", type: "string" },
       ],
       data: [
-        { name: "chatId", displayName: "Chat ID", type: "string" },
-        { name: "message", displayName: "Message", type: "string" },
+        { id: "1",name: "chatId", displayName: "Chat ID", type: "string" },
+        { id: "2",name: "message", displayName: "Message", type: "string" },
       ]
     },
     {
@@ -48,9 +48,9 @@ const workflowScheme: WorkflowScheme  = {
       type: "webhookTriggerNode",
       image: "/webhook.svg",
       category: "trigger",
-      credentials: {},
+      credentials: [],
       data: [
-        { displayName:"", name: "Payload", type: "object" }
+        { id: "1", displayName:"", name: "Payload", type: "object" }
       ]
     },
     {
@@ -59,16 +59,18 @@ const workflowScheme: WorkflowScheme  = {
       type: "emailNode",
       image: "/mail.svg",
       category: "action", 
-      credentials: {
-        smtpServer: "string",
-        username: "string",
-        password: "string"
-      },
+      credentials: [
+        { id: "1", name: "smtpServer", displayName: "SMTP Server", type: "string" },
+        { id: "2", name: "port", displayName: "Port", type: "number" },
+        { id: "3", name: "username", displayName: "Username", type: "string" },
+        { id: "4", name: "password", displayName: "Password", type: "string" },
+      ],
       data: [
-        { name: "from", displayName: "From", type: "string"},
-        { name: "to", displayName: "To", type: "string" },
-        { name: "subject", displayName: "Subject", type: "string" },
-        { name: "HTML Body", displayName: "HTML Body", type: "string" }
+        { id: "1", name: "from", displayName: "From", type: "string"},
+        { id: "2", name: "to", displayName: "To", type: "string" },
+        { id: "3", name: "subject", displayName: "Subject", type: "string" },
+        { id: "4", name: "html", displayName: "HTML Body", type: "string" },
+        { id: "5", name: "text", displayName: "Text", type: "string" }
       ]
     },
     // {
@@ -91,7 +93,7 @@ const workflowScheme: WorkflowScheme  = {
       type: "agentNode",
       image: "/bot.svg",
       category: "action",
-      credentials: {},
+      credentials: [],
       data: [
         // { name: "goal", type: "string" },
         // { name: "tools", type: "array" }
@@ -106,7 +108,7 @@ const workflowScheme: WorkflowScheme  = {
       type: "conditionNode",
       image: "/condition.svg",
       category: "action",
-      credentials: {},
+      credentials: [],
       data: [
         // { name: "condition", type: "string" },
         // { name: "truePathLabel", type: "string" },

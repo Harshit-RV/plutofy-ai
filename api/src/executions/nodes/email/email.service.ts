@@ -2,17 +2,17 @@
 import nodemailer from "nodemailer";
 import { EmailSmtpProps, SendEmailProps } from "./types";
 
-class EmailExec {
+class EmailService {
   transporter: nodemailer.Transporter;
 
   constructor(data: EmailSmtpProps) {
     this.transporter = nodemailer.createTransport({
-      host: data.host,
+      host: data.smtpServer,
       port: data.port,
-      secure: data.secure,
+      secure: data.port === 465,
       auth: {
-        user: data.auth.user,
-        pass: data.auth.pass,
+        user: data.username,
+        pass: data.password,
       },
     });
   }
@@ -22,10 +22,9 @@ class EmailExec {
       from: data.from,
       to: data.to,
       subject: data.subject,
-      text: data.text,
       html: data.html,
     })
   } 
 }
 
-export default EmailExec;
+export default EmailService;

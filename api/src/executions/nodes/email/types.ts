@@ -1,17 +1,13 @@
 export interface EmailSmtpProps {
-  host: string;
+  smtpServer: string;
   port: number;
-  secure: boolean;
-  auth: {
-    user: string;
-    pass: string;
-  };
+  username: string;
+  password: string;
 }
 
 export interface SendEmailProps {
   from: string;
   to: string;
   subject: string;
-  text: string;
   html: string;
 }
