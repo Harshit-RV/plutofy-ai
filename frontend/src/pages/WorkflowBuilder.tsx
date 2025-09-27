@@ -186,12 +186,16 @@ const WorkflowBuilder = ({ workflowName, initialEdges, initialNodes, syncWorkflo
   }, []);
 
   const unselectNodeOnPositionChange = (changes: NodeChange<INode>[]) => {
+    if (changes.length == 0) return
+
     if (changes[0].type == "position") {
       onSelectionChange({nodes: []})
     }
   }
 
   const handleWebhookTriggerNodeChanges = async (changes: NodeChange<INode>[]) => {
+    if (changes.length == 0) return
+    
     if (changes[0].type == "remove") {
       const deletedNode = getNode(changes[0].id)
       

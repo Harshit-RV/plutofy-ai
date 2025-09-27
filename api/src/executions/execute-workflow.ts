@@ -12,7 +12,7 @@ const executeWorkflow = async (input: ExecuteWorkflowInput) => {
     return;
   }
 
-  executeWorkflow({ ...input, nodeId: nextNodeId})
+  await executeWorkflow({ ...input, nodeId: nextNodeId})
 };
 
 export default executeWorkflow;

@@ -15,7 +15,6 @@ const SelectCredentials = ( props : SelectCredentialsProps ) => {
   const { getToken } = useAuth();
   
   const fetchList = async () => {
-    await new Promise((r) => setTimeout(r, 3000));
     const token = await getToken();
     if (!token) return;
     return await CredentialsService.getAllCredentialsByUserAndNodeType(props.nodeType, token);
