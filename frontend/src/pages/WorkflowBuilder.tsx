@@ -1,4 +1,4 @@
-import LlmNode from '@/components/workflows/nodes/LlmNode';
+import AgentLlmNode from '@/components/workflows/nodes/AgentLlmNode';
 import AgentNode from '@/components/workflows/nodes/AgentNode';
 import ConditionNode from '@/components/workflows/nodes/ConditionNode';
 import EmailNode from '@/components/workflows/nodes/EmailNode';
@@ -27,7 +27,7 @@ import WebhookService from '@/utils/webhook.util';
 import AgentToolNode from '@/components/workflows/nodes/AgentToolNode';
 
 const nodeTypes = {
-  llmNode: LlmNode,
+  agentLlmNode: AgentLlmNode,
   webhookTriggerNode: WebhookTriggerNode,
   emailNode: EmailNode,
   telegramNode: TelegramNode,
@@ -258,7 +258,7 @@ const WorkflowBuilder = ({ workflowName, initialEdges, initialNodes, syncWorkflo
           const sourceNode = getNode(connection.source);
           const targetNode = getNode(connection.target);
 
-          if (targetNode?.type === NodeType.llmNode) {
+          if (targetNode?.type === NodeType.agentLlmNode) {
             if (sourceNode?.type === NodeType.agentNode) return true;
             return false;
           }

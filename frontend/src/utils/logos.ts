@@ -5,7 +5,7 @@ const logos: Record<NodeType, string> = {
   [NodeType.agentNode]: "/bot.svg",
   [NodeType.conditionNode]: "/condition.svg",
   [NodeType.emailNode]: "/mail.svg",
-  [NodeType.llmNode]: "/telegram.svg",
+  [NodeType.agentLlmNode]: "/telegram.svg",
   [NodeType.webhookTriggerNode]: "/webhook.svg",
 }
 

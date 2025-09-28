@@ -1,6 +1,6 @@
 import { OutputStructure, PrimitiveType } from "./models/Agent.model"
 
-type NodeGeneralType =  "llmNode" | "webhookTriggerNode" | "emailNode" | "telegramNode" | "agentNode" | "conditionNode"
+type NodeGeneralType =  "agentLlmNode" | "webhookTriggerNode" | "emailNode" | "telegramNode" | "agentNode" | "conditionNode"
 
 interface NodeInfo {
   name: string,
@@ -75,7 +75,7 @@ const workflowScheme: WorkflowScheme  = {
     // {
     //   name: "LLM",
     //   description: "Large Language Model node",
-    //   type: "llmNode",
+    //   type: "agentLlmNode",
     //   category: "action",
     //   credentials: {
     //     apiKey: "string"
@@ -98,7 +98,7 @@ const workflowScheme: WorkflowScheme  = {
         // { name: "tools", type: "array" }
       ],
       connections: {
-        required: ["llmNode"]
+        required: ["agentLlmNode"]
       }
     },
     {

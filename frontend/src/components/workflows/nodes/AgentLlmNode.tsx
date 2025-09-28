@@ -2,7 +2,7 @@ import { Handle, Position } from "@xyflow/react";
 import { FaGoogle } from "react-icons/fa";
 import { GeneralDependentNode } from "./shared/NodeWrappers";
 
-const LlmNode = () => {
+const AgentLlmNode = () => {
   return (
     <GeneralDependentNode>
       <FaGoogle />
@@ -16,4 +16,4 @@ const LlmNode = () => {
 
 
 
-export default LlmNode;
+export default AgentLlmNode;
