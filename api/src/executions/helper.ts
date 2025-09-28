@@ -4,9 +4,10 @@ import { generateDynamicObjectZodSchema } from "../utils/generateDynamicZodSchem
 import { ExecuteWorkflowInput } from "./types";
 
 class ExecutionHelper {
-  // TODO: add support for multiple next nodes
-  static getNextNodeId = (input: ExecuteWorkflowInput) => {
-    return input.workflow.connections.find(item => item.source === input.nodeId)?.target;
+  static getNextNodesId = (input: ExecuteWorkflowInput) : string[] => {
+    return input.workflow.connections
+      .filter(item => item.source === input.nodeId)
+      .map(item => item.target);
   };
 
   static getNodeFromId = (input: ExecuteWorkflowInput) => {
