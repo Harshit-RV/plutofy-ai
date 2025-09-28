@@ -24,6 +24,7 @@ import { throttle } from 'lodash';
 import { v4 as uuid } from "uuid";
 import WorkflowSidebar from '@/components/workflows/sidebar/WorkflowSidebar';
 import WebhookService from '@/utils/webhook.util';
+import AgentToolNode from '@/components/workflows/nodes/AgentToolNode';
 
 const nodeTypes = {
   llmNode: LlmNode,
@@ -32,6 +33,7 @@ const nodeTypes = {
   telegramNode: TelegramNode,
   agentNode: AgentNode,
   conditionNode: ConditionNode,
+  agentToolNode: AgentToolNode,
 }
 
 type Mode = 'CREATE' | 'EDIT';
@@ -238,6 +240,7 @@ const WorkflowBuilder = ({ workflowName, initialEdges, initialNodes, syncWorkflo
           <WorkflowSidebar 
             sidebarState={sidebarState}
             onAddNode={onAddNode}
+            setEdges={setEdges}
             setNodes={setNodes}
             currentNodes={nodes}
           />

@@ -5,5 +5,6 @@ export enum NodeType {
   emailNode = "emailNode",
   telegramNode = "telegramNode",
   agentNode = "agentNode",
-  conditionNode = "conditionNode" 
+  conditionNode = "conditionNode",
+  agentToolNode = "agentToolNode"
 }
