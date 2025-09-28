@@ -5,14 +5,16 @@ import { ExecuteWorkflowInput } from "./types";
 const executeWorkflow = async (input: ExecuteWorkflowInput) => {
   await executeNode(input);
 
-  const nextNodeId = ExecutionHelper.getNextNodeId(input)
+  const nextNodeId = ExecutionHelper.getNextNodesId(input)
 
   if (!nextNodeId) {
     console.log("no more nodes to process")
     return;
   }
 
-  await executeWorkflow({ ...input, nodeId: nextNodeId})
+  nextNodeId.map(async (node) => {
+    await executeWorkflow({ ...input, nodeId: node})
+  }) 
 };
 
 export default executeWorkflow;
