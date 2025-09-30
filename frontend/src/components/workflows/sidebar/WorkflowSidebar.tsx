@@ -1,13 +1,13 @@
-import { NodeType, SidebarState, INode } from "@/types/workflow";
+import { NodeType, SidebarState, INode, IConnection } from "@/types/workflow";
 import AddNodeSection from "./views/AddNodeSection"
 import NodeExpanded from "./views/NodeExpanded"
-import { Node } from '@xyflow/react';
 import { Dispatch, SetStateAction } from "react";
 
 interface WorkflowSidebarProps {
   sidebarState: SidebarState,
   onAddNode: (type: NodeType) => void,
-  setNodes: Dispatch<SetStateAction<Node[]>>,
+  setNodes: Dispatch<SetStateAction<INode[]>>,
+  setEdges:  Dispatch<SetStateAction<IConnection[]>>,
   currentNodes: INode[]
 }
 
@@ -20,7 +20,8 @@ const WorkflowSidebar = ( props : WorkflowSidebarProps ) => {
           // force NodeExpanded to rerender when node is changes
           key={props.sidebarState.selectedNodes[0].id} 
           node={props.sidebarState.selectedNodes[0]} 
-          setNodes={props.setNodes} 
+          setNodes={props.setNodes}
+          setEdges={props.setEdges}
         />
       ) : (
         <AddNodeSection onAddNode={props.onAddNode} currentNodes={props.currentNodes}></AddNodeSection>

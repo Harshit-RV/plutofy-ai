@@ -5,8 +5,9 @@ const logos: Record<NodeType, string> = {
   [NodeType.agentNode]: "/bot.svg",
   [NodeType.conditionNode]: "/condition.svg",
   [NodeType.emailNode]: "/mail.svg",
-  [NodeType.llmNode]: "/telegram.svg",
+  [NodeType.agentLlmNode]: "/llm.svg",
   [NodeType.webhookTriggerNode]: "/webhook.svg",
+  [NodeType.httpRequestToolNode]: "/globe.svg"
 }
 
 export default logos;

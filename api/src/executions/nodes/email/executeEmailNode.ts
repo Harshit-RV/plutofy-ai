@@ -13,17 +13,17 @@ const executeEmailNode = async (node: INode, userId: string, credStructure: Outp
     const data = ExecutionHelper.getDataFromNode(node.data, dataStructure);
   
     const emailService = new EmailService({
-      smtpServer: creds.smtpServer,
-      port: creds.port,
-      username: creds.username,
-      password: creds.password,
+      smtpServer: creds.smtpServer as string,
+      port: creds.port as number,
+      username: creds.username as string,
+      password: creds.password as string,
     })
   
     await emailService.sendEmail({
-      from: data.from,
-      to: data.to,
-      subject: data.subject,
-      html: data.html,
+      from: data.from as string,
+      to: data.to as string,
+      subject: data.subject as string,
+      html: data.html as string,
     })
   
   } catch (error) {

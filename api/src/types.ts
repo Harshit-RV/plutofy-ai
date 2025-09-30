@@ -1,9 +1,10 @@
 
 export enum NodeType {
-  llmNode = "llmNode",
+  agentLlmNode = "agentLlmNode",
   webhookTriggerNode = "webhookTriggerNode",
   emailNode = "emailNode",
   telegramNode = "telegramNode",
   agentNode = "agentNode",
-  conditionNode = "conditionNode" 
+  conditionNode = "conditionNode",
+  httpRequestToolNode = "httpRequestToolNode"
 }

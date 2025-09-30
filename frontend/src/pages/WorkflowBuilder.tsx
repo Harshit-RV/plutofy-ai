@@ -1,4 +1,4 @@
-import LlmNode from '@/components/workflows/nodes/LlmNode';
+import AgentLlmNode from '@/components/workflows/nodes/agent-children-nodes/AgentLlmNode';
 import AgentNode from '@/components/workflows/nodes/AgentNode';
 import ConditionNode from '@/components/workflows/nodes/ConditionNode';
 import EmailNode from '@/components/workflows/nodes/EmailNode';
@@ -24,14 +24,16 @@ import { throttle } from 'lodash';
 import { v4 as uuid } from "uuid";
 import WorkflowSidebar from '@/components/workflows/sidebar/WorkflowSidebar';
 import WebhookService from '@/utils/webhook.util';
+import HttpRequestToolNode from '@/components/workflows/nodes/agent-children-nodes/HttpRequestToolNode';
 
 const nodeTypes = {
-  llmNode: LlmNode,
+  agentLlmNode: AgentLlmNode,
   webhookTriggerNode: WebhookTriggerNode,
   emailNode: EmailNode,
   telegramNode: TelegramNode,
   agentNode: AgentNode,
   conditionNode: ConditionNode,
+  httpRequestToolNode: HttpRequestToolNode,
 }
 
 type Mode = 'CREATE' | 'EDIT';
@@ -238,6 +240,7 @@ const WorkflowBuilder = ({ workflowName, initialEdges, initialNodes, syncWorkflo
           <WorkflowSidebar 
             sidebarState={sidebarState}
             onAddNode={onAddNode}
+            setEdges={setEdges}
             setNodes={setNodes}
             currentNodes={nodes}
           />
@@ -255,7 +258,7 @@ const WorkflowBuilder = ({ workflowName, initialEdges, initialNodes, syncWorkflo
           const sourceNode = getNode(connection.source);
           const targetNode = getNode(connection.target);
 
-          if (targetNode?.type === NodeType.llmNode) {
+          if (targetNode?.type === NodeType.agentLlmNode) {
             if (sourceNode?.type === NodeType.agentNode) return true;
             return false;
           }

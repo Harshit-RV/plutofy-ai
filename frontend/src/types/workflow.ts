@@ -13,7 +13,9 @@ export interface INode extends Node {
 export interface IConnection {
   id: string, 
   source: string, 
-  target: string
+  target: string,
+  type?: string,
+  sourceHandle?: string
 }
 
 export interface IWorkflow {
@@ -33,10 +35,11 @@ export interface WorkflowDoc extends IWorkflow, Document {
 }
 
 export enum NodeType {
-  llmNode = "llmNode",
+  agentLlmNode = "agentLlmNode",
   webhookTriggerNode = "webhookTriggerNode",
   emailNode = "emailNode",
   telegramNode = "telegramNode",
   agentNode = "agentNode",
-  conditionNode = "conditionNode" 
+  conditionNode = "conditionNode",
+  httpRequestToolNode = "httpRequestToolNode"
 }

@@ -49,7 +49,7 @@ export function generateDynamicObjectZodSchema(fields: OutputStructure[]): ZodOb
         throw new Error(`Unsupported field type: ${field.type}`);
     }
 
-    schemaShape[field.name] = schema;
+    Object.assign(schemaShape, { [field.name]: schema });
   });
 
   return z.object(schemaShape);

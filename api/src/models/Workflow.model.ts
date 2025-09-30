@@ -12,7 +12,9 @@ export interface INode {
 export interface IConnection {
   id: string, 
   source: string, 
-  target: string
+  target: string,
+  type?: string,
+  sourceHandle?: string
 }
 
 export interface IWorkflow {
@@ -52,6 +54,8 @@ const connectionSchema: Schema = new Schema(
     id: { type: String, required: true },
     source: { type: String, required: true },
     target: { type: String, required: true },
+    sourceHandle: { type: String, required: false },
+    type: { type: String, required: false }
   },
 );
 

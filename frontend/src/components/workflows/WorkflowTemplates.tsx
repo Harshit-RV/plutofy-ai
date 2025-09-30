@@ -36,7 +36,7 @@ const WorkflowTemplates = ({
         { id: '2', position: { x: 100, y: 0 }, data: {}, type: 'emailNode', },
         { id: '3', position: { x: 100, y: 100 }, data: {}, type: 'telegramNode', },
         { id: '4', position: { x: 200, y: 100 }, data: {}, type: 'agentNode', },
-        { id: '5', position: { x: 200, y: 200 }, data: {}, type: 'llmNode', },
+        { id: '5', position: { x: 200, y: 200 }, data: {}, type: 'agentLlmNode', },
         { id: '6', position: { x: 200, y: 300 }, data: {}, type: 'conditionNode', },
       ],
       connections: [

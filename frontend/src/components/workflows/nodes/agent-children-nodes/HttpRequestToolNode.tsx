@@ -1,14 +1,14 @@
 import { Handle, Position } from "@xyflow/react";
-import { GeneralDependentNode } from "./shared/NodeWrappers";
+import { GeneralDependentNode } from "../shared/NodeWrappers";
 import logos from "@/utils/logos";
 
-export const AgentToolNode = () => {
+const HttpRequestToolNode = () => {
   return (
     <GeneralDependentNode>
       <img
-        src={logos.emailNode}
-        alt="Agent Tool"
-        className="w-6 h-6 object-contain"
+        src={logos.httpRequestToolNode}
+        alt="llm"
+        className="size-4 object-contain"
       />
       <Handle 
         type="target" 
@@ -18,4 +18,6 @@ export const AgentToolNode = () => {
   )
 }
 
-export default AgentToolNode;
+
+
+export default HttpRequestToolNode;

@@ -1,18 +1,18 @@
 import { PrimitiveType } from "./types/common-types"
 
-type NodeGeneralType =  "llmNode" | "webhookTriggerNode" | "emailNode" | "telegramNode" | "agentNode" | "conditionNode"
+type NodeGeneralType =  "agentLlmNode" | "webhookTriggerNode" | "emailNode" | "telegramNode" | "agentNode" | "conditionNode" | "httpRequestToolNode"
 
-interface NodeInfo {
+export interface NodeInfo {
   name: string,
   description: string,
   image: string,
   type: NodeGeneralType,
-  category: "trigger" | "action",
+  category: "trigger" | "action" | "child",
   credentials: InputField[],
   data: InputField[],
-  connections?: {
-    required?: NodeGeneralType[]
-  }
+  // connections?: {
+  //   required?: NodeGeneralType[]
+  // }
 }
 
 export interface InputField {
@@ -72,20 +72,29 @@ const workflowScheme: WorkflowScheme  = {
         { name: "html", displayName: "HTML Body", type: "string" },
       ]
     },
-    // {
-    //   name: "LLM",
-    //   description: "Large Language Model node",
-    //   type: "llmNode",
-    //   category: "action",
-    //   credentials: {
-    //     apiKey: "string"
-    //   },
-    //   data: [
-    //     { name: "prompt", type: "string" },
-    //     { name: "temperature", type: "number" },
-    //     { name: "maxTokens", type: "number" }
-    //   ]
-    // },
+    {
+      name: "LLM",
+      image: "/llm.svg",
+      description: "Large Language Model node",
+      type: "agentLlmNode",
+      category: "child",
+      credentials: [
+        { name: "apiKey", displayName: "API Key", type: "string" },
+      ],
+      data: [
+        { name: "provider", displayName: "Provider", type: "string"},
+        { name: "model", displayName: "Model", type: "string"},
+      ]
+    },
+    {
+      name: "HTTP Request Tool",
+      image: "/globe.svg",
+      description: "Gives Agent ability to make GET requests",
+      type: "httpRequestToolNode",
+      category: "child",
+      credentials: [],
+      data: []
+    },
     {
       name: "AI Agent",
       description: "An AI agent that can use tools and make decisions",
@@ -94,26 +103,21 @@ const workflowScheme: WorkflowScheme  = {
       category: "action",
       credentials: [],
       data: [
-        // { name: "goal", type: "string" },
-        // { name: "tools", type: "array" }
+        { name: "prompt", displayName: "System Prompt", type: "string"},
       ],
-      connections: {
-        required: ["llmNode"]
-      }
+      // connections: {
+      //   required: ["agentLlmNode"]
+      // },
     },
-    {
-      name: "Condition",
-      description: "Branch workflow based on conditions",
-      type: "conditionNode",
-      image: "/condition.svg",
-      category: "action",
-      credentials: [],
-      data: [
-        // { name: "condition", type: "string" },
-        // { name: "truePathLabel", type: "string" },
-        // { name: "falsePathLabel", type: "string" }
-      ]
-    }
+    // {
+    //   name: "Condition",
+    //   description: "Branch workflow based on conditions",
+    //   type: "conditionNode",
+    //   image: "/condition.svg",
+    //   category: "action",
+    //   credentials: [],
+    //   data: []
+    // }
   ]
 }
 
