@@ -104,6 +104,8 @@ const workflowScheme: WorkflowScheme  = {
       credentials: [],
       data: [
         { id: "1", name: "prompt", displayName: "System Prompt", type: "string"},
+        { id: "2", name: "getStructuredResponse", displayName: "Get Structured/JSON Response", type: "boolean"},
+        // { id: "2", name: "outputStructure", displayName: "Output Structure", type: "array"},
       ],
     },
     // {

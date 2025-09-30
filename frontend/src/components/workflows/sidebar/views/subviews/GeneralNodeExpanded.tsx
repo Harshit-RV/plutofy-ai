@@ -1,11 +1,12 @@
 import workflowScheme from "@/workflow-scheme";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { ButtonCN } from "@/components/ui/buttoncn";
 import { INode, NodeType } from "@/types/workflow";
-import SingleInputField from "../SingleInputField";
-import SelectCredentials from "@/components/workflows/sidebar/components/SelectCredentials";
 import AgentNodeExpanded from "../../components/AgentNodeExpanded";
 import { NodeExpandedProps } from "../NodeExpanded";
+import NodeDataEditor from "../../components/NodeDataEditor";
+import NodeCredentialsEditor from "../../components/NodeCredentialsEditor";
+import JsonBuilderWrappedForWorkflow from "../../components/JsonBuilderWrappedForWorkflow";
 
 const GeneralNodeExpanded = ({ node, setNodes, setEdges } : NodeExpandedProps) => {
   const nodeInfoFromScheme = workflowScheme.nodes.find(wf => wf.type == node.type);
@@ -13,12 +14,8 @@ const GeneralNodeExpanded = ({ node, setNodes, setEdges } : NodeExpandedProps) =
   const [localData, setLocalData] = useState<INode>(() => node || {});
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
-  useEffect(() => {
-    setLocalData(node || {});
-    setHasUnsavedChanges(false);
-  }, [node.id, node.data]);
-
-  const handleSave = () => {
+  // saves both new data and credentials
+  const saveNodeChanges = () => {
     setNodes((nodes) =>
       nodes.map((singleNode) => {
         if (singleNode.id === node.id) {
@@ -34,25 +31,6 @@ const GeneralNodeExpanded = ({ node, setNodes, setEdges } : NodeExpandedProps) =
     setHasUnsavedChanges(false);
   };
 
-  const handleDataInputChange = (fieldName: string, value: unknown) => {
-    setLocalData(prev => ({
-      ...prev,
-      data: {
-        ...prev.data,
-        [fieldName]: value
-      } 
-    }));
-    setHasUnsavedChanges(true);
-  };
-
-  const handleCredentialsChange = (value: string) => {
-    setLocalData(prev => ({
-      ...prev,
-      credentials: value
-    }))
-    setHasUnsavedChanges(true);
-  }
-
   return (
     <div className='flex flex-col w-full py-5 px-4'>
       
@@ -63,35 +41,41 @@ const GeneralNodeExpanded = ({ node, setNodes, setEdges } : NodeExpandedProps) =
 
       <p className='text-sm mt-3'>{nodeInfoFromScheme?.description}</p>
 
-      { nodeInfoFromScheme?.credentials.length != 0 && (
-        <div className="border-y py-4 my-3">
-          <p className="text-xs mb-2">Credentials</p>
-          <SelectCredentials value={localData.credentials} setValue={(val) => handleCredentialsChange(val)} nodeType={node.type ?? ""}/>
-        </div>
+      { (nodeInfoFromScheme && nodeInfoFromScheme.credentials.length != 0) && (
+        <NodeCredentialsEditor 
+          node={node}
+          localData={localData}
+          setLocalData={setLocalData}
+          setHasUnsavedChanges={setHasUnsavedChanges}
+        />
       )}
 
-      <div>
-        {
-          nodeInfoFromScheme?.data.map((inputField, index) => (
-            <div key={index} className='mt-4'>
-              <p className='text-xs mb-1'>{inputField.displayName}</p>
-              <SingleInputField 
-                key={`${index}-${nodeInfoFromScheme.type}-${inputField.name}`}
-                type={inputField.type} 
-                value={(localData.data ?? {})[inputField.name] ?? ''} 
-                onValueChange={(val) => handleDataInputChange(inputField.name, val)}
-                name={inputField.name} 
-                displayName={inputField.displayName} 
-              />
-            </div>
-          ))
-        }
-      </div>
-      
+      {
+        (nodeInfoFromScheme && nodeInfoFromScheme.data.length != 0) && (
+          <NodeDataEditor 
+            nodeInfoFromScheme={nodeInfoFromScheme}
+            node={node}
+            setNodes={setNodes}
+            localData={localData}
+            setLocalData={setLocalData}
+            hasUnsavedChanges={hasUnsavedChanges}
+            setHasUnsavedChanges={setHasUnsavedChanges}
+          />
+        )
+      }
+
+      { (node.type === NodeType.agentNode && (localData.data.getStructuredResponse as boolean)) && (
+        <JsonBuilderWrappedForWorkflow 
+          localData={localData}
+          setHasUnsavedChanges={setHasUnsavedChanges}
+          setLocalData={setLocalData}
+        />
+      ) }
+
       { !(nodeInfoFromScheme?.credentials.length == 0 && nodeInfoFromScheme?.data.length == 0) && (
         <div className='mt-6 pt-4 border-t'>
           <ButtonCN 
-            onClick={handleSave}
+            onClick={saveNodeChanges}
             disabled={!hasUnsavedChanges}
             className='w-full'
           >

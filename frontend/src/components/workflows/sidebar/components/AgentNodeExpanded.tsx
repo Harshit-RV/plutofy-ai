@@ -57,27 +57,6 @@ const AgentNodeExpanded = ({ node, setNodes, setEdges } : AgentNodeExpandedProps
     setEdges((oldEdges) => addEdge(newConnection, oldEdges));
   }
 
-  // const addMemory = () => {
-  //   const newNodeId = uuid();
-
-  //   const newNode: INode = {
-  //     id: newNodeId,
-  //     type: NodeType.agentToolNode,
-  //     position: { x: Math.floor(Math.random() * 101), y: Math.floor(Math.random() * 101) },
-  //     data: {},
-  //   };
-
-  //   setNodes((nds) => nds.concat(newNode));
-    
-  //   const newConnection = {
-  //     id: uuid(),
-  //     source: node.id,
-  //     target: newNodeId,
-  //     sourceHandle: "llm"
-  //   }
-
-  //   setEdges((oldEdges) => addEdge(newConnection, oldEdges));
-  // }
 
   return ( 
     <div>

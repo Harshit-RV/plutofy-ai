@@ -38,7 +38,7 @@ interface NavBarItemProps {
   
 export const NavBarItem = (args: NavBarItemProps) => {
     return (
-        <Link to={args.link} className="h-full  flex flex-col justify-between">
+        <Link to={args.link} className="h-full hover:cursor-pointer flex flex-col justify-between">
             <div></div> <div></div> <div></div>
             
             <Button type="text" className={`rounded-lg font-semibold ${args.pathname == args.link ? ' text-black' : 'text-gray-500' } `}>{args.title}</Button>
