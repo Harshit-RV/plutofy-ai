@@ -22,6 +22,7 @@ export const AgentNode = () => {
       <Handle
         type="source"
         position={Position.Right}
+        id="next"
       />
     </div>
   )

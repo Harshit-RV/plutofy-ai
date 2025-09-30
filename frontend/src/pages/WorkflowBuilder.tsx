@@ -120,7 +120,7 @@ interface WorkflowBuilderProps {
 
 const WorkflowBuilder = ({ workflowName, initialEdges, initialNodes, syncWorkflowWithDB, workflowDocId } : WorkflowBuilderProps) => {
   const [ nodes, setNodes, onNodesChange ] = useNodesState<INode>(initialNodes);
-  const [ edges, setEdges, onEdgesChange ] = useEdgesState(initialEdges);
+  const [ edges, setEdges, onEdgesChange ] = useEdgesState<IConnection>(initialEdges);
   const [ sidebarState, setSidebarState ] = useState<SidebarState>({ mode: "CLOSED", selectedNodes: [] })
   const [ name, setName ] = useState(workflowName);
   const { getNode } = useReactFlow();
@@ -128,7 +128,14 @@ const WorkflowBuilder = ({ workflowName, initialEdges, initialNodes, syncWorkflo
 
   const onConnect = useCallback(
     (connection: Connection) => {
-      setEdges((edges) => [...edges, { id: `${connection.source}+${connection.target}`, source: connection.source, target: connection.target }]);
+      const newEdge: IConnection = { 
+        id: `${connection.source}+${connection.target}`, 
+        source: connection.source, 
+        target: connection.target,
+        sourceHandle: connection.sourceHandle ? connection.sourceHandle : undefined
+      }
+
+      setEdges((edges) => [...edges, newEdge]);
     },
     [setEdges]
   );
