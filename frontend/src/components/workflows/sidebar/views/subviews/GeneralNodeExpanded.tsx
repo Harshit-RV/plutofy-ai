@@ -87,16 +87,18 @@ const GeneralNodeExpanded = ({ node, setNodes, setEdges } : NodeExpandedProps) =
           ))
         }
       </div>
-
-      <div className='mt-6 pt-4 border-t'>
-        <ButtonCN 
-          onClick={handleSave}
-          disabled={!hasUnsavedChanges}
-          className='w-full'
-        >
-          {hasUnsavedChanges ? 'Save Changes' : 'Saved'}
-        </ButtonCN>
-      </div>
+      
+      { !(nodeInfoFromScheme?.credentials.length == 0 && nodeInfoFromScheme?.data.length == 0) && (
+        <div className='mt-6 pt-4 border-t'>
+          <ButtonCN 
+            onClick={handleSave}
+            disabled={!hasUnsavedChanges}
+            className='w-full'
+          >
+            {hasUnsavedChanges ? 'Save Changes' : 'Saved'}
+          </ButtonCN>
+        </div>
+      )}
 
       { node.type === NodeType.agentNode && <AgentNodeExpanded node={node} nodeInfo={nodeInfoFromScheme!} setNodes={setNodes} setEdges={setEdges} /> }
     </div>
