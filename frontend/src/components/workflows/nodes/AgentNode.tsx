@@ -17,7 +17,7 @@ export const AgentNode = () => {
 
       <Handle type="source" position={Position.Bottom} id="llm" style={{ left: 25 }} />
       <Handle type="source" position={Position.Bottom} id="tool" style={{ left: 80 }} />
-      <Handle type="source" position={Position.Bottom} id="memory"/>
+      {/* <Handle type="source" position={Position.Bottom} id="memory"/> */}
       
       <Handle
         type="source"
