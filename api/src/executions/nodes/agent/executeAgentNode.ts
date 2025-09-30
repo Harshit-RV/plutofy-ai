@@ -5,11 +5,20 @@ import AgentService from "./agent.service";
 import AgentExecutionHelper from "./helper";
 import { ExecuteWorkflowInput } from "../../types";
 import workflowScheme from "../../../workflow-scheme";
+import { generateDynamicObjectZodSchema } from "../../../utils/generateDynamicZodSchema";
 
 const executeAgentNode = async (input: ExecuteWorkflowInput, node: INode, userId: string, dataStructure: OutputStructure[]) => {
   try {
     // AI Agent node has no credentials, only LLM Node does
     const data = AgentExecutionHelper.getDataFromNode(node.data, dataStructure);
+
+    // Generate dynamic Zod schema from the output structure defined in the frontend
+    const outputStructure = (node.data as any).outputStructure as OutputStructure[];
+    const responseSchema = generateDynamicObjectZodSchema(outputStructure);
+
+    if (data.getStructuredResponse as boolean && outputStructure.length == 0) {
+      throw Error("No output structure defined")
+    }
 
     // prepare LLM model
     const llmNode = AgentExecutionHelper.getLlmNode(input)
@@ -31,16 +40,19 @@ const executeAgentNode = async (input: ExecuteWorkflowInput, node: INode, userId
     const agent = createReactAgent({
       llm: model,
       tools: toolsList,
+      responseFormat: data.getStructuredResponse as boolean ? responseSchema : undefined,
     });
 
-    await agent.invoke({
+    const res = await agent.invoke({
       messages: [
         {
           role: "user",
           content: data.prompt as string,
         },
-      ],  
+      ],
     });
+
+    console.log(data.getStructuredResponse as boolean ? res.structuredResponse : res.messages)
   
   } catch (error) {
     console.log(error)

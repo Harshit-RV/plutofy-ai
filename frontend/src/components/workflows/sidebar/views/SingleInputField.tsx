@@ -37,7 +37,7 @@ const SingleInputField = ( props : InputFieldProps): ReactNode => {
         type="checkbox"
         checked={Boolean(props.value)}
         onChange={(e) => props.onValueChange(e.target.checked)}
-        className=''
+        className='size-4 mt-1'
       />
     )
   }

@@ -104,6 +104,8 @@ const workflowScheme: WorkflowScheme  = {
       credentials: [],
       data: [
         { name: "prompt", displayName: "System Prompt", type: "string"},
+        { name: "getStructuredResponse", displayName: "Get Structured/JSON Response", type: "boolean"},
+        // { name: "outputStructure", displayName: "Output Structure", type: "string"},
       ],
       // connections: {
       //   required: ["agentLlmNode"]

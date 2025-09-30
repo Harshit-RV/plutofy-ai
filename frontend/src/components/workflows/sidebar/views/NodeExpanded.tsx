@@ -17,8 +17,13 @@ const NodeExpanded = ({ node, setNodes, setEdges } : NodeExpandedProps ) => {
     return <TriggerNodeExpanded node={node}/>
   }
 
+  // TODO: (for far future) all if else checks for Nodes should happen here 
+  // and respective data changing components and visual components like 
+  // trailing content (Add LLM, Add tools buttons in AI agent node) should go as props here in GeneralNodeExpanded
   return (
-    <GeneralNodeExpanded node={node} setNodes={setNodes} setEdges={setEdges}/>
+    <div className="overflow-y-scroll overflow-x-clip">
+      <GeneralNodeExpanded node={node} setNodes={setNodes} setEdges={setEdges}/>
+    </div>
   )
 }
 
