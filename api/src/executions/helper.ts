@@ -6,7 +6,9 @@ import { ExecuteWorkflowInput } from "./types";
 class ExecutionHelper {
   static getNextNodesId = (input: ExecuteWorkflowInput) : string[] => {
     return input.workflow.connections
-      .filter(item => item.source === input.nodeId)
+      .filter(item => {
+        return (item.source === input.nodeId && item.type != "child")
+      })
       .map(item => item.target);
   };
 

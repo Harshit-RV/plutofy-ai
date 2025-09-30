@@ -19,7 +19,6 @@ export interface InputField {
   name: string,
   displayName: string,
   type: PrimitiveType,
-  options?: string[]
 } 
 
 interface WorkflowScheme { 
@@ -83,12 +82,8 @@ const workflowScheme: WorkflowScheme  = {
         { name: "apiKey", displayName: "API Key", type: "string" },
       ],
       data: [
-        // TODO: add support for enum type for this
-        { name: "llm", displayName: "LLM", type: "string", 
-          options: [
-            "Google Gemini Flash 2", "OpenAI GPT 5"
-          ] 
-        },
+        { name: "provider", displayName: "Provider", type: "string"},
+        { name: "model", displayName: "Model", type: "string"},
       ]
     },
     {
