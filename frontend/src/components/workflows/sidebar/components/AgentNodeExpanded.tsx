@@ -39,7 +39,7 @@ const AgentNodeExpanded = ({ node, setNodes, setEdges } : AgentNodeExpandedProps
 
     const newNode: INode = {
       id: newNodeId,
-      type: NodeType.agentToolNode,
+      type: NodeType.httpRequestToolNode,
       position: { x: Math.floor(Math.random() * 101), y: Math.floor(Math.random() * 101) },
       data: {},
     };

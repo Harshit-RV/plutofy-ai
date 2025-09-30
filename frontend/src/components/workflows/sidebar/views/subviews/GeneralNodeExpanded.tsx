@@ -63,10 +63,12 @@ const GeneralNodeExpanded = ({ node, setNodes, setEdges } : NodeExpandedProps) =
 
       <p className='text-sm mt-3'>{nodeInfoFromScheme?.description}</p>
 
-      <div className="border-y py-4 my-3">
-        <p className="text-xs mb-2">Credentials</p>
-        <SelectCredentials value={localData.credentials} setValue={(val) => handleCredentialsChange(val)} nodeType={node.type ?? ""}/>
-      </div>
+      { nodeInfoFromScheme?.credentials.length != 0 && (
+        <div className="border-y py-4 my-3">
+          <p className="text-xs mb-2">Credentials</p>
+          <SelectCredentials value={localData.credentials} setValue={(val) => handleCredentialsChange(val)} nodeType={node.type ?? ""}/>
+        </div>
+      )}
 
       <div>
         {

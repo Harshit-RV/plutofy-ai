@@ -1,4 +1,4 @@
-import AgentLlmNode from '@/components/workflows/nodes/AgentLlmNode';
+import AgentLlmNode from '@/components/workflows/nodes/agent-children-nodes/AgentLlmNode';
 import AgentNode from '@/components/workflows/nodes/AgentNode';
 import ConditionNode from '@/components/workflows/nodes/ConditionNode';
 import EmailNode from '@/components/workflows/nodes/EmailNode';
@@ -24,7 +24,7 @@ import { throttle } from 'lodash';
 import { v4 as uuid } from "uuid";
 import WorkflowSidebar from '@/components/workflows/sidebar/WorkflowSidebar';
 import WebhookService from '@/utils/webhook.util';
-import AgentToolNode from '@/components/workflows/nodes/AgentToolNode';
+import HttpRequestToolNode from '@/components/workflows/nodes/agent-children-nodes/HttpRequestToolNode';
 
 const nodeTypes = {
   agentLlmNode: AgentLlmNode,
@@ -33,7 +33,7 @@ const nodeTypes = {
   telegramNode: TelegramNode,
   agentNode: AgentNode,
   conditionNode: ConditionNode,
-  agentToolNode: AgentToolNode,
+  httpRequestToolNode: HttpRequestToolNode,
 }
 
 type Mode = 'CREATE' | 'EDIT';

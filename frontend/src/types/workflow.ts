@@ -41,5 +41,5 @@ export enum NodeType {
   telegramNode = "telegramNode",
   agentNode = "agentNode",
   conditionNode = "conditionNode",
-  agentToolNode = "agentToolNode"
+  httpRequestToolNode = "httpRequestToolNode"
 }

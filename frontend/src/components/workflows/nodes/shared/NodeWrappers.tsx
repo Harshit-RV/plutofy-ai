@@ -19,7 +19,7 @@ export const GeneralTriggerNode = ({ className, children } : { className?: strin
 
 export const GeneralDependentNode = ({ className, children } : { className?: string , children: ReactNode}) => {
   return (
-    <div className={cn('size-full rounded-full border p-2 bg-white', className ?? "")}>
+    <div className={cn('size-full rounded-full border p-1 bg-white', className ?? "")}>
       {children}
     </div>
   )
