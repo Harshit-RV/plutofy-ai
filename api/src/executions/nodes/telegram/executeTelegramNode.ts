@@ -13,9 +13,9 @@ const executeTelegramNode = async (node: INode, userId: string, credStructure: O
     const data = ExecutionHelper.getDataFromNode(node.data, dataStructure);
   
     await TelegramService.sendMessage({
-      botToken: creds.botToken,
-      chatId: data.chatId,
-      message: data.message,
+      botToken: creds.botToken as string,
+      chatId: data.chatId as string,
+      message: data.message as string,
     })
   
   } catch (error) {
