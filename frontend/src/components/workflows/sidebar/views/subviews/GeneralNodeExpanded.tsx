@@ -43,6 +43,7 @@ const GeneralNodeExpanded = ({ node, setNodes, setEdges } : NodeExpandedProps) =
 
       { (nodeInfoFromScheme && nodeInfoFromScheme.credentials.length != 0) && (
         <NodeCredentialsEditor 
+          className="mt-3"
           node={node}
           localData={localData}
           setLocalData={setLocalData}
@@ -53,6 +54,7 @@ const GeneralNodeExpanded = ({ node, setNodes, setEdges } : NodeExpandedProps) =
       {
         (nodeInfoFromScheme && nodeInfoFromScheme.data.length != 0) && (
           <NodeDataEditor 
+            className="mt-3"
             nodeInfoFromScheme={nodeInfoFromScheme}
             node={node}
             setNodes={setNodes}
@@ -66,6 +68,7 @@ const GeneralNodeExpanded = ({ node, setNodes, setEdges } : NodeExpandedProps) =
 
       { (node.type === NodeType.agentNode && (localData.data.getStructuredResponse as boolean)) && (
         <JsonBuilderWrappedForWorkflow 
+          className="mt-3"
           localData={localData}
           setHasUnsavedChanges={setHasUnsavedChanges}
           setLocalData={setLocalData}
@@ -73,7 +76,7 @@ const GeneralNodeExpanded = ({ node, setNodes, setEdges } : NodeExpandedProps) =
       ) }
 
       { !(nodeInfoFromScheme?.credentials.length == 0 && nodeInfoFromScheme?.data.length == 0) && (
-        <div className='mt-6 pt-4 border-t'>
+        <div className='mt-3 pt-4 border-t'>
           <ButtonCN 
             onClick={saveNodeChanges}
             disabled={!hasUnsavedChanges}

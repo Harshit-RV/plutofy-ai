@@ -16,7 +16,10 @@ type Field = {
   isExpanded?: boolean
 }
 
-export default function JsonBuilder( { outputStructure, setOutputStructure }:{ outputStructure:OutputStructure[], setOutputStructure : (outputStructure: OutputStructure[]) => void } ) {
+export default function JsonBuilder( 
+  { outputStructure, setOutputStructure, hidePreview = false }
+  : { outputStructure:OutputStructure[], setOutputStructure : (outputStructure: OutputStructure[]) => void, hidePreview?: boolean } 
+) {
   const convertOutputStructureToFields = (outputStructure: OutputStructure[]): Field[] => {
     return outputStructure.map(({ id, name, type, fields }) => ({
       id,
@@ -225,16 +228,22 @@ export default function JsonBuilder( { outputStructure, setOutputStructure }:{ o
 
   return (
     <div className="container mx-auto pt-2 max-w-3xl">
-      <div className="space-y-1.5 border bg-gray-100 mb-4 rounded-lg px-4 py-5">
+      <div className="space-y-1.5 border bg-gray-100 rounded-lg px-4 py-5">
         {fields.map((field) => renderField(field))}
         <ButtonCN onClick={() => addField()} size={'sm'} variant={'outline'} className="px-4 mt-2">
           Add Field
         </ButtonCN>
       </div>
-      <div>
-        {/* <h2 className="text-xl font-semibold mb-2">JSON Output:</h2> */}
-        <pre className="bg-gray-100 border p-4 text-sm rounded-md overflow-auto">{JSON.stringify(jsonObject, null, 2)}</pre>
-      </div>
+      
+      {
+        !hidePreview && (
+          <div>
+            {/* <h2 className="text-xl font-semibold mb-2">JSON Output:</h2> */}
+            <pre className="bg-gray-100 border mt-4 p-4 text-sm rounded-md overflow-auto">{JSON.stringify(jsonObject, null, 2)}</pre>
+          </div>
+        )
+      }
+      
     </div>
   )
 }

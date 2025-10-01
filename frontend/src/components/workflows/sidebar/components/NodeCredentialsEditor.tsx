@@ -1,12 +1,14 @@
 import { Dispatch, SetStateAction } from "react";
 import { INode } from "@/types/workflow";
 import SelectCredentials from "./SelectCredentials";
+import { cn } from "@/lib/utils";
 
 interface NodeCredentialsEditorProps {
   node: INode,
   localData: INode,
   setLocalData: Dispatch<SetStateAction<INode>>,
   setHasUnsavedChanges: Dispatch<SetStateAction<boolean>>,
+  className?: string
 }
 
 const NodeCredentialsEditor = ( props: NodeCredentialsEditorProps ) => {
@@ -20,7 +22,7 @@ const NodeCredentialsEditor = ( props: NodeCredentialsEditorProps ) => {
   }
 
   return (
-    <div className="border-y py-4 my-3">
+    <div className={cn("border-t py-4", props.className)}>
       <p className="text-xs mb-2">Credentials</p>
       <SelectCredentials 
         value={props.localData.credentials} 
