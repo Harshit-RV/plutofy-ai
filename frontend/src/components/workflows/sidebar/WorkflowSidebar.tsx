@@ -5,6 +5,8 @@ import { Dispatch, SetStateAction } from "react";
 
 interface WorkflowSidebarProps {
   sidebarState: SidebarState,
+  nodes: INode[]
+  edges: IConnection[]
   onAddNode: (type: NodeType) => void,
   setNodes: Dispatch<SetStateAction<INode[]>>,
   setEdges:  Dispatch<SetStateAction<IConnection[]>>,
@@ -18,6 +20,8 @@ const WorkflowSidebar = ( props : WorkflowSidebarProps ) => {
       { (props.sidebarState.mode === "NODE-EXPANDED" && props.sidebarState.selectedNodes.length !=0) ? (
         <NodeExpanded 
           // force NodeExpanded to rerender when node is changes
+          nodes={props.nodes}
+          edges={props.edges}
           key={props.sidebarState.selectedNodes[0].id} 
           node={props.sidebarState.selectedNodes[0]} 
           setNodes={props.setNodes}

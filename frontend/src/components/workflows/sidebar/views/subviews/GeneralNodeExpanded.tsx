@@ -1,5 +1,5 @@
 import workflowScheme from "@/workflow-scheme";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ButtonCN } from "@/components/ui/buttoncn";
 import { INode, NodeType } from "@/types/workflow";
 import AgentNodeExpanded from "../../components/AgentNodeExpanded";
@@ -7,11 +7,14 @@ import { NodeExpandedProps } from "../NodeExpanded";
 import NodeDataEditor from "../../components/NodeDataEditor";
 import NodeCredentialsEditor from "../../components/NodeCredentialsEditor";
 import JsonBuilderWrappedForWorkflow from "../../components/JsonBuilderWrappedForWorkflow";
+import JsonPreview from "@/components/json-forms/JsonPreview";
+import { OutputStructure } from "@/types/agent";
 
-const GeneralNodeExpanded = ({ node, setNodes, setEdges } : NodeExpandedProps) => {
+const GeneralNodeExpanded = ({ node, nodes, edges, setNodes, setEdges } : NodeExpandedProps) => {
   const nodeInfoFromScheme = workflowScheme.nodes.find(wf => wf.type == node.type);
   
   const [localData, setLocalData] = useState<INode>(() => node || {});
+  const [ previousNodeData, setPrevioudNodeData ] = useState<INode | null>(null)
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
   // saves both new data and credentials
@@ -31,6 +34,24 @@ const GeneralNodeExpanded = ({ node, setNodes, setEdges } : NodeExpandedProps) =
     setHasUnsavedChanges(false);
   };
 
+  const getPreviousNodeData = () => {
+    const previousNodes = edges.filter(item => {
+      return (item.target === node.id && item.type != "child")
+    }).map(item => item.source);
+
+    if (previousNodes.length == 0) return
+
+    const nodeData = nodes.find(item => item.id === previousNodes[0]);
+
+    if (nodeData) {
+      setPrevioudNodeData(nodeData)
+    }
+  }
+
+  useEffect(() => {
+    getPreviousNodeData()
+  }, [])
+
   return (
     <div className='flex flex-col w-full py-5 px-4'>
       
@@ -39,7 +60,20 @@ const GeneralNodeExpanded = ({ node, setNodes, setEdges } : NodeExpandedProps) =
         <h1 className='font-bold text-lg'>{nodeInfoFromScheme?.name}</h1>
       </div>
 
-      <p className='text-sm mt-3'>{nodeInfoFromScheme?.description}</p>
+      <p className='text-sm my-3'>{nodeInfoFromScheme?.description}</p>
+
+      <div className="flex flex-col border-t pt-3 gap-2">
+        <div className="flex items-center gap-2">
+          <p className="text-sm">Get data from previous node</p>
+          <input
+            type="checkbox"
+            // checked={Boolean(props.value)}
+            // onChange={(e) => props.onValueChange(e.target.checked)}
+            className='size-4'
+          />
+        </div>
+        <JsonPreview outputStructure={((previousNodeData?.data || {}).outputStructure || []) as OutputStructure[]}/>
+      </div>
 
       { (nodeInfoFromScheme && nodeInfoFromScheme.credentials.length != 0) && (
         <NodeCredentialsEditor 
