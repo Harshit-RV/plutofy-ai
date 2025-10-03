@@ -40,8 +40,8 @@ const SelectCredentials = ( props : SelectCredentialsProps ) => {
           {credentialsLoading && <Skeleton className="w-full h-6 bg-gray-200"></Skeleton>}
 
           {
-            credentialsList?.map((item) => (
-              <SelectItem value={item._id as string}>{item.name}</SelectItem>
+            credentialsList?.map((item, index) => (
+              <SelectItem key={index} value={item._id as string}>{item.name}</SelectItem>
             ))
           }
 
