@@ -7,9 +7,8 @@ import { NodeExpandedProps } from "../NodeExpanded";
 import NodeDataEditor from "../../components/NodeDataEditor";
 import NodeCredentialsEditor from "../../components/NodeCredentialsEditor";
 import JsonBuilderWrappedForWorkflow from "../../components/JsonBuilderWrappedForWorkflow";
-import JsonPreview from "@/components/json-forms/JsonPreview";
 import { OutputStructure } from "@/types/agent";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import DataFromPreviousNodeCard from "../../components/DataFromPreviousNodeCard";
 
 const GeneralNodeExpanded = ({ node, nodes, edges, setNodes, setEdges } : NodeExpandedProps) => {
   const nodeInfoFromScheme = workflowScheme.nodes.find(wf => wf.type == node.type);
@@ -63,19 +62,15 @@ const GeneralNodeExpanded = ({ node, nodes, edges, setNodes, setEdges } : NodeEx
 
       <p className='text-sm my-3'>{nodeInfoFromScheme?.description}</p>
 
-      <Card className="">
-        <CardHeader className="pt-5 pb-3 px-3 md:px-4">
-          <CardTitle className="flex justify-between">
-            <h4 className="text-sm font-semibold">
-              Data from previous node
-            </h4>
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="py-0 pb-4 px-3 md:px-4">
-          <JsonPreview outputStructure={((previousNodeData?.data || {}).outputStructure || []) as OutputStructure[]}/>
-        </CardContent>
-      </Card>
-
+      { previousNodeData && (
+        <DataFromPreviousNodeCard 
+          previousNodeData={previousNodeData} 
+          localData={localData} 
+          setLocalData={setLocalData} 
+          setHasUnsavedChanges={setHasUnsavedChanges} 
+        /> 
+      )}
+ 
       { (nodeInfoFromScheme && nodeInfoFromScheme.credentials.length != 0) && (
         <NodeCredentialsEditor 
           className="mt-3"

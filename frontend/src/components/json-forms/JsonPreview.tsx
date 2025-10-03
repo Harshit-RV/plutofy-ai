@@ -1,9 +1,10 @@
 import { OutputStructure } from "@/types/agent";
 import { Field, JsonValue } from "./JsonInput"
 import convertOutputStructureToFields from "@/utils/convertOutputStructureToFields";
+import { cn } from "@/lib/utils";
 
 
-const JsonPreview = ({ outputStructure } : { outputStructure: OutputStructure[] }) => {
+const JsonPreview = ({ outputStructure, className } : { outputStructure: OutputStructure[], className?: string }) => {
 
   const fields = (convertOutputStructureToFields(outputStructure))
 
@@ -43,7 +44,7 @@ const JsonPreview = ({ outputStructure } : { outputStructure: OutputStructure[] 
   const jsonObject = getJsonObject(fields)
 
   return (
-    <div>
+    <div className={cn(className)}>
       <pre className="bg-gray-100 border p-4 text-sm rounded-md overflow-auto">{JSON.stringify(jsonObject, null, 2)}</pre>
     </div>
   )
