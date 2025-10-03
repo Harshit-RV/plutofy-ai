@@ -1,5 +1,5 @@
 import workflowScheme from "@/workflow-scheme";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { ButtonCN } from "@/components/ui/buttoncn";
 import { INode, NodeType } from "@/types/workflow";
 import AgentNodeExpanded from "../../components/AgentNodeExpanded";
@@ -13,9 +13,9 @@ import { OutputStructure } from "@/types/agent";
 const GeneralNodeExpanded = ({ node, nodes, edges, setNodes, setEdges } : NodeExpandedProps) => {
   const nodeInfoFromScheme = workflowScheme.nodes.find(wf => wf.type == node.type);
   
-  const [localData, setLocalData] = useState<INode>(() => node || {});
+  const [ localData, setLocalData ] = useState<INode>(() => node || {});
   const [ previousNodeData, setPrevioudNodeData ] = useState<INode | null>(null)
-  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+  const [ hasUnsavedChanges, setHasUnsavedChanges ] = useState(false);
 
   // saves both new data and credentials
   const saveNodeChanges = () => {
@@ -34,7 +34,7 @@ const GeneralNodeExpanded = ({ node, nodes, edges, setNodes, setEdges } : NodeEx
     setHasUnsavedChanges(false);
   };
 
-  const getPreviousNodeData = () => {
+  const getPreviousNodeData = useCallback(() => {
     const previousNodes = edges.filter(item => {
       return (item.target === node.id && item.type != "child")
     }).map(item => item.source);
@@ -46,11 +46,11 @@ const GeneralNodeExpanded = ({ node, nodes, edges, setNodes, setEdges } : NodeEx
     if (nodeData) {
       setPrevioudNodeData(nodeData)
     }
-  }
+  }, [edges, node.id, nodes])
 
   useEffect(() => {
     getPreviousNodeData()
-  }, [])
+  }, [getPreviousNodeData])
 
   return (
     <div className='flex flex-col w-full py-5 px-4'>
@@ -96,6 +96,7 @@ const GeneralNodeExpanded = ({ node, nodes, edges, setNodes, setEdges } : NodeEx
             setLocalData={setLocalData}
             hasUnsavedChanges={hasUnsavedChanges}
             setHasUnsavedChanges={setHasUnsavedChanges}
+            outputStructure={((previousNodeData?.data || {}).outputStructure || []) as OutputStructure[]}
           />
         )
       }
@@ -121,7 +122,7 @@ const GeneralNodeExpanded = ({ node, nodes, edges, setNodes, setEdges } : NodeEx
         </div>
       )}
 
-      { node.type === NodeType.agentNode && <AgentNodeExpanded node={node} nodeInfo={nodeInfoFromScheme!} setNodes={setNodes} setEdges={setEdges} /> }
+      { node.type === NodeType.agentNode && <AgentNodeExpanded node={node} nodes={nodes} edges={edges} nodeInfo={nodeInfoFromScheme!} setNodes={setNodes} setEdges={setEdges} /> }
     </div>
   )
 }

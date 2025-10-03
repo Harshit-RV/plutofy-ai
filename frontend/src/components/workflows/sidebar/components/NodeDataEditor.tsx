@@ -3,6 +3,7 @@ import SingleInputField from "../views/SingleInputField";
 import { INode } from "@/types/workflow";
 import { NodeInfo } from "@/workflow-scheme";
 import { cn } from "@/lib/utils";
+import { OutputStructure } from "@/types/agent";
 
 interface NodeDataEditorProps {
   nodeInfoFromScheme: NodeInfo,
@@ -12,6 +13,7 @@ interface NodeDataEditorProps {
   setLocalData: Dispatch<SetStateAction<INode>>,
   hasUnsavedChanges: boolean,
   setHasUnsavedChanges: Dispatch<SetStateAction<boolean>>,
+  outputStructure?: OutputStructure[],
   className?: string
 }
 
@@ -45,7 +47,8 @@ const NodeDataEditor = ( props: NodeDataEditorProps ) => {
                 value={(props.localData.data ?? {})[inputField.name] ?? ''} 
                 onValueChange={(val) => handleDataInputChange(inputField.name, val)}
                 name={inputField.name} 
-                displayName={inputField.displayName} 
+                displayName={inputField.displayName}
+                outputStructure={props.outputStructure}
               />
             </div>
           ))

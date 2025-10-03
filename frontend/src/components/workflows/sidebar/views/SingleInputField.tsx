@@ -1,21 +1,26 @@
 import { Input } from "@/components/ui/input"
 import { InputField } from "@/workflow-scheme"
 import { ReactNode } from "react"
+import TemplateInputField from "./TemplateInputField";
+import { OutputStructure } from "@/types/agent";
 
 type InputValue = string | number | boolean | object | unknown[];
 
 interface InputFieldProps extends InputField {
   value: InputValue,
-  onValueChange: (value: InputValue) => void
+  onValueChange: (value: InputValue) => void,
+  outputStructure?: OutputStructure[]
 }
 
 const SingleInputField = ( props : InputFieldProps): ReactNode => {
   if (props.type === "string") {
     return (
-      <Input 
+      <TemplateInputField
         value={props.value as string}
-        onChange={(e) => props.onValueChange(e.target.value)}
-        className=''
+        onValueChange={(value) => props.onValueChange(value)}
+        name={props.name}
+        displayName={props.displayName}
+        outputStructure={props.outputStructure}
       />
     )
   }
