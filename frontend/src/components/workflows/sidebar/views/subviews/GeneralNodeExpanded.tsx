@@ -9,6 +9,7 @@ import NodeCredentialsEditor from "../../components/NodeCredentialsEditor";
 import JsonBuilderWrappedForWorkflow from "../../components/JsonBuilderWrappedForWorkflow";
 import JsonPreview from "@/components/json-forms/JsonPreview";
 import { OutputStructure } from "@/types/agent";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const GeneralNodeExpanded = ({ node, nodes, edges, setNodes, setEdges } : NodeExpandedProps) => {
   const nodeInfoFromScheme = workflowScheme.nodes.find(wf => wf.type == node.type);
@@ -62,18 +63,18 @@ const GeneralNodeExpanded = ({ node, nodes, edges, setNodes, setEdges } : NodeEx
 
       <p className='text-sm my-3'>{nodeInfoFromScheme?.description}</p>
 
-      <div className="flex flex-col border-t pt-3 gap-2">
-        <div className="flex items-center gap-2">
-          <p className="text-sm">Get data from previous node</p>
-          <input
-            type="checkbox"
-            // checked={Boolean(props.value)}
-            // onChange={(e) => props.onValueChange(e.target.checked)}
-            className='size-4'
-          />
-        </div>
-        <JsonPreview outputStructure={((previousNodeData?.data || {}).outputStructure || []) as OutputStructure[]}/>
-      </div>
+      <Card className="">
+        <CardHeader className="pt-5 pb-3 px-3 md:px-4">
+          <CardTitle className="flex justify-between">
+            <h4 className="text-sm font-semibold">
+              Data from previous node
+            </h4>
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="py-0 pb-4 px-3 md:px-4">
+          <JsonPreview outputStructure={((previousNodeData?.data || {}).outputStructure || []) as OutputStructure[]}/>
+        </CardContent>
+      </Card>
 
       { (nodeInfoFromScheme && nodeInfoFromScheme.credentials.length != 0) && (
         <NodeCredentialsEditor 

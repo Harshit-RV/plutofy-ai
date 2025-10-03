@@ -51,7 +51,7 @@ const TemplateInputField: React.FC<TemplateInputFieldProps> = ({
         onChange={(e) => onValueChange(e.target.value)}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
-        className=""
+        className="bg-gray-100"
         placeholder={`Enter ${displayName.toLowerCase()}`}
       />
     );
@@ -90,7 +90,7 @@ const TemplateInputField: React.FC<TemplateInputFieldProps> = ({
         onChange={(e) => onValueChange(e.target.value)}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
-        className=""
+        className="bg-gray-100"
         placeholder={`Enter ${displayName.toLowerCase()}`}
       />
       
