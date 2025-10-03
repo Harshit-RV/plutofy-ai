@@ -5,10 +5,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { X, ChevronDown, ChevronRight } from "lucide-react"
 import { Input as InputAnt } from 'antd';
 import { OutputStructure } from "@/types/agent";
+import JsonPreview from "./JsonPreview";
+import convertOutputStructureToFields from "@/utils/convertOutputStructureToFields";
 
 export type JsonValue = string | number | boolean | null | JsonValue[] | { [key: string]: JsonValue }
 
-type Field = {
+export type Field = {
   id: string
   name: string
   type: string
@@ -16,18 +18,11 @@ type Field = {
   isExpanded?: boolean
 }
 
+
 export default function JsonBuilder( 
   { outputStructure, setOutputStructure, hidePreview = false }
   : { outputStructure:OutputStructure[], setOutputStructure : (outputStructure: OutputStructure[]) => void, hidePreview?: boolean } 
 ) {
-  const convertOutputStructureToFields = (outputStructure: OutputStructure[]): Field[] => {
-    return outputStructure.map(({ id, name, type, fields }) => ({
-      id,
-      name,
-      type,
-      fields: fields ? convertOutputStructureToFields(fields) : undefined,
-    }));
-  };
   
   const [fields, setFields] = useState<Field[]>(convertOutputStructureToFields(outputStructure))
 
@@ -191,44 +186,10 @@ export default function JsonBuilder(
     )
   }
 
-  const getJsonObject = (fields: Field[]): { [key: string]: JsonValue } => {
-    return fields.reduce(
-      (obj, field) => {
-        if (field.name) {
-          if ((field.type === "object" || field.type === "array") && field.fields) {
-            obj[field.name] = getJsonObject(field.fields)
-          } else {
-            obj[field.name] = getDefaultValue(field.type)
-          }
-        }
-        return obj
-      },
-      {} as { [key: string]: JsonValue },
-    )
-  }
-
-  const getDefaultValue = (type: string): JsonValue => {
-    switch (type) {
-      case "string":
-        return ""
-      case "number":
-        return 0
-      case "boolean":
-        return false
-      case "object":
-        return {}
-      case "array":
-        return []
-      default:
-        return null
-    }
-  }
-
-  const jsonObject = getJsonObject(fields)
 
   return (
     <div className="container mx-auto pt-2 max-w-3xl">
-      <div className="space-y-1.5 border bg-gray-100 rounded-lg px-4 py-5">
+      <div className="space-y-1.5 border mb-4 bg-gray-100 rounded-lg px-4 py-5">
         {fields.map((field) => renderField(field))}
         <ButtonCN onClick={() => addField()} size={'sm'} variant={'outline'} className="px-4 mt-2">
           Add Field
@@ -236,12 +197,7 @@ export default function JsonBuilder(
       </div>
       
       {
-        !hidePreview && (
-          <div>
-            {/* <h2 className="text-xl font-semibold mb-2">JSON Output:</h2> */}
-            <pre className="bg-gray-100 border mt-4 p-4 text-sm rounded-md overflow-auto">{JSON.stringify(jsonObject, null, 2)}</pre>
-          </div>
-        )
+        !hidePreview && <JsonPreview outputStructure={outputStructure}/>
       }
       
     </div>
