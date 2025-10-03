@@ -7,7 +7,7 @@ import { ExecuteWorkflowInput } from "../../types";
 import workflowScheme from "../../../workflow-scheme";
 import { generateDynamicObjectZodSchema } from "../../../utils/generateDynamicZodSchema";
 
-const executeAgentNode = async (input: ExecuteWorkflowInput, node: INode, userId: string, dataStructure: OutputStructure[]) => {
+const executeAgentNode = async (input: ExecuteWorkflowInput, node: INode, userId: string, dataStructure: OutputStructure[]) : Promise<object> => {
   try {
     // AI Agent node has no credentials, only LLM Node does
     const data = AgentExecutionHelper.getDataFromNode(node.data, dataStructure);
@@ -52,10 +52,12 @@ const executeAgentNode = async (input: ExecuteWorkflowInput, node: INode, userId
       ],
     });
 
-    console.log(data.getStructuredResponse as boolean ? res.structuredResponse : res.messages)
+    // console.log(data.getStructuredResponse as boolean ? res.structuredResponse : res.messages)
+    return data.getStructuredResponse as boolean ? res.structuredResponse : res.messages
   
   } catch (error) {
     console.log(error)
+    return {};
   }
 }
 

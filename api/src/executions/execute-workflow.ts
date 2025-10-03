@@ -1,9 +1,10 @@
 import executeNode from "./execute-node";
 import ExecutionHelper from "./helper";
-import { ExecuteWorkflowInput } from "./types";
+import { ExecuteWorkflowHistory, ExecuteWorkflowInput } from "./types";
 
-const executeWorkflow = async (input: ExecuteWorkflowInput) => {
-  await executeNode(input);
+const executeWorkflow = async (input: ExecuteWorkflowInput, history: ExecuteWorkflowHistory[]) => {
+  const data = await executeNode(input, history[history.length - 1]);
+  history.push({ nodeId: input.nodeId, data });
 
   const nextNodeId = ExecutionHelper.getNextNodesId(input)
 
@@ -13,7 +14,7 @@ const executeWorkflow = async (input: ExecuteWorkflowInput) => {
   }
 
   nextNodeId.map(async (node) => {
-    await executeWorkflow({ ...input, nodeId: node})
+    await executeWorkflow({ ...input, nodeId: node}, history)
   }) 
 };
 

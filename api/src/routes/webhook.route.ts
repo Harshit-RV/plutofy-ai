@@ -25,10 +25,11 @@ router.get("/:id", async (req, res) : Promise<any> => {
       workflow: workflowToExecute,
       nodeId: webhookRecord.nodeId,
       userId: webhookRecord.userId
-    })
+    }, [ { nodeId: webhookRecord.nodeId, data: {} } ])
 
     return res.status(200).json({final: "Execution trigger"})
   } catch (error) {
+    console.error(error)
     return res.status(500).json({final: "failure"})
   }
 })
