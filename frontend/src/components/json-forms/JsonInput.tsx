@@ -134,7 +134,7 @@ export default function JsonBuilder(
           {isArraySubfield && <div className="text-nowrap font-black text-gray-500 px-3 tracking-widest text-sm"> array of </div>}
           
           {(field.type === "object" || field.type === "array") && (
-            <ButtonCN variant="secondary" size="icon" className="h-10 hover:border hover:bg-white" onClick={() => toggleExpand(field.id)}>
+            <ButtonCN variant="secondary" size="icon" className="h-10 hover:border hover:bg-background" onClick={() => toggleExpand(field.id)}>
               {field.isExpanded ? <ChevronDown size={20} /> : <ChevronRight size={20} />}
             </ButtonCN>
           )}
@@ -143,11 +143,11 @@ export default function JsonBuilder(
             value={field.name}
             onChange={(e) => updateField(field.id, { name: e.target.value })}
             placeholder="Enter field name"
-            className="w-full h-10 tracking-widest font-bold shadow-sm font-mono bg-white rounded-sm focus-visible:ring-1 focus-visible:outline-none" 
+            className="w-full h-10 tracking-widest font-bold shadow-sm font-mono bg-background rounded-sm focus-visible:ring-1 focus-visible:outline-none" 
           />}
           
           <Select value={field.type} onValueChange={(value) => updateField(field.id, { type: value as PrimitiveType })}>
-            <SelectTrigger className="w-[120px] h-10 bg-white">
+            <SelectTrigger className="w-[120px] h-10 bg-background">
               <SelectValue placeholder="Select type" />
             </SelectTrigger>
             <SelectContent>
@@ -189,7 +189,7 @@ export default function JsonBuilder(
 
   return (
     <div className="container mx-auto pt-2 max-w-3xl">
-      <div className="space-y-1.5 border mb-4 bg-gray-100 rounded-lg px-4 py-5">
+      <div className="space-y-1.5 border mb-4 bg-gray-100 dark:bg-background rounded-lg px-4 py-5">
         {fields.map((field) => renderField(field))}
         <ButtonCN onClick={() => addField()} size={'sm'} variant={'outline'} className="px-4 mt-2">
           Add Field

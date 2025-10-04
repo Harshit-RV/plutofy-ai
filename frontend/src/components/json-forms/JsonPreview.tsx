@@ -45,7 +45,7 @@ const JsonPreview = ({ outputStructure, className } : { outputStructure: OutputS
 
   return (
     <div className={cn(className)}>
-      <pre className="bg-gray-100 border p-4 text-sm rounded-md overflow-auto">{JSON.stringify(jsonObject, null, 2)}</pre>
+      <pre className="bg-gray-100 dark:bg-background border p-4 text-sm rounded-md overflow-auto">{JSON.stringify(jsonObject, null, 2)}</pre>
     </div>
   )
 }
