@@ -85,8 +85,8 @@ const AgentTemplatesSection = ({
     return (
       <Collapsible className="w-full space-y-5 ">
         <CollapsibleTrigger asChild>
-          <div className="flex items-center space-x-4 py-1 rounded-xl shadow-sm border-2 border-gray-200 hover:border-gray-300 hover:cursor-pointer px-4">
-            <h1 className="font-black text-md font-poppins text-gray-600">
+          <div className="flex items-center space-x-4 py-1 rounded-xl shadow-sm border-2 border-gray-200 hover:border-gray-300 dark:border-gray-900 dark:hover:border-gray-800 hover:cursor-pointer px-4">
+            <h1 className="font-black text-md font-poppins text-gray-600 dark:text-secondary-foreground">
               Templates
             </h1>
             <ButtonCN variant="ghost" size="sm">

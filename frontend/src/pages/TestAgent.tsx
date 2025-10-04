@@ -123,7 +123,7 @@ const AgentCreate = ({ isTestMode = false }: { isTestMode: boolean }) => {
 
   if (agentError) {
     return (
-      <div className="flex flex-col justify-center pb-[150px] items-center font-mono min-h-screen bg-gray-100 px-2.5 sm:px-6 md:px-10 lg:px-0">
+      <div className="flex flex-col justify-center pb-[150px] items-center font-mono min-h-screen bg-gray-100 dark:bg-background px-2.5 sm:px-6 md:px-10 lg:px-0">
         <Card className="w-full max-w-lg">
           <CardHeader>
             <div className="flex items-center justify-center mb-2">
@@ -148,15 +148,15 @@ const AgentCreate = ({ isTestMode = false }: { isTestMode: boolean }) => {
   }
 
   return !agentLoading || agent != undefined ? (
-    <div className="flex flex-col font-mono min-h-screen bg-gray-100">
+    <div className="flex flex-col font-mono min-h-screen bg-gray-100 dark:bg-background">
       <div
-        className={`flex justify-between items-center bg-white border ${pagePadding} pt-5 w-full py-5 gap-3`}
+        className={`flex justify-between items-center bg-background border ${pagePadding} pt-5 w-full py-5 gap-3`}
       >
         <div className="flex flex-col w-full pr-20">
-          <h2 className="w-full bg-white mx-1 my-1 sm:my-2 font-bold text-lg sm:text-xl border-none">
+          <h2 className="w-full bg-background mx-1 my-1 sm:my-2 font-bold text-lg sm:text-xl border-none">
             {agent?.name}
           </h2>
-          <p className="w-full bg-white mx-1 mt-1  text-gray-500 focus-visible:outline-gray-300 text-sm border-none">
+          <p className="w-full bg-background mx-1 mt-1  text-gray-500 focus-visible:outline-gray-300 text-sm border-none">
             {agent?.description}
           </p>
         </div>
@@ -164,7 +164,7 @@ const AgentCreate = ({ isTestMode = false }: { isTestMode: boolean }) => {
         <ButtonCN
           onClick={() => navigate(`/agent/edit/${agentDocId}`)}
           variant={"outline"}
-          className="w-[130px] sm:flex hidden border-gray-300"
+          className="w-[130px] sm:flex hidden border-gray-300 dark:border-gray-700"
         >
           Edit
         </ButtonCN>
@@ -176,7 +176,7 @@ const AgentCreate = ({ isTestMode = false }: { isTestMode: boolean }) => {
         <Collapsible
           open={isConfigOpen}
           onOpenChange={setIsConfigOpen}
-          className="w-full rounded-xl shadow-sm border space-y-2 bg-white py-2.5 px-4"
+          className="w-full rounded-xl shadow-sm border space-y-2 bg-background py-2.5 px-4"
         >
           <div className="flex items-center space-x-4 px-1">
             <h4 className="text-sm font-semibold">Agent Config</h4>
@@ -188,10 +188,10 @@ const AgentCreate = ({ isTestMode = false }: { isTestMode: boolean }) => {
             </CollapsibleTrigger>
           </div>
           <CollapsibleContent className="flex flex-col lg:flex-row gap-4 px-0 lg:px-0">
-            <div className="lg:w-2/3 flex-grow p-2 lg:p-4 border rounded-lg text-sm text-gray-600">
+            <div className="lg:w-2/3 flex-grow p-2 lg:p-4 border rounded-lg text-sm text-gray-600 dark:text-gray-400">
               {agent?.instruction}
             </div>
-            <pre className="bg-gray-100 border p-4 text-sm rounded-md overflow-auto">
+            <pre className="bg-gray-100 dark:bg-gray-900 border p-4 text-sm rounded-md overflow-auto">
               {JSON.stringify(
                 getJsonObject(agent?.outputStructure ?? []),
                 null,
@@ -202,7 +202,7 @@ const AgentCreate = ({ isTestMode = false }: { isTestMode: boolean }) => {
         </Collapsible>
 
         <Tabs defaultValue={isTestMode ? "test" : "usage"}>
-          <TabsList className="bg-gray-200 border-gray-300 border">
+          <TabsList className="bg-gray-200 dark:bg-gray-900 border-gray-300 dark:border-gray-800 border">
             <TabsTrigger className="px-3" value="usage">
               Usage
             </TabsTrigger>
@@ -215,12 +215,12 @@ const AgentCreate = ({ isTestMode = false }: { isTestMode: boolean }) => {
           </TabsList>
 
           <TabsContent value="usage" className="pt-3">
-            <div className="bg-white text-sm w-full flex justify-center py-10 items-center rounded-lg border">
+            <div className="bg-background text-sm w-full flex justify-center py-10 items-center rounded-lg border">
               Coming Soon..
             </div>
           </TabsContent>
           <TabsContent value="settings" className="pt-3">
-            <div className="bg-white text-sm w-full flex justify-center py-10 items-center rounded-lg border">
+            <div className="bg-background text-sm w-full flex justify-center py-10 items-center rounded-lg border">
               Coming Soon..
             </div>
           </TabsContent>
@@ -317,7 +317,7 @@ const AgentCreate = ({ isTestMode = false }: { isTestMode: boolean }) => {
                       Output
                     </h3>
                     {responseInfo && (
-                      <div className="flex px-4 py-1 bg-white gap-5  border rounded-lg shadow-sm text-sm text-gray-600">
+                      <div className="flex px-4 py-1 bg-background gap-5  border rounded-lg shadow-sm text-sm text-gray-600 dark:text-gray-400">
                         <p>
                           Status:{" "}
                           <span
@@ -341,7 +341,7 @@ const AgentCreate = ({ isTestMode = false }: { isTestMode: boolean }) => {
                     )}
                   </div>
                   <div className="flex flex-col-reverse gap-2 shadow-sm">
-                    <pre className="bg-white border p-4 min-h-[230px] max-h-[265px] h-full text-sm rounded-md overflow-auto">
+                    <pre className="bg-background border p-4 min-h-[230px] max-h-[265px] h-full text-sm rounded-md overflow-auto">
                       {output}
                     </pre>
                   </div>

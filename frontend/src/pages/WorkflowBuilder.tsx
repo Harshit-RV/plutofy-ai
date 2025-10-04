@@ -95,7 +95,7 @@ export default function WorkflowBuilderPage({ mode } : { mode: Mode }) {
 
   return (
     <ReactFlowProvider>
-      <div className='h-[calc(100vh-3.5rem)] w-full p-4 bg-gray-100'>
+      <div className='h-[calc(100vh-3.5rem)] w-full p-4 bg-gray-100 dark:bg-background'>
         <WorkflowBuilder 
           workflowDocId={workflowDocId ?? ""}
           syncWorkflowWithDB={syncWorkflowWithDB} 

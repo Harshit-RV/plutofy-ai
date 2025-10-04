@@ -63,7 +63,7 @@ const WorkflowCard = ({
         )}
         <CardFooter className="flex gap-4 py-0 w-full justify-between">
           <div className="text-xs text-gray-500">Last updated {getRelativeTimeFromDate(updatedAt)}</div>
-          <div className="flex gap-2 bg-gray-50 border border-gray-200 rounded-full items-center h-7 px-3 xl:px-4">
+          <div className="flex gap-2 bg-gray-50 dark:bg-background border border-gray-200 dark:border-gray-800 rounded-full items-center h-7 px-3 xl:px-4">
             <div className="w-2 h-2 bg-green-600 rounded-full"></div>
             <p className="flex items-center text-green-600 font-black text-xs">Active</p>
           </div>
