@@ -10,7 +10,6 @@ import { API_URL } from '@/config';
  */
 export const createAgent = async ( {agentProps, token} :{agentProps: Omit<AgentProps, 'userId'>, token: string}): Promise<AgentDoc> => {
   try {
-    console.log(`${API_URL}/agent/create`)
     const response = await axios.post(
       `${API_URL}/agent/create`, 
       {
@@ -27,7 +26,6 @@ export const createAgent = async ( {agentProps, token} :{agentProps: Omit<AgentP
         },
       }
     );
-    console.log(response)
     return response.data;
   } catch (error) {
     console.log('Error creating agent:', error);
@@ -113,7 +111,6 @@ export const deleteAgent = async ( { agentId, token } : {agentId: string, token:
  */
 export const getAllAgents = async (token: string): Promise<AgentDoc[]> => {
   try {
-    console.log(`${API_URL}/agent/all`)
     const response = await axios.get(
       `${API_URL}/agent/all`, 
       {
@@ -122,7 +119,6 @@ export const getAllAgents = async (token: string): Promise<AgentDoc[]> => {
         },
       }
     );
-    console.log(response)
     return response.data;
   } catch (error) {
     console.error('Error getting all agents:', error);
@@ -175,7 +171,6 @@ export const getCompletion = async <T>(body: T, token: string): Promise<Completi
         },
       }
     );
-    console.log(response.data);
     return {
       completion: response.data,
       statusCode: response.status,

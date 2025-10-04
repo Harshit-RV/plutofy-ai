@@ -60,7 +60,6 @@ const TemplateInputField: React.FC<TemplateInputFieldProps> = ({
   // Render the input with template variable highlighting
   const renderHighlightedText = () => {
     const textParts = Templater.getRenderableItems(value, variables);
-    console.log(textParts)
     
     return textParts.map((part, index) => {
       if (!part.isTemplate) {

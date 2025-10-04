@@ -37,11 +37,9 @@ class Templater {
     let outputType;
   
     for (const k of keys) {
-      console.log(k , " is being checked in ", currentLevel)
       const field = currentLevel.find((i) => i.name == k)
   
       if (!field){
-        console.log(k , " is not found in ", currentLevel)
         return false
       }
   

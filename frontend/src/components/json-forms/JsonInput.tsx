@@ -120,7 +120,6 @@ export default function JsonBuilder(
   useEffect(() => {
     const outputStructure: OutputStructure[] = convertFieldsToOutputStructure(fields);
     setOutputStructure(outputStructure);
-    console.log('fields changed')
   }, [fields])
 
   const renderField = (field: Field, depth = 0, isArraySubfield = false) => {
