@@ -2,6 +2,7 @@ import { Dispatch, SetStateAction, useEffect } from "react";
 import SingleInputField from "../views/SingleInputField";
 import { INode } from "@/types/workflow";
 import { NodeInfo } from "@/workflow-scheme";
+import { cn } from "@/lib/utils";
 
 interface NodeDataEditorProps {
   nodeInfoFromScheme: NodeInfo,
@@ -11,6 +12,7 @@ interface NodeDataEditorProps {
   setLocalData: Dispatch<SetStateAction<INode>>,
   hasUnsavedChanges: boolean,
   setHasUnsavedChanges: Dispatch<SetStateAction<boolean>>,
+  className?: string
 }
 
 const NodeDataEditor = ( props: NodeDataEditorProps ) => {
@@ -32,10 +34,10 @@ const NodeDataEditor = ( props: NodeDataEditorProps ) => {
   }, [props.node.id, props.node.data]);
 
   return (
-    <div>
+    <div className={cn("border-t", props.className)}>
         {
           props.nodeInfoFromScheme.data.map((inputField, index) => (
-            <div key={index} className='mt-4'>
+            <div key={index} className='mt-3'>
               <p className='text-xs mb-1'>{inputField.displayName}</p>
               <SingleInputField 
                 key={`${index}-${props.nodeInfoFromScheme.type}-${inputField.name}`}

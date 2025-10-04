@@ -1,4 +1,5 @@
 import JsonBuilder from "@/components/json-forms/JsonInput"
+import { cn } from "@/lib/utils"
 import { OutputStructure } from "@/types/agent"
 import { INode } from "@/types/workflow"
 import { Dispatch, SetStateAction} from "react"
@@ -6,7 +7,8 @@ import { Dispatch, SetStateAction} from "react"
 interface JsonBuilderWrappedForWorkflowProps {
   localData: INode,
   setLocalData: Dispatch<SetStateAction<INode>>
-  setHasUnsavedChanges: Dispatch<SetStateAction<boolean>>
+  setHasUnsavedChanges: Dispatch<SetStateAction<boolean>>,
+  className?: string
 }
 
 const JsonBuilderWrappedForWorkflow = ( props: JsonBuilderWrappedForWorkflowProps ) => {
@@ -22,12 +24,13 @@ const JsonBuilderWrappedForWorkflow = ( props: JsonBuilderWrappedForWorkflowProp
   };
 
   return (
-    <div className="border-y py-4 my-3">
+    <div className={cn("border-t pt-3", props.className)}>
       <p className="text-xs">Output Structure</p>
       <JsonBuilder
         // TODO: improve these checks
         outputStructure={(((props.localData?? {}).data ?? {}).outputStructure ?? []) as OutputStructure[]} 
         setOutputStructure={(val) => handleDataInputChange(val)}
+        hidePreview
       />
     </div>
   )

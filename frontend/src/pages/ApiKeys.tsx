@@ -9,6 +9,7 @@ import { convertMongoTimestampToLocal } from "@/utils/convertMongoTimestampToLoc
 import PageWrapper from "@/components/PageWrapper"
 import ApiCreateDialog from "@/components/api-keys/ApiCreateDialog"
 import ApiKeySkeleton from "@/components/api-keys/ApiKeySkeleton"
+import { ReactNode } from "react"
 
 export default function ApiKeysPage() {
   const { getToken } = useAuth();
@@ -51,7 +52,7 @@ export default function ApiKeysPage() {
               </div>
           </div>
 
-          <div className="mt-3 sm:mt-7 rounded-xl border drop-shadow-sm bg-white">
+          <div className="mt-3 sm:mt-7 rounded-xl border drop-shadow-sm bg-background">
             <Table className='rounded-lg'>
                 <TableHeader>
                     <TableRow>
@@ -70,23 +71,23 @@ export default function ApiKeysPage() {
                       apiKeys?.length == 0 ? (
                         <TableRow>
                           <TableCell colSpan={5} className="p-4 pl-5">
-                            <span className="font-medium text-md mb-0.5 text-gray-800">You have not created any API Key yet.</span>
+                            <TableTextItem>You have not created any API Key yet.</TableTextItem>
                           </TableCell>
                         </TableRow>
                       ) : (
                         apiKeys?.map((apiKey, index) => (
                           <TableRow key={index}>
                             <TableCell className="p-4 pl-5">
-                                <span className="font-medium text-md mb-0.5 text-gray-800">{apiKey.name}</span>
+                                <TableTextItem>{apiKey.name}</TableTextItem>
                             </TableCell>
                             <TableCell className="p-4">
-                                <span className="font-medium text-md mb-0.5 text-gray-800">********</span>
+                                <TableTextItem >********</TableTextItem>
                             </TableCell>
                             <TableCell className="p-4">
-                                <span className="font-medium text-md mb-0.5 text-gray-800">{convertMongoTimestampToLocal(apiKey.createdAt)}</span>
+                                <TableTextItem>{convertMongoTimestampToLocal(apiKey.createdAt)}</TableTextItem>
                             </TableCell>
                             <TableCell className="p-4">
-                                <span className="font-medium text-md mb-0.5 text-gray-800">{apiKey.access}</span>
+                                <TableTextItem>{apiKey.access}</TableTextItem>
                             </TableCell>
                             
                             <TableCell className="text-right text-lg pr-4">
@@ -116,5 +117,11 @@ export default function ApiKeysPage() {
           
         </div>
     </PageWrapper>
+  )
+}
+
+const TableTextItem = ( { children } : { children: ReactNode } ) => {
+  return (
+    <span className="font-medium text-md mb-0.5 text-gray-800 dark:text-foreground">{children}</span>
   )
 }

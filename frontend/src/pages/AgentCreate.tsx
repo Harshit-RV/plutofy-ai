@@ -33,8 +33,8 @@ const llmsList = [
   { modelCategory: "Gemini", models: ["Gemini o"] },
 ]
 
-const whiteBgGray200Border = "bg-white border-gray-200 hover:bg-gray-100";
-const noRingClass = "focus-visible:ring-gray-400 focus-visible:ring-2 focus-visible:ring-offset-0";
+const whiteBgGray200Border = "bg-background border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-900";
+const noRingClass = "focus-visible:ring-gray-400 dark:focus-visible:ring-gray-800 focus-visible:ring-2 focus-visible:ring-offset-0";
 
 type Mode = 'CREATE' | 'EDIT';
 
@@ -141,8 +141,8 @@ const AgentCreate = ({ mode } : { mode: Mode }) => {
     createdAgent ? (
       <AgentDeploymentSuccessCard name={createdAgent.name} agentId={createdAgent.agentId} />
     ) : 
-    <div className='flex flex-col font-mono min-h-screen bg-gray-100'>
-          <div className="flex justify-between items-center sm:gap-10 bg-white border px-2 sm:px-10 md:px-20 xl:px-48 pt-5 w-full py-5">
+    <div className='flex flex-col font-mono min-h-screen bg-gray-100 dark:bg-background'>
+          <div className="flex justify-between items-center sm:gap-10 bg-white dark:bg-background border px-2 sm:px-10 md:px-20 xl:px-48 pt-5 w-full py-5">
             <div className="flex flex-col w-full lg:pr-20">
               <Input 
                 value={formData.name} 
@@ -171,7 +171,7 @@ const AgentCreate = ({ mode } : { mode: Mode }) => {
               {/* <div className="bg-black bg-opacity-80 text-white border lg:gap-20 rounded-xl flex justify-between items-center py-4 px-5 lg:px-6"> */}
                 <p className="flex items-center gap-2"> <LuBrainCircuit size={20} /> Model</p>
                 <Select value={formData.modelName} onValueChange={(value) => setFormData({...formData, modelName: value})}>
-                  <SelectTrigger className="w-full max-w-96 ml-10 md:ml-48 lg:ml-0 bg-white text-black h-8">
+                  <SelectTrigger className="w-full max-w-96 ml-10 md:ml-48 lg:ml-0 bg-background text-foreground h-8">
                     <SelectValue placeholder="select model" />
                   </SelectTrigger>
                   <SelectContent>
@@ -204,7 +204,7 @@ const AgentCreate = ({ mode } : { mode: Mode }) => {
                     value={formData.instruction}
                     onChange={(e) => setFormData({ ...formData, instruction: e.target.value})}
                     placeholder="e.g. given the age of the candidate, return whether they are eligible for voting" 
-                    className="bg-gray-100 drop-shadow-none shadow-sm min-h-[120px] focus-visible:outline-gray-300 focus-visible:ring-gray-400 focus-visible:ring-1 outline-gray-300"
+                    className="bg-gray-100 bg-background drop-shadow-none shadow-sm min-h-[120px] focus-visible:outline-gray-300 focus-visible:ring-gray-400 focus-visible:ring-1 outline-gray-300"
                   />
                 </CardContent>
               </Card>
@@ -227,7 +227,7 @@ const AgentCreate = ({ mode } : { mode: Mode }) => {
 
             </div>
             
-            <div className="lg:w-2/6 hidden lg:flex flex-col h-min my-6 py-3 pb-8 rounded-lg bg-gray-200 border">
+            <div className="lg:w-2/6 hidden lg:flex flex-col h-min my-6 py-3 pb-8 rounded-lg bg-gray-200 dark:bg-background border">
               <Alert 
                 message="This component is a work in progress" 
                 className="font-bold mx-5 my-2 font-mono text-xs text-gray-500 rounded-md" 
@@ -245,7 +245,7 @@ const AgentCreate = ({ mode } : { mode: Mode }) => {
                 </div>
               </div>
 
-              <div className="h-1 w-full my-4 bg-gray-100"></div>
+              <div className="h-1 w-full my-4 bg-gray-100 dark:bg-gray-800"></div>
 
               <div className="flex flex-col gap-1 px-5">
                 <h3 className="text-sm text-gray-500 font-semibold">Output</h3>

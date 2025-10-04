@@ -5,10 +5,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { X, ChevronDown, ChevronRight } from "lucide-react"
 import { Input as InputAnt } from 'antd';
 import { OutputStructure } from "@/types/agent";
+import JsonPreview from "./JsonPreview";
+import convertOutputStructureToFields from "@/utils/convertOutputStructureToFields";
 
 export type JsonValue = string | number | boolean | null | JsonValue[] | { [key: string]: JsonValue }
 
-type Field = {
+export type Field = {
   id: string
   name: string
   type: string
@@ -16,15 +18,11 @@ type Field = {
   isExpanded?: boolean
 }
 
-export default function JsonBuilder( { outputStructure, setOutputStructure }:{ outputStructure:OutputStructure[], setOutputStructure : (outputStructure: OutputStructure[]) => void } ) {
-  const convertOutputStructureToFields = (outputStructure: OutputStructure[]): Field[] => {
-    return outputStructure.map(({ id, name, type, fields }) => ({
-      id,
-      name,
-      type,
-      fields: fields ? convertOutputStructureToFields(fields) : undefined,
-    }));
-  };
+
+export default function JsonBuilder( 
+  { outputStructure, setOutputStructure, hidePreview = false }
+  : { outputStructure:OutputStructure[], setOutputStructure : (outputStructure: OutputStructure[]) => void, hidePreview?: boolean } 
+) {
   
   const [fields, setFields] = useState<Field[]>(convertOutputStructureToFields(outputStructure))
 
@@ -136,7 +134,7 @@ export default function JsonBuilder( { outputStructure, setOutputStructure }:{ o
           {isArraySubfield && <div className="text-nowrap font-black text-gray-500 px-3 tracking-widest text-sm"> array of </div>}
           
           {(field.type === "object" || field.type === "array") && (
-            <ButtonCN variant="secondary" size="icon" className="h-10 hover:border hover:bg-white" onClick={() => toggleExpand(field.id)}>
+            <ButtonCN variant="secondary" size="icon" className="h-10 hover:border hover:bg-background" onClick={() => toggleExpand(field.id)}>
               {field.isExpanded ? <ChevronDown size={20} /> : <ChevronRight size={20} />}
             </ButtonCN>
           )}
@@ -145,11 +143,11 @@ export default function JsonBuilder( { outputStructure, setOutputStructure }:{ o
             value={field.name}
             onChange={(e) => updateField(field.id, { name: e.target.value })}
             placeholder="Enter field name"
-            className="w-full h-10 tracking-widest font-bold shadow-sm font-mono bg-white rounded-sm focus-visible:ring-1 focus-visible:outline-none" 
+            className="w-full h-10 tracking-widest font-bold shadow-sm font-mono bg-background rounded-sm focus-visible:ring-1 focus-visible:outline-none" 
           />}
           
           <Select value={field.type} onValueChange={(value) => updateField(field.id, { type: value })}>
-            <SelectTrigger className="w-[120px] h-10 bg-white">
+            <SelectTrigger className="w-[120px] h-10 bg-background">
               <SelectValue placeholder="Select type" />
             </SelectTrigger>
             <SelectContent>
@@ -188,53 +186,20 @@ export default function JsonBuilder( { outputStructure, setOutputStructure }:{ o
     )
   }
 
-  const getJsonObject = (fields: Field[]): { [key: string]: JsonValue } => {
-    return fields.reduce(
-      (obj, field) => {
-        if (field.name) {
-          if ((field.type === "object" || field.type === "array") && field.fields) {
-            obj[field.name] = getJsonObject(field.fields)
-          } else {
-            obj[field.name] = getDefaultValue(field.type)
-          }
-        }
-        return obj
-      },
-      {} as { [key: string]: JsonValue },
-    )
-  }
-
-  const getDefaultValue = (type: string): JsonValue => {
-    switch (type) {
-      case "string":
-        return ""
-      case "number":
-        return 0
-      case "boolean":
-        return false
-      case "object":
-        return {}
-      case "array":
-        return []
-      default:
-        return null
-    }
-  }
-
-  const jsonObject = getJsonObject(fields)
 
   return (
     <div className="container mx-auto pt-2 max-w-3xl">
-      <div className="space-y-1.5 border bg-gray-100 mb-4 rounded-lg px-4 py-5">
+      <div className="space-y-1.5 border mb-4 bg-gray-100 dark:bg-background rounded-lg px-4 py-5">
         {fields.map((field) => renderField(field))}
         <ButtonCN onClick={() => addField()} size={'sm'} variant={'outline'} className="px-4 mt-2">
           Add Field
         </ButtonCN>
       </div>
-      <div>
-        {/* <h2 className="text-xl font-semibold mb-2">JSON Output:</h2> */}
-        <pre className="bg-gray-100 border p-4 text-sm rounded-md overflow-auto">{JSON.stringify(jsonObject, null, 2)}</pre>
-      </div>
+      
+      {
+        !hidePreview && <JsonPreview outputStructure={outputStructure}/>
+      }
+      
     </div>
   )
 }

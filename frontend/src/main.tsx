@@ -2,10 +2,11 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
 import './index.css'
-import { ConfigProvider } from 'antd'
 import { BrowserRouter, useNavigate } from "react-router-dom"
 import { ClerkProvider } from '@clerk/clerk-react'
 import { QueryClient, QueryClientProvider } from 'react-query'
+import { ThemeProvider } from './contexts/ThemeContext'
+import AntdConfigProvider from './contexts/AntdConfigProvider.tsx'
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
 
@@ -33,23 +34,11 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-      <ConfigProvider
-          theme={{
-            token: {
-              colorPrimary: '#087e8b', //primary
-              // colorPrimary: '#003f91', //primary
-              // colorPrimary: '#764abc', //primary
-              borderRadius: 2,
-            },
-            components: {
-              Menu: {
-                itemBg: '#fafafa',
-              },
-            },
-          }}
-        >
-          <ClerkWithRoutes />
-        </ConfigProvider>
+        <ThemeProvider>
+          <AntdConfigProvider>
+            <ClerkWithRoutes />
+          </AntdConfigProvider>
+        </ThemeProvider>
       </BrowserRouter>
     </QueryClientProvider>
   </React.StrictMode>,

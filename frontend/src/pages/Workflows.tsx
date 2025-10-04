@@ -3,7 +3,6 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { useAuth } from "@clerk/clerk-react";
 import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
-import { FaChevronDown } from "react-icons/fa";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import WorkflowService from "@/utils/workflow.util";
 import AgentCardSkeleton from "@/components/agents/AgentCardSkeleton";
@@ -68,17 +67,14 @@ const Workflows = () => {
             ) : "Your Workflows"}
           </h1>
           <div className="flex">
-            <ButtonCN onClick={createNewWorkflow} size={'lg'} className="px-6 sm:px-8 h-9 rounded-r-none">
+            <ButtonCN onClick={createNewWorkflow} size={'lg'} className="px-6 sm:px-8 h-9">
               Create
-            </ButtonCN>
-            <ButtonCN size={'lg'} className="px-2 h-9 border-l-[0.5px] border-white rounded-l-none">
-              <FaChevronDown />
             </ButtonCN>
           </div>
         </div>
        
         <Tabs defaultValue="workflows" className="mt-4">
-          <TabsList className="border bg-gray-300">
+          <TabsList className="border bg-gray-300 dark:bg-gray-900">
             <TabsTrigger value="workflows">Workflows</TabsTrigger>
             <TabsTrigger value="credentials">Credentials</TabsTrigger>
             <TabsTrigger value="executions">Executions</TabsTrigger>
@@ -126,8 +122,8 @@ const Workflows = () => {
               </div>
             )}
           </TabsContent>
-          <TabsContent value="credentials" className="mt-4 text-sm text-gray-700">Coming soon..</TabsContent>
-          <TabsContent value="executions" className="mt-4 text-sm text-gray-700">Coming soon..</TabsContent>
+          <TabsContent value="credentials" className="mt-4 text-sm text-gray-700 dark:text-foreground">Coming soon..</TabsContent>
+          <TabsContent value="executions" className="mt-4 text-sm text-gray-700 dark:text-foreground">Coming soon..</TabsContent>
         </Tabs>
       </div>
    </PageWrapper>
