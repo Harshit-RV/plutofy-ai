@@ -23,7 +23,7 @@ const DataFromPreviousNodeCard = ( props: DataFromPreviousNodeCardProps) => {
     <Card className={cn(props.className)}>
       <CardHeader className="pt-5 pb-3 px-3 md:px-4">
         <CardTitle className="flex gap-2 items-center">
-          <ButtonCN variant="secondary" size="icon" className="size-6 border hover:bg-white" onClick={() => setIsExpanded((val) => !val)}>
+          <ButtonCN variant="secondary" size="icon" className="size-6 border hover:bg-background" onClick={() => setIsExpanded((val) => !val)}>
             {isExpanded ? <ChevronDown size={20} /> : <ChevronRight size={20} />}
           </ButtonCN>
           <h4 className="text-sm font-semibold">

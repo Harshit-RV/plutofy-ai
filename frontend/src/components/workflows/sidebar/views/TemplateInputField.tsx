@@ -51,7 +51,7 @@ const TemplateInputField: React.FC<TemplateInputFieldProps> = ({
         onChange={(e) => onValueChange(e.target.value)}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
-        className="bg-gray-100"
+        className="bg-gray-100 dark:bg-background"
         placeholder={`Enter ${displayName.toLowerCase()}`}
       />
     );
@@ -90,13 +90,13 @@ const TemplateInputField: React.FC<TemplateInputFieldProps> = ({
         onChange={(e) => onValueChange(e.target.value)}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
-        className="bg-gray-100"
+        className="bg-gray-100 dark:bg-background"
         placeholder={`Enter ${displayName.toLowerCase()}`}
       />
       
       {/* Preview with highlighted text - only visible when focused and has template variables */}
       {isFocused && variables.length > 0 && (
-        <div className="p-2 text-sm border border-gray-200 rounded-md bg-gray-50">
+        <div className="p-2 text-sm border border-gray-200 dark:border-gray-800 rounded-md bg-gray-50 dark:bg-black">
           <div className="whitespace-pre-wrap">
             {renderHighlightedText()}
           </div>
