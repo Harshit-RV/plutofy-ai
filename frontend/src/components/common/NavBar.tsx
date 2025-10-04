@@ -1,6 +1,7 @@
 import { SignedIn, UserButton } from "@clerk/clerk-react";
 import { Button } from "antd";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import ThemeToggleButton from "./ThemeToggleButton";
 
 export const NavBar = () => {
     const location = useLocation();
@@ -20,7 +21,7 @@ export const NavBar = () => {
                 </div>
                 
                 <div className="h-full flex items-center gap-5">
-                  {/* <FeedbackComponent /> */}
+                  <ThemeToggleButton />
                   <UserButton />
                 </div>
   
@@ -28,7 +29,6 @@ export const NavBar = () => {
         </SignedIn>
     )  
 }
-
 
 interface NavBarItemProps {
     pathname: string;
