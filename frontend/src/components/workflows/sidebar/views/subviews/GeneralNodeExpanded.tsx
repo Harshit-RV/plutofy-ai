@@ -62,15 +62,6 @@ const GeneralNodeExpanded = ({ node, nodes, edges, setNodes, setEdges } : NodeEx
 
       <p className='text-sm my-3'>{nodeInfoFromScheme?.description}</p>
 
-      { previousNodeData && (
-        <DataFromPreviousNodeCard 
-          previousNodeData={previousNodeData} 
-          localData={localData} 
-          setLocalData={setLocalData} 
-          setHasUnsavedChanges={setHasUnsavedChanges} 
-        /> 
-      )}
- 
       { (nodeInfoFromScheme && nodeInfoFromScheme.credentials.length != 0) && (
         <NodeCredentialsEditor 
           className="mt-3"
@@ -79,6 +70,14 @@ const GeneralNodeExpanded = ({ node, nodes, edges, setNodes, setEdges } : NodeEx
           setLocalData={setLocalData}
           setHasUnsavedChanges={setHasUnsavedChanges}
         />
+      )}
+      
+      { previousNodeData && (
+        <DataFromPreviousNodeCard 
+          className="mt-3"
+          outputStructure={((previousNodeData?.data || {}).outputStructure || []) as OutputStructure[]} 
+          localData={localData} 
+        /> 
       )}
 
       {
@@ -107,7 +106,7 @@ const GeneralNodeExpanded = ({ node, nodes, edges, setNodes, setEdges } : NodeEx
       ) }
 
       { !(nodeInfoFromScheme?.credentials.length == 0 && nodeInfoFromScheme?.data.length == 0) && (
-        <div className='mt-3 pt-4 border-t'>
+        <div className='mt-3'>
           <ButtonCN 
             onClick={saveNodeChanges}
             disabled={!hasUnsavedChanges}

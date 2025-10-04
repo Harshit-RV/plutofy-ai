@@ -4,47 +4,36 @@ import { CardContent } from "@/components/ui/card"
 import JsonPreview from "@/components/json-forms/JsonPreview"
 import { OutputStructure } from "@/types/agent"
 import { INode } from "@/types/workflow"
-import { Dispatch, SetStateAction } from "react"
-import { Switch } from "@/components/ui/switch"
+import { cn } from "@/lib/utils"
+import { ButtonCN } from "@/components/ui/buttoncn"
+import { ChevronDown, ChevronRight } from "lucide-react"
+import { useState } from "react"
 
 interface DataFromPreviousNodeCardProps {
-  previousNodeData: INode,
+  outputStructure: OutputStructure[],
   localData: INode,
-  setLocalData: Dispatch<SetStateAction<INode>>,
-  setHasUnsavedChanges: Dispatch<SetStateAction<boolean>>,
+  className?: string
 }
 
 const DataFromPreviousNodeCard = ( props: DataFromPreviousNodeCardProps) => {
   
-  const handleDataInputChange = (val: boolean) => {
-    props.setLocalData(prev => ({
-      ...prev,
-      data: {
-        ...prev.data,
-        getDataFromPreviousNode: val
-      } 
-    }));
-    props.setHasUnsavedChanges(true);
-  };
-
+  const [ isExpanded, setIsExpanded ] = useState(true);
+  
   return (
-    <Card className="">
+    <Card className={cn(props.className)}>
       <CardHeader className="pt-5 pb-3 px-3 md:px-4">
-        <CardTitle className="flex justify-between">
+        <CardTitle className="flex gap-2 items-center">
+          <ButtonCN variant="secondary" size="icon" className="size-6 border hover:bg-white" onClick={() => setIsExpanded((val) => !val)}>
+            {isExpanded ? <ChevronDown size={20} /> : <ChevronRight size={20} />}
+          </ButtonCN>
           <h4 className="text-sm font-semibold">
             Data from previous node
           </h4>
-          <Switch
-            checked={((props.localData?.data || {}).getDataFromPreviousNode || false) as boolean}
-            onCheckedChange={handleDataInputChange}
-          />
         </CardTitle>
       </CardHeader>
       <CardContent className="py-0 pb-2 px-3 md:px-4">
         {
-          ((props.localData?.data || {}).getDataFromPreviousNode || false) as boolean && (
-            <JsonPreview className="mb-2" outputStructure={((props.previousNodeData?.data || {}).outputStructure || []) as OutputStructure[]}/>
-          )
+          isExpanded && <JsonPreview className="mb-2" outputStructure={props.outputStructure}/>
         }
       </CardContent>
     </Card> 
