@@ -9,26 +9,7 @@ interface ReponseProps {
 }
 
 export const getResponse = async (props: ReponseProps) => {
-  const dynamicSchema = generateDynamicObjectZodV3Schema([
-    {
-      id: "1",
-      name: "name",
-      type: "string"
-    },
-    {
-      id: "2",
-      name: "age",
-      type: "number"
-    },
-    {
-      id: "4",
-      name: "languages",
-      type: "array",
-      fields: [{
-        id: "3", name: "w", type: "string"
-      }]
-    }
-  ]);
+  const dynamicSchema = generateDynamicObjectZodV3Schema(props.fields);
 
 
   const res = await getResponseFromOpenAI({
