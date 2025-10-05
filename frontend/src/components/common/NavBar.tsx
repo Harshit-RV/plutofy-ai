@@ -20,7 +20,7 @@ export const NavBar = () => {
                   </div>
                 </div>
                 
-                <div className="h-full flex items-center gap-5">
+                <div className="h-full flex items-center gap-6">
                   <ThemeToggleButton />
                   <UserButton />
                 </div>

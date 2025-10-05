@@ -1,5 +1,5 @@
 import { OutputStructure } from "../models/Agent.model";
-import { generateDynamicObjectZodSchema } from "./generateDynamicZodSchema";
+import { generateDynamicObjectZodV3Schema } from "./generateDynamicZodV3Schema";
 import { getResponseFromOpenAI } from "./openAi";
 
 interface ReponseProps {
@@ -9,7 +9,8 @@ interface ReponseProps {
 }
 
 export const getResponse = async (props: ReponseProps) => {
-  const dynamicSchema = generateDynamicObjectZodSchema(props.fields);
+  const dynamicSchema = generateDynamicObjectZodV3Schema(props.fields);
+
 
   const res = await getResponseFromOpenAI({
     schema: dynamicSchema,
@@ -17,6 +18,6 @@ export const getResponse = async (props: ReponseProps) => {
     prompt: props.prompt,
   });
 
-  console.log(res?.parsed);
-  return res?.parsed;
+  console.log(res);
+  return res;
 }

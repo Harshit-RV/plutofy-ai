@@ -5,7 +5,7 @@ import AgentService from "./agent.service";
 import AgentExecutionHelper from "./helper";
 import { ExecuteWorkflowInput } from "../../types";
 import workflowScheme from "../../../workflow-scheme";
-import { generateDynamicObjectZodSchema } from "../../../utils/generateDynamicZodSchema";
+import { generateDynamicObjectZodV4Schema } from "../../../utils/generateDynamicZodV4Schema";
 
 const executeAgentNode = async (input: ExecuteWorkflowInput, node: INode, userId: string, dataStructure: OutputStructure[]) : Promise<object> => {
   try {
@@ -14,7 +14,7 @@ const executeAgentNode = async (input: ExecuteWorkflowInput, node: INode, userId
 
     // Generate dynamic Zod schema from the output structure defined in the frontend
     const outputStructure = (node.data as any).outputStructure as OutputStructure[];
-    const responseSchema = generateDynamicObjectZodSchema(outputStructure);
+    const responseSchema = generateDynamicObjectZodV4Schema(outputStructure);
 
     if (data.getStructuredResponse as boolean && outputStructure.length == 0) {
       throw Error("No output structure defined")
