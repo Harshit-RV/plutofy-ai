@@ -17,7 +17,7 @@ export const getAuthToken = (req: Request): string | null => {
   return authHeader.split(' ')[1];
 };
 
-// Create a new agent
+// make request to an agent
 router.post('/', async (req: Request, res: Response) : Promise<any> => {
   try {
     const token = getAuthToken(req);
@@ -47,6 +47,8 @@ router.post('/', async (req: Request, res: Response) : Promise<any> => {
       instruction: agent.instruction,
       prompt: message,
     });
+
+    if (!response) return res.status(500).json({error: "no response from Agent"});
 
     return res.status(200).json(response);
   } catch (err) {
