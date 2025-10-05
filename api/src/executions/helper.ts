@@ -1,6 +1,6 @@
 import { OutputStructure } from "../models/Agent.model";
 import CredentialsService from "../services/credentials.service";
-import { generateDynamicObjectZodSchema } from "../utils/generateDynamicZodSchema";
+import { generateDynamicObjectZodV4Schema } from "../utils/generateDynamicZodV4Schema";
 import { ExecuteWorkflowInput } from "./types";
 
 class ExecutionHelper {
@@ -17,7 +17,7 @@ class ExecutionHelper {
   }
 
   static getDataFromNode = (data: object, structure: OutputStructure[]) => {
-    const dynamicSchema = generateDynamicObjectZodSchema(structure)
+    const dynamicSchema = generateDynamicObjectZodV4Schema(structure)
     
     const parsedData = dynamicSchema.parse(data);
     return parsedData;
@@ -30,7 +30,7 @@ class ExecutionHelper {
       throw Error("No credentials found")
     }
     
-    const dynamicSchema = generateDynamicObjectZodSchema(structure)
+    const dynamicSchema = generateDynamicObjectZodV4Schema(structure)
     const parsedCreds = dynamicSchema.parse(creds[0].data);
     return parsedCreds;
   }

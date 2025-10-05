@@ -1,6 +1,6 @@
 import OpenAI from "openai";
 import { zodResponseFormat } from "openai/helpers/zod";
-import { ZodObject, ZodRawShape } from "zod";
+import { ZodObject, ZodRawShape } from "zod3";
 import "dotenv/config";
 import config from "../config";
 
