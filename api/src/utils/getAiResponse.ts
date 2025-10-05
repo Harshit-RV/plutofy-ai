@@ -19,5 +19,5 @@ export const getResponse = async (props: ReponseProps) => {
   });
 
   console.log(res);
-  return res;
+  return res?.parsed;
 }
