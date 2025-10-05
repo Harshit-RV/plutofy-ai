@@ -5,12 +5,14 @@ import TriggerNodeExpanded from "./subviews/TriggerNodeExpanded";
 import GeneralNodeExpanded from "./subviews/GeneralNodeExpanded";
 
 export interface NodeExpandedProps {
-  node: INode, 
+  node: INode,
+  nodes: INode[],
+  edges: IConnection[],
   setNodes: Dispatch<SetStateAction<INode[]>>, 
   setEdges: Dispatch<SetStateAction<IConnection[]>> 
 }
 
-const NodeExpanded = ({ node, setNodes, setEdges } : NodeExpandedProps ) => {
+const NodeExpanded = ({ node, nodes, edges, setNodes, setEdges } : NodeExpandedProps ) => {
   const nodeInfoFromScheme = workflowScheme.nodes.find(wf => wf.type == node.type);
 
   if (nodeInfoFromScheme?.category == "trigger") {
@@ -22,7 +24,7 @@ const NodeExpanded = ({ node, setNodes, setEdges } : NodeExpandedProps ) => {
   // trailing content (Add LLM, Add tools buttons in AI agent node) should go as props here in GeneralNodeExpanded
   return (
     <div className="overflow-y-scroll overflow-x-clip">
-      <GeneralNodeExpanded node={node} setNodes={setNodes} setEdges={setEdges}/>
+      <GeneralNodeExpanded node={node} nodes={nodes} edges={edges} setNodes={setNodes} setEdges={setEdges}/>
     </div>
   )
 }

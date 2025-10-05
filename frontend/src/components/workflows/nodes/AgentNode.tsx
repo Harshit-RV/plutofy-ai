@@ -3,7 +3,7 @@ import logos from "@/utils/logos";
 
 export const AgentNode = () => {
   return (
-    <div className='h-full w-full bg-white border rounded-lg p-3'>
+    <div className='h-full w-full bg-white text-black border rounded-lg p-3'>
       <Handle type="target" position={Position.Left}/>
       
       <div className="flex gap-2 items-center">

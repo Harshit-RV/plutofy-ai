@@ -5,3 +5,8 @@ export interface ExecuteWorkflowInput {
   nodeId: string;
   userId: string
 }
+
+export interface ExecuteWorkflowHistory {
+  nodeId: string;
+  data: object;
+}

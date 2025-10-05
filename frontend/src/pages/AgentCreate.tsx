@@ -60,7 +60,6 @@ const AgentCreate = ({ mode } : { mode: Mode }) => {
   const [ createdAgent, setCreatedAgent ] = useState<AgentDoc | null>(null);
 
   const onClick = async () => {
-    console.log(formData)
     const token: string | null = await getToken();
     if (!token) return;
 

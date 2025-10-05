@@ -16,7 +16,7 @@ const AddNodeSection = ( { onAddNode, currentNodes } : { onAddNode: (type: NodeT
 
   return (
     <div>
-      <h1 className='my-7 ml-3 font-bold text-gray-900'>Available Nodes</h1>
+      <h1 className='my-7 ml-3 font-bold text-foreground'>Available Nodes</h1>
       {
         availableNodes.map((node, index) => (
           <div key={index} onClick={() => onAddNode(node.type as NodeType)} className='flex hover:shadow-md items-center h-20 cursor-pointer px-4 py-3 border-y gap-5'>

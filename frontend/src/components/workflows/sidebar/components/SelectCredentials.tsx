@@ -24,7 +24,7 @@ const SelectCredentials = ( props : SelectCredentialsProps ) => {
 
   return (
     <Select value={props.value} onValueChange={(val) => props.setValue(val)}>
-      <SelectTrigger className="w-full">
+      <SelectTrigger className="w-full bg-gray-100 dark:bg-background">
         {
           credentialsLoading ? (
             <Skeleton className="w-full h-6 bg-gray-200"></Skeleton>
@@ -40,8 +40,8 @@ const SelectCredentials = ( props : SelectCredentialsProps ) => {
           {credentialsLoading && <Skeleton className="w-full h-6 bg-gray-200"></Skeleton>}
 
           {
-            credentialsList?.map((item) => (
-              <SelectItem value={item._id as string}>{item.name}</SelectItem>
+            credentialsList?.map((item, index) => (
+              <SelectItem key={index} value={item._id as string}>{item.name}</SelectItem>
             ))
           }
 

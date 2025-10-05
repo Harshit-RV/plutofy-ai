@@ -4,7 +4,7 @@ import { ButtonCN } from "@/components/ui/buttoncn"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { X, ChevronDown, ChevronRight } from "lucide-react"
 import { Input as InputAnt } from 'antd';
-import { OutputStructure } from "@/types/agent";
+import { OutputStructure, PrimitiveType } from "@/types/agent";
 import JsonPreview from "./JsonPreview";
 import convertOutputStructureToFields from "@/utils/convertOutputStructureToFields";
 
@@ -13,7 +13,7 @@ export type JsonValue = string | number | boolean | null | JsonValue[] | { [key:
 export type Field = {
   id: string
   name: string
-  type: string
+  type: PrimitiveType
   fields?: Field[]
   isExpanded?: boolean
 }
@@ -120,7 +120,6 @@ export default function JsonBuilder(
   useEffect(() => {
     const outputStructure: OutputStructure[] = convertFieldsToOutputStructure(fields);
     setOutputStructure(outputStructure);
-    console.log('fields changed')
   }, [fields])
 
   const renderField = (field: Field, depth = 0, isArraySubfield = false) => {
@@ -146,7 +145,7 @@ export default function JsonBuilder(
             className="w-full h-10 tracking-widest font-bold shadow-sm font-mono bg-background rounded-sm focus-visible:ring-1 focus-visible:outline-none" 
           />}
           
-          <Select value={field.type} onValueChange={(value) => updateField(field.id, { type: value })}>
+          <Select value={field.type} onValueChange={(value) => updateField(field.id, { type: value as PrimitiveType })}>
             <SelectTrigger className="w-[120px] h-10 bg-background">
               <SelectValue placeholder="Select type" />
             </SelectTrigger>

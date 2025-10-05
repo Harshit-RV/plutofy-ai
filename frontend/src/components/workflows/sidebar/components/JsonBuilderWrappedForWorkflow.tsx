@@ -1,4 +1,5 @@
 import JsonBuilder from "@/components/json-forms/JsonInput"
+import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
 import { OutputStructure } from "@/types/agent"
 import { INode } from "@/types/workflow"
@@ -13,25 +14,40 @@ interface JsonBuilderWrappedForWorkflowProps {
 
 const JsonBuilderWrappedForWorkflow = ( props: JsonBuilderWrappedForWorkflowProps ) => {
   const handleDataInputChange = (val: OutputStructure[]) => {
+    const existing = (((props.localData ?? {}).data ?? {}).outputStructure ?? []) as OutputStructure[];
+    const isSame = JSON.stringify(existing) === JSON.stringify(val);
+
+    if (isSame) return;
+
     props.setLocalData(prev => ({
       ...prev,
       data: {
         ...prev.data,
         outputStructure: val
-      } 
+      }
     }));
     props.setHasUnsavedChanges(true);
   };
 
   return (
-    <div className={cn("border-t pt-3", props.className)}>
-      <p className="text-xs">Output Structure</p>
-      <JsonBuilder
-        // TODO: improve these checks
-        outputStructure={(((props.localData?? {}).data ?? {}).outputStructure ?? []) as OutputStructure[]} 
-        setOutputStructure={(val) => handleDataInputChange(val)}
-        hidePreview
-      />
+    <div className={cn(props.className)}>
+      <Card className="">
+        <CardHeader className="pt-5 pb-3 px-3 md:px-4">
+          <CardTitle className="flex justify-between">
+            <h4 className="text-sm font-semibold">
+              Output Structure
+            </h4>
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="py-0 pb-4 px-3 md:px-4">
+          <JsonBuilder
+            // TODO: improve these checks
+            outputStructure={(((props.localData?? {}).data ?? {}).outputStructure ?? []) as OutputStructure[]} 
+            setOutputStructure={(val) => handleDataInputChange(val)}
+            hidePreview
+          />
+        </CardContent>
+      </Card>
     </div>
   )
 }

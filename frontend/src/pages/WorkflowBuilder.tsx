@@ -243,10 +243,12 @@ const WorkflowBuilder = ({ workflowName, initialEdges, initialNodes, syncWorkflo
 
 
       {(sidebarState.mode != "CLOSED") &&
-        <div className='top-16 bottom-4 right-4 absolute rounded-lg border-gray-200 z-10 bg-white w-[400px] shadow-xl'>
+        <div className='top-16 bottom-4 right-4 absolute rounded-lg border-gray-200 z-10 bg-background w-[500px] shadow-xl'>
           <WorkflowSidebar 
             sidebarState={sidebarState}
             onAddNode={onAddNode}
+            nodes={nodes}
+            edges={edges}
             setEdges={setEdges}
             setNodes={setNodes}
             currentNodes={nodes}
