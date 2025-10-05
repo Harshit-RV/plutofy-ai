@@ -20,37 +20,48 @@ export const getAuthToken = (req: Request): string | null => {
 // make request to an agent
 router.post('/', async (req: Request, res: Response) : Promise<any> => {
   try {
-    const token = getAuthToken(req);
 
-    if (!token) {
-      return res.status(401).json({ message: 'Unauthorized: Missing API Key' });
-    }
+    res.status(503).set("Retry-After", "172800")
+      .json({
+        status: "unavailable",
+        message:
+          "Managed AI Agents are temporarily disabled. Please Workflows in the meantime at https://plutofy.harshitrv.com/workflow."
+      });
 
-    if (!await isSecretKeyValid(token)) {
-      return res.status(403).json({ message: 'INVALID_API_KEY' });
-    }
+    return;
 
-    const { agentId, message } = req.body;
-
-    if (!agentId) {
-      return res.status(400).json({error: "Missing required fields"})
-    }
-
-    const agent = await getAgentsByAgentId(agentId)
     
-    if (agent == null) {
-      return res.status(400).json({error: "Agent not found. Please recheck your Agent ID"})
-    }
+    // const token = getAuthToken(req);
 
-    const response = await getResponse({
-      fields: agent.outputStructure,
-      instruction: agent.instruction,
-      prompt: message,
-    });
+    // if (!token) {
+    //   return res.status(401).json({ message: 'Unauthorized: Missing API Key' });
+    // }
 
-    if (!response) return res.status(500).json({error: "no response from Agent"});
+    // if (!await isSecretKeyValid(token)) {
+    //   return res.status(403).json({ message: 'INVALID_API_KEY' });
+    // }
 
-    return res.status(200).json(response);
+    // const { agentId, message } = req.body;
+
+    // if (!agentId) {
+    //   return res.status(400).json({error: "Missing required fields"})
+    // }
+
+    // const agent = await getAgentsByAgentId(agentId)
+    
+    // if (agent == null) {
+    //   return res.status(400).json({error: "Agent not found. Please recheck your Agent ID"})
+    // }
+
+    // const response = await getResponse({
+    //   fields: agent.outputStructure,
+    //   instruction: agent.instruction,
+    //   prompt: message,
+    // });
+
+    // if (!response) return res.status(500).json({error: "no response from Agent"});
+
+    // return res.status(200).json(response);
   } catch (err) {
     console.log(err);
     return res.status(500).json(err);
