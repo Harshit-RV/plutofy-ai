@@ -14,12 +14,17 @@ interface JsonBuilderWrappedForWorkflowProps {
 
 const JsonBuilderWrappedForWorkflow = ( props: JsonBuilderWrappedForWorkflowProps ) => {
   const handleDataInputChange = (val: OutputStructure[]) => {
+    const existing = (((props.localData ?? {}).data ?? {}).outputStructure ?? []) as OutputStructure[];
+    const isSame = JSON.stringify(existing) === JSON.stringify(val);
+
+    if (isSame) return;
+
     props.setLocalData(prev => ({
       ...prev,
       data: {
         ...prev.data,
         outputStructure: val
-      } 
+      }
     }));
     props.setHasUnsavedChanges(true);
   };
