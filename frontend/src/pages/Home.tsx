@@ -10,7 +10,7 @@ import AgentCardSkeleton from "@/components/agents/AgentCardSkeleton";
 import TemplatesSection from "@/components/agents/AgentTemplatesSection";
 import AgentCard from "@/components/agents/AgentCard";
 import NoAgentYetCard from "@/components/agents/NoAgentYetCard";
-import PageWrapper from "@/components/PageWrapper";
+import PageWrapper from "@/components/common/PageWrapper";
 
 export const Home = () => {
   const { getToken } = useAuth();
