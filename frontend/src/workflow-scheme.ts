@@ -50,7 +50,7 @@ const workflowScheme: WorkflowScheme  = {
       category: "trigger",
       credentials: [],
       data: [
-        { displayName:"", name: "Payload", type: "object" }
+        // { displayName:"", name: "Payload", type: "object" }
       ]
     },
     {

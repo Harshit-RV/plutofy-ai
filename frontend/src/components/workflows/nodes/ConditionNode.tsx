@@ -1,10 +1,19 @@
-import { Handle, Position } from "@xyflow/react";
+import { Handle, Position, useNodeId, useReactFlow } from "@xyflow/react";
 import { GeneralActionNode } from "./shared/NodeWrappers";
 import logos from "@/utils/logos";
+import { INode } from "@/types/workflow";
+import WorkflowValidator from "@/utils/workflow-validator.util";
+import { useMemo } from "react";
 
 export const ConditionNode = () => {
+  const nodeId = useNodeId();
+  const { getNode } = useReactFlow();
+
+  const node = getNode(nodeId ?? "") as INode | undefined;
+  const isCorrectlyConfigured = useMemo(() => node ? WorkflowValidator.isNodeConfigCorrect(node) : false, [node]);
+
   return (
-    <GeneralActionNode>
+    <GeneralActionNode className={`border-2 ${isCorrectlyConfigured ? "border-green-400" : "border-red-500"}`}>
       <img
         src={logos.conditionNode}
         alt="Condition"

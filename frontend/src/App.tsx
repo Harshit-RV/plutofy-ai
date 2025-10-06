@@ -10,7 +10,7 @@ import { Toaster } from "react-hot-toast";
 import AgentCreate from "./pages/AgentCreate";
 import TestAgent from "./pages/TestAgent";
 import ApiKeys from "./pages/ApiKeys";
-import WorkflowBuilder from "./pages/WorkflowBuilder";
+import WorkflowBuilder from "./pages/WorkflowBuilderPage";
 import Workflows from "./pages/Workflows";
 import ProtectedRoute from "./components/common/ProtectedRoute";
 
@@ -39,8 +39,7 @@ function App() {
 
 
           <Route path="/workflow" element={<ProtectedRoute child={<Workflows />} />} />
-          <Route path="/workflow/create" element={<ProtectedRoute child={<WorkflowBuilder mode="CREATE"/>} />} />
-          <Route path="/workflow/:workflowDocId" element={<ProtectedRoute child={<WorkflowBuilder mode="EDIT"/>} />} />
+          <Route path="/workflow/:workflowDocId" element={<ProtectedRoute child={<WorkflowBuilder />} />} />
 
 
           <Route path="/api" element={<ProtectedRoute child={<ApiKeys/>} />} />

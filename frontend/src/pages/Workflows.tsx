@@ -10,7 +10,7 @@ import toast from "react-hot-toast";
 import WorkflowTemplates from "@/components/workflows/WorkflowTemplates";
 import NoWorkflowYetCard from "@/components/workflows/NoWorkflowYetCard";
 import WorkflowCard from "@/components/workflows/WorkflowCard";
-import PageWrapper from "@/components/PageWrapper";
+import PageWrapper from "@/components/common/PageWrapper";
 
 const Workflows = () => {
   const { getToken } = useAuth();

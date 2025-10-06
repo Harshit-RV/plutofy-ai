@@ -1,117 +1,20 @@
-import AgentLlmNode from '@/components/workflows/nodes/agent-children-nodes/AgentLlmNode';
-import AgentNode from '@/components/workflows/nodes/AgentNode';
-import ConditionNode from '@/components/workflows/nodes/ConditionNode';
-import EmailNode from '@/components/workflows/nodes/EmailNode';
-import TelegramNode from '@/components/workflows/nodes/TelegramNode';
-import WebhookTriggerNode from '@/components/workflows/nodes/WebhookTriggerNode';
+import { Background, Connection, ReactFlow, useEdgesState, useNodesState, useReactFlow, useOnSelectionChange, NodeChange } from '@xyflow/react';
 import { ButtonCN } from '@/components/ui/buttoncn';
 import { Input } from '@/components/ui/input';
-import WorkflowService from '@/utils/workflow.util';
-import { useAuth } from '@clerk/clerk-react';
-import { Background, Connection, ReactFlow, ReactFlowProvider, useEdgesState, useNodesState, useReactFlow, Node, useOnSelectionChange, NodeChange } from '@xyflow/react';
-import '@xyflow/react/dist/style.css';
-import { useCallback, useEffect, useMemo, useState } from 'react';
 import { FaPlus } from 'react-icons/fa';
-import { useQuery, useQueryClient } from 'react-query';
-import { useParams } from 'react-router-dom';
-import {
-  Card,
-  CardContent,
-} from "@/components/ui/card"
-import { Loader2 } from "lucide-react";
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { IConnection, INode, NodeType, SidebarState } from '@/types/workflow';
 import { throttle } from 'lodash';
 import { v4 as uuid } from "uuid";
 import WorkflowSidebar from '@/components/workflows/sidebar/WorkflowSidebar';
 import WebhookService from '@/utils/webhook.util';
-import HttpRequestToolNode from '@/components/workflows/nodes/agent-children-nodes/HttpRequestToolNode';
-
-const nodeTypes = {
-  agentLlmNode: AgentLlmNode,
-  webhookTriggerNode: WebhookTriggerNode,
-  emailNode: EmailNode,
-  telegramNode: TelegramNode,
-  agentNode: AgentNode,
-  conditionNode: ConditionNode,
-  httpRequestToolNode: HttpRequestToolNode,
-}
-
-type Mode = 'CREATE' | 'EDIT';
-
-export default function WorkflowBuilderPage({ mode } : { mode: Mode }) {
-  const { workflowDocId } = useParams(); 
-  const { getToken } = useAuth();
-  const queryClient = useQueryClient();
-
-  const fetchWorkflow = async () => {
-    const token = await getToken();
-    if (!token) return;
-    if (!workflowDocId) return;
-    return await WorkflowService.getWorkflowById(workflowDocId, token);
-  };
-
-  const syncWorkflowWithDB = useCallback(
-    async (nodes: INode[], edges: IConnection[], name: string) => {
-      const token = await getToken();
-      if (!token) return;
-      if (!workflowDocId) return;
-  
-      queryClient.setQueryData([`workflow-${workflowDocId}`], (oldData: unknown) => {
-        if (!oldData) return oldData;
-        return {
-          ...oldData,
-          name,
-          nodes,
-          connections: edges,
-        };
-      });
-  
-      await WorkflowService.updateWorkflow(workflowDocId, {
-        name,
-        nodes,
-        connections: edges,
-      }, token);
-    },
-    [getToken, queryClient, workflowDocId]
-  );
-
-  const {
-    data: workflow,
-    isLoading: workflowLoading,
-  } = useQuery(`workflow-${workflowDocId}`, fetchWorkflow);
-
-  if (workflowLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-[200px] w-full">
-        <Card className="w-[300px]">
-          <CardContent className="flex flex-col items-center justify-center p-6">
-            <Loader2 className="h-8 w-8 animate-spin text-primary" />
-            <p className="mt-4 text-center text-sm text-muted-foreground">Loading...</p>
-          </CardContent>
-        </Card>
-      </div>
-    )
-  }
-
-  return (
-    <ReactFlowProvider>
-      <div className='h-[calc(100vh-3.5rem)] w-full p-4 bg-gray-100 dark:bg-background'>
-        <WorkflowBuilder 
-          workflowDocId={workflowDocId ?? ""}
-          syncWorkflowWithDB={syncWorkflowWithDB} 
-          mode={mode}
-          workflowName={workflow?.name ?? ""}
-          initialEdges={workflow?.connections ?? []} 
-          initialNodes={workflow?.nodes ?? []}
-        />
-      </div>
-    </ReactFlowProvider>
-  )
-}
+import WorkflowValidator from '@/utils/workflow-validator.util';
+import { useAuth } from '@clerk/clerk-react';
+import nodeTypes from './node-types';
+import { MdError } from "react-icons/md";
 
 interface WorkflowBuilderProps {
   workflowName: string,
-  mode: Mode,
   workflowDocId: string,
   initialEdges: IConnection[],
   initialNodes: INode[],
@@ -125,6 +28,8 @@ const WorkflowBuilder = ({ workflowName, initialEdges, initialNodes, syncWorkflo
   const [ name, setName ] = useState(workflowName);
   const { getNode } = useReactFlow();
   const { getToken } = useAuth();
+
+  const isWorkflowCorrectlyConfigured = useMemo(() => !WorkflowValidator.isWorkflowConfigCorrect(nodes), [nodes]);
 
   const onConnect = useCallback(
     (connection: Connection) => {
@@ -180,12 +85,10 @@ const WorkflowBuilder = ({ workflowName, initialEdges, initialNodes, syncWorkflo
     return () => throttledSync.cancel();
   }, [throttledSync]);
 
-  const onSelectionChange = useCallback(({ nodes } : { nodes: Node[] }) => {
+  const onSelectionChange = useCallback(({ nodes } : { nodes: INode[] }) => {
     if (nodes.length == 0) {
       setSidebarState((val) => {
-        if (val.mode == "NODE-EXPANDED") {
-          return { mode: "CLOSED", selectedNodes: [] }
-        }
+        if (val.mode == "NODE-EXPANDED") return { mode: "CLOSED", selectedNodes: [] }
         return val;
       })
       return
@@ -240,6 +143,13 @@ const WorkflowBuilder = ({ workflowName, initialEdges, initialNodes, syncWorkflo
       >
         <FaPlus className={sidebarState.mode == "ADD-NODE" ? 'rotate-45' : ""}/> Add node
       </ButtonCN>
+      
+      {isWorkflowCorrectlyConfigured && (
+        <div className='h-8 bg-background absolute top-5 text-red-600 right-40 z-10 rounded-md px-3 flex gap-2 items-center'>
+          <MdError />
+          <span className='text-xs font-bold'>Some nodes are misconfigured</span>
+        </div>
+      )}
 
 
       {(sidebarState.mode != "CLOSED") &&
@@ -285,3 +195,5 @@ const WorkflowBuilder = ({ workflowName, initialEdges, initialNodes, syncWorkflo
     </div>
   );
 }
+
+export default WorkflowBuilder;
