@@ -1,10 +1,21 @@
-import { Handle, Position } from "@xyflow/react";
+import { Handle, Position, useNodeId, useReactFlow } from "@xyflow/react";
 import { GeneralTriggerNode } from "./shared/NodeWrappers";
 import logos from "@/utils/logos";
+import WorkflowValidator from "@/utils/workflow-validator.util";
+import { INode } from "@/types/workflow";
+import { useMemo } from "react";
 
 export const WebhookTriggerNode = () => {
+  const nodeId = useNodeId();
+  const { getNode } = useReactFlow();
+
+  const isCorrectlyConfigured = useMemo(() => {
+    const node = getNode(nodeId ?? "") as INode | undefined;
+    return node ? WorkflowValidator.isNodeConfigCorrect(node) : false
+  }, [getNode, nodeId]);
+
   return (
-    <GeneralTriggerNode>
+    <GeneralTriggerNode className={`border-2 ${isCorrectlyConfigured ? "border-green-400" : "border-red-500"}`}>
       <div className="flex pl-2 flex-col w-full items-center">
         <img
           src={logos.webhookTriggerNode}
