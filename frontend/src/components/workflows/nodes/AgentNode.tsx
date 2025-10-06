@@ -9,10 +9,8 @@ export const AgentNode = () => {
   const nodeId = useNodeId();
   const { getNode } = useReactFlow();
 
-  const isCorrectlyConfigured = useMemo(() => {
-    const node = getNode(nodeId ?? "") as INode | undefined;
-    return node ? WorkflowValidator.isNodeConfigCorrect(node) : false
-  }, [getNode, nodeId]);
+  const node = getNode(nodeId ?? "") as INode | undefined;
+  const isCorrectlyConfigured = useMemo(() => node ? WorkflowValidator.isNodeConfigCorrect(node) : false, [node]);
   
   return (
     <div className={'h-full w-full bg-white text-black border rounded-lg p-3 ' + (isCorrectlyConfigured ? ' border-2 border-green-500 ' : 'border-2 border-red-500 ')}>

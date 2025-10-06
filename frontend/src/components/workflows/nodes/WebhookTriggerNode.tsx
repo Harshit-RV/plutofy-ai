@@ -9,10 +9,8 @@ export const WebhookTriggerNode = () => {
   const nodeId = useNodeId();
   const { getNode } = useReactFlow();
 
-  const isCorrectlyConfigured = useMemo(() => {
-    const node = getNode(nodeId ?? "") as INode | undefined;
-    return node ? WorkflowValidator.isNodeConfigCorrect(node) : false
-  }, [getNode, nodeId]);
+  const node = getNode(nodeId ?? "") as INode | undefined;
+  const isCorrectlyConfigured = useMemo(() => node ? WorkflowValidator.isNodeConfigCorrect(node) : false, [node]);
 
   return (
     <GeneralTriggerNode className={`border-2 ${isCorrectlyConfigured ? "border-green-400" : "border-red-500"}`}>
