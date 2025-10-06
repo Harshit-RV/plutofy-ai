@@ -11,6 +11,7 @@ import WebhookService from '@/utils/webhook.util';
 import WorkflowValidator from '@/utils/workflow-validator.util';
 import { useAuth } from '@clerk/clerk-react';
 import nodeTypes from './node-types';
+import { MdError } from "react-icons/md";
 
 interface WorkflowBuilderProps {
   workflowName: string,
@@ -144,7 +145,10 @@ const WorkflowBuilder = ({ workflowName, initialEdges, initialNodes, syncWorkflo
       </ButtonCN>
       
       {isWorkflowCorrectlyConfigured && (
-        <span className='absolute top-4 right-[160px] z-10 text-red-500 text-xs'>Some nodes are misconfigured</span>
+        <div className='h-8 bg-background absolute top-5 text-red-600 right-40 z-10 rounded-md px-3 flex gap-2 items-center'>
+          <MdError />
+          <span className='text-xs font-bold'>Some nodes are misconfigured</span>
+        </div>
       )}
 
 
