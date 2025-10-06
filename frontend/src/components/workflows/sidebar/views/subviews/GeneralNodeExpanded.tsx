@@ -96,7 +96,7 @@ const GeneralNodeExpanded = ({ node, nodes, edges, setNodes, setEdges } : NodeEx
         )
       }
 
-      { (node.type === NodeType.agentNode && (localData.data.getStructuredResponse as boolean)) && (
+      { (node.type === NodeType.agentNode && (((localData.data || {}).getStructuredResponse || false) as boolean)) && (
         <JsonBuilderWrappedForWorkflow 
           className="mt-3"
           localData={localData}
