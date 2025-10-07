@@ -44,7 +44,7 @@ const ApiCreateDialog = ( { getToken, refetchApiKeys } : { getToken: () => (Prom
   return (
     <Dialog>
       <DialogTrigger asChild>
-          <ButtonCN className="px-6 sm:px-8 h-9">Create</ButtonCN>
+          <ButtonCN className="px-6 sm:px-8 h-9">Create API Key</ButtonCN>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

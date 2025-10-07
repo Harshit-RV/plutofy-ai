@@ -2,6 +2,7 @@ import { SignedIn, UserButton } from "@clerk/clerk-react";
 import { Button } from "antd";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import ThemeToggleButton from "./ThemeToggleButton";
+import { AGENTS_BASE_ROUTE } from "@/config";
 
 export const NavBar = () => {
     const location = useLocation();
@@ -14,8 +15,8 @@ export const NavBar = () => {
                 <div className="flex h-full">
                   <img src="/Plutofy-Logo.png" onClick={()=> navigate('/')}  alt="image" className="rounded-t-sm bg-[#553566] min-w-12 flex items-end mt-4 mr-6 px-2.5 aspect-square object-contain hover:cursor-pointer" />
                   <div className="sm:flex h-full hidden">
-                    <NavBarItem pathname={location.pathname} link="/" title="Agents" />
-                    <NavBarItem pathname={location.pathname} link="/workflow" title="Workflows" />
+                    <NavBarItem pathname={location.pathname} link="/" title="Workflows" />
+                    <NavBarItem pathname={location.pathname} link={`/${AGENTS_BASE_ROUTE}`} title="Managed Agents" />
                     <NavBarItem pathname={location.pathname} link="/api" title="API Keys" />
                   </div>
                 </div>

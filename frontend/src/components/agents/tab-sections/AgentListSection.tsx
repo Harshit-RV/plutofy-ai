@@ -1,22 +1,19 @@
 import { Skeleton } from "@/components/ui/skeleton";
-import { Link } from "react-router-dom";
 import { useQuery } from "react-query";
-
 import toast from "react-hot-toast";
-import { ButtonCN } from "@/components/ui/buttoncn";
 import { deleteAgent, getAgentsByUserId } from "@/utils/agent.utils";
 import { useAuth } from "@clerk/clerk-react";
 import AgentCardSkeleton from "@/components/agents/AgentCardSkeleton";
 import TemplatesSection from "@/components/agents/AgentTemplatesSection";
 import AgentCard from "@/components/agents/AgentCard";
 import NoAgentYetCard from "@/components/agents/NoAgentYetCard";
-import PageWrapper from "@/components/common/PageWrapper";
 
-export const Home = () => {
+const AgentListSection = () => {
   const { getToken } = useAuth();
 
   const fetchList = async () => {
     const token = await getToken();
+    await new Promise(r => setTimeout(r, 5000))
     if (!token) return;
     return await getAgentsByUserId(token);
   };
@@ -41,28 +38,15 @@ export const Home = () => {
   } = useQuery("agents", fetchList);
 
   return (
-    <PageWrapper>
-      <div className="py-8 w-full lg:max-w-[1300px]">
-        {/* {JSON.stringify(agents)} */}
-
-        <div className="flex justify-between h-8 ">
-          <h1 className="font-black text-[21px] sm:text-lg font-poppins mt-0.5 sm:mt-1.5">
-            {agentsLoading ? (
-              <Skeleton className="w-40 h-6 bg-gray-200"></Skeleton>
-            ) : agents?.length == 0 ? (
-              "Templates"
-            ) : (
-              "Your Agents"
-            )}
+    <div>
+        {agentsLoading ? (
+          <Skeleton className="w-40 h-6 bg-gray-200"></Skeleton>
+        ) : agents?.length == 0 && (
+          <h1 className="font-black text-sm font-poppins mt-2 sm:mt-4">
+            TEMPLATES
           </h1>
-          <div className="flex gap-5">
-            <Link to="/agent/create">
-              <ButtonCN size={'lg'} className="px-6 sm:px-8 h-9">
-                Create
-              </ButtonCN>
-            </Link>
-          </div>
-        </div>
+        )}
+
         {agents?.length == 0 && (
           <div className="mt-4">
             <TemplatesSection
@@ -104,7 +88,9 @@ export const Home = () => {
             />
           </div>
         )}
-      </div>
-    </PageWrapper>
+        
+    </div>
   );
 };
+
+export default AgentListSection;
