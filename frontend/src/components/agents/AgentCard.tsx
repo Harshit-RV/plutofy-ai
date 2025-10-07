@@ -16,6 +16,7 @@ import {
 import { Link } from "react-router-dom";
 import { truncateString } from "@/utils/utils";
 import { MoreOutlined } from "@ant-design/icons";
+import { AGENTS_BASE_ROUTE } from "@/config";
 
 const AgentCard = ({
   name,
@@ -31,7 +32,7 @@ const AgentCard = ({
   onDelete: (agentId: string) => void;
 }) => {
   return (
-    <Link to={`/agent/${agentDocId}`}>
+    <Link to={`/${AGENTS_BASE_ROUTE}/${agentDocId}`}>
     <Card className="pb-5 h-full flex flex-col justify-between">
       <CardHeader className="pt-6 pb-3">
         <CardTitle className="flex justify-between">

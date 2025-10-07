@@ -1,6 +1,6 @@
 
 import { Routes,Route, useLocation } from "react-router-dom"
-import { Home } from "./pages/Home";
+import Agents from "./pages/Agents";
 
 // import { ScrollArea } from "./components/ui/scroll-area";
 import { SignInPage } from "./pages/SignIn";
@@ -9,10 +9,10 @@ import { NavBar } from "./components/common/NavBar";
 import { Toaster } from "react-hot-toast";
 import AgentCreate from "./pages/AgentCreate";
 import TestAgent from "./pages/TestAgent";
-import ApiKeys from "./pages/ApiKeys";
 import WorkflowBuilder from "./pages/WorkflowBuilderPage";
 import Workflows from "./pages/Workflows";
 import ProtectedRoute from "./components/common/ProtectedRoute";
+import { AGENTS_BASE_ROUTE, WORKFLOWS_BASE_ROUTE } from "./config";
 
 
 function App() {
@@ -27,22 +27,20 @@ function App() {
 
       {/* <ScrollArea className="h-full w-full px-10 rounded-md border"> */}
         <Routes>
-          <Route path="/" element= { <ProtectedRoute child={<Home/>} /> }/>
+          <Route path={`/${AGENTS_BASE_ROUTE}`} element= { <ProtectedRoute child={<Agents />} /> }/>
           <Route path="/sign-in" element={<SignInPage/>} />
           <Route path="/sign-up" element={<SignUpPage/>} />
 
 
-          <Route path="/agent/create" element={ <ProtectedRoute child={<AgentCreate mode="CREATE"/>} />} />
-          <Route path="/agent/edit/:agentDocId" element={ <ProtectedRoute child={<AgentCreate mode="EDIT"/>} />} />
-          <Route path="/agent/:agentDocId" element={<ProtectedRoute child={<TestAgent isTestMode={false} />} />} />
-          <Route path="/agent/:agentDocId/test" element={<ProtectedRoute child={<TestAgent isTestMode/>} />} />
+          <Route path={`/${AGENTS_BASE_ROUTE}/create`} element={ <ProtectedRoute child={<AgentCreate mode="CREATE"/>} />} />
+          <Route path={`/${AGENTS_BASE_ROUTE}/edit/:agentDocId`} element={ <ProtectedRoute child={<AgentCreate mode="EDIT"/>} />} />
+          <Route path={`/${AGENTS_BASE_ROUTE}/:agentDocId`} element={<ProtectedRoute child={<TestAgent isTestMode={false} />} />} />
+          <Route path={`/${AGENTS_BASE_ROUTE}/:agentDocId/test`} element={<ProtectedRoute child={<TestAgent isTestMode/>} />} />
 
 
-          <Route path="/workflow" element={<ProtectedRoute child={<Workflows />} />} />
-          <Route path="/workflow/:workflowDocId" element={<ProtectedRoute child={<WorkflowBuilder />} />} />
+          <Route path="/" element={<ProtectedRoute child={<Workflows />} />} />
+          <Route path={`/${WORKFLOWS_BASE_ROUTE}/:workflowDocId`} element={<ProtectedRoute child={<WorkflowBuilder />} />} />
 
-
-          <Route path="/api" element={<ProtectedRoute child={<ApiKeys/>} />} />
         </Routes>
       {/* </ScrollArea> */}
       

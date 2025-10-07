@@ -25,6 +25,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { getJsonObject } from "@/utils/utils";
 import { ConnectToAgentDialogBox } from "@/components/agents/ConnectToAgentDialogBox";
+import { AGENTS_BASE_ROUTE } from "@/config";
 
 enum TestingMode {
   DEVELOPER_MODE = "developer_mode",
@@ -162,7 +163,7 @@ const AgentCreate = ({ isTestMode = false }: { isTestMode: boolean }) => {
         </div>
         <ConnectToAgentDialogBox agentId={agent?.agentId ?? ""} />
         <ButtonCN
-          onClick={() => navigate(`/agent/edit/${agentDocId}`)}
+          onClick={() => navigate(`/${AGENTS_BASE_ROUTE}/edit/${agentDocId}`)}
           variant={"outline"}
           className="w-[130px] sm:flex hidden border-gray-300 dark:border-gray-700"
         >
