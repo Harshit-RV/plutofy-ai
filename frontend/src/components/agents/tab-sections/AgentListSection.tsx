@@ -13,7 +13,6 @@ const AgentListSection = () => {
 
   const fetchList = async () => {
     const token = await getToken();
-    await new Promise(r => setTimeout(r, 5000))
     if (!token) return;
     return await getAgentsByUserId(token);
   };
