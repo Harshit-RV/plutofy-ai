@@ -8,7 +8,7 @@ import ApiKeysSection from "@/components/agents/tab-sections/ApiKeysSection";
 import { FaChevronDown } from "react-icons/fa";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { AGENTS_BASE_ROUTE } from "@/config";
-import ApiCreateDialog from "@/components/api-keys/ApiCreateDialog";
+import ApiCreateDialog from "@/components/agents/ApiCreateDialog";
 import AgentListSection from "@/components/agents/tab-sections/AgentListSection";
 
 const Agents = () => {

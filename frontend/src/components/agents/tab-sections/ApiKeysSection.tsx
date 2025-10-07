@@ -6,7 +6,7 @@ import { useAuth } from "@clerk/clerk-react"
 import { deleteApiKey, getApiKeys } from "@/utils/apiKey.utils"
 import toast from "react-hot-toast"
 import { convertMongoTimestampToLocal } from "@/utils/convertMongoTimestampToLocal"
-import ApiKeySkeleton from "@/components/api-keys/ApiKeySkeleton"
+import ApiKeySkeleton from "@/components/agents/ApiKeySkeleton"
 import { ReactNode } from "react"
 
 export default function ApiKeysSection() {
