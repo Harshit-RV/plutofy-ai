@@ -4,7 +4,7 @@ import { useAuth } from "@clerk/clerk-react";
 import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import WorkflowService from "@/utils/workflow.util";
+import WorkflowService from "@/services/workflow.service";
 import AgentCardSkeleton from "@/components/agents/AgentCardSkeleton";
 import toast from "react-hot-toast";
 import WorkflowTemplates from "@/components/workflows/WorkflowTemplates";

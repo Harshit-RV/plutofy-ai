@@ -3,11 +3,11 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import { MoreOutlined } from "@ant-design/icons"
 import { useQuery } from 'react-query'
 import { useAuth } from "@clerk/clerk-react"
-import { deleteApiKey, getApiKeys } from "@/utils/apiKey.utils"
 import toast from "react-hot-toast"
 import ApiKeySkeleton from "@/components/agents/ApiKeySkeleton"
 import { ReactNode } from "react"
 import Helper from "@/utils/helper"
+import ApiKeyService from "@/services/apiKey.service"
 
 export default function ApiKeysSection() {
   const { getToken } = useAuth();
@@ -15,7 +15,7 @@ export default function ApiKeysSection() {
   const fetchList = async () => {
       const token = await getToken();
       if (!token) return;
-      return await getApiKeys(token);
+      return await ApiKeyService.getApiKeys(token);
   }
 
   const onDelete = async ( apiKeyId: string) => {
@@ -23,7 +23,7 @@ export default function ApiKeysSection() {
       if (!token) return;
 
       await toast.promise(
-          deleteApiKey({ apiKeyId: apiKeyId, token: token }),
+          ApiKeyService.deleteApiKey({ apiKeyId: apiKeyId, token: token }),
             {
               loading: 'Deleting...',
               success: <b>API Key Deleted</b>,

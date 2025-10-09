@@ -22,11 +22,11 @@ import {
 } from "@/components/ui/card"
 import { AgentDoc, AgentProps, OutputStructure } from "@/types/agent";
 import toast from "react-hot-toast";
-import { createAgent, getAgentByDocId, updateAgent } from "@/utils/agent.utils";
 import { useAuth } from "@clerk/clerk-react";
 import { useParams } from "react-router-dom";
 import { Loader2 } from "lucide-react";
 import AgentDeploymentSuccessCard from "@/components/agents/AgentDeploymentSuccessCard";
+import AgentService from "@/services/agent.service";
 
 const llmsList = [
   { modelCategory: "OpenAI", models: ["gpt-3.5", "gpt-4o-2024-08-06", "gpt-babbage"] },
@@ -70,7 +70,7 @@ const AgentCreate = ({ mode } : { mode: Mode }) => {
     if (mode === 'EDIT') {
       if (!agentDocId) return;
       const agent = await toast.promise(
-        updateAgent({agentId: agentDocId, updateFields: formData, token: token }),
+        AgentService.updateAgent({agentId: agentDocId, updateFields: formData, token: token }),
         {
           loading: 'Editing...',
           success: <b>Agent Edited</b>,
@@ -80,7 +80,7 @@ const AgentCreate = ({ mode } : { mode: Mode }) => {
       setCreatedAgent(agent);
     } else {
       const agent = await toast.promise(
-        createAgent({ agentProps: formData, token: token }),
+        AgentService.createAgent({ agentProps: formData, token: token }),
         {
           loading: 'Creating...',
           success: <b>Agent Created</b>,
@@ -96,7 +96,7 @@ const AgentCreate = ({ mode } : { mode: Mode }) => {
     const token: string | null = await getToken();
     if (!token) return;
     if (!agentDocId) return;
-    const agent = await getAgentByDocId({agentDocId: agentDocId, token: token})
+    const agent = await AgentService.getAgentByDocId({agentDocId: agentDocId, token: token})
     setFormData({
       name: agent.name,
       description: agent.description,

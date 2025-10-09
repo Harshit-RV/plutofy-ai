@@ -14,7 +14,7 @@ import { useState } from "react"
 import { ButtonCN } from "@/components/ui/buttoncn"
 import { ApiKeyDoc } from "@/types/apiKey"
 import toast from "react-hot-toast"
-import { createApiKey } from "@/utils/apiKey.utils"
+import ApiKeyService from "@/services/apiKey.service"
 
 const ApiCreateDialog = ( { getToken, refetchApiKeys } : { getToken: () => (Promise<string | null>), refetchApiKeys: () => void}) => {
   const [ generatedKey, setGeneratedKey ] = useState<ApiKeyDoc | null>(null);
@@ -30,7 +30,7 @@ const ApiCreateDialog = ( { getToken, refetchApiKeys } : { getToken: () => (Prom
     }
 
     const apiKey = await toast.promise(
-      createApiKey({ name: name, token: token }),
+      ApiKeyService.createApiKey({ name: name, token: token }),
       {
         loading: 'Creating...',
         success: <b>API Key Created</b>,

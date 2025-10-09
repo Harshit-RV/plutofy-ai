@@ -1,4 +1,4 @@
-import WorkflowService from '@/utils/workflow.util';
+import WorkflowService from '@/services/workflow.service';
 import { useAuth } from '@clerk/clerk-react';
 import { ReactFlowProvider } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';

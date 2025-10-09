@@ -2,7 +2,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import CreateCredentialDialog from "./CreateCredentialDialog";
 import { useQuery } from "react-query";
 import { useAuth } from "@clerk/clerk-react";
-import CredentialsService from "@/utils/credentials.util";
+import CredentialsService from "@/services/credentials.service";
 import { Skeleton } from "@/components/ui/skeleton";
 
 interface SelectCredentialsProps {

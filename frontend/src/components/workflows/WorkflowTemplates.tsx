@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/card";
 import toast from "react-hot-toast";
 import { useAuth } from "@clerk/clerk-react";
-import WorkflowService from "@/utils/workflow.util";
+import WorkflowService from "@/services/workflow.service";
 import Helper from "@/utils/helper";
 
 const WorkflowTemplates = ({

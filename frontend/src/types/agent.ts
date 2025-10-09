@@ -32,3 +32,8 @@ export interface AgentDoc extends Document {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface CompletionResponse {
+  completion: JSON | null;
+  statusCode: number;
+}

@@ -7,7 +7,7 @@ import { IConnection, INode, NodeType, SidebarState } from '@/types/workflow';
 import { throttle } from 'lodash';
 import { v4 as uuid } from "uuid";
 import WorkflowSidebar from '@/components/workflows/sidebar/WorkflowSidebar';
-import WebhookService from '@/utils/webhook.util';
+import WebhookService from '@/services/webhook.service';
 import WorkflowValidator from '@/utils/workflow-validator.util';
 import { useAuth } from '@clerk/clerk-react';
 import nodeTypes from './node-types';

@@ -2,7 +2,6 @@ import { ButtonCN } from "@/components/ui/buttoncn";
 import { useEffect, useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { ChevronsUpDown, AlertCircle, Loader2 } from "lucide-react";
-import { getAgentByDocId, getCompletion } from "@/utils/agent.utils";
 import {
   Collapsible,
   CollapsibleContent,
@@ -26,6 +25,7 @@ import { Input } from "@/components/ui/input";
 import { ConnectToAgentDialogBox } from "@/components/agents/ConnectToAgentDialogBox";
 import { AGENTS_BASE_ROUTE } from "@/config";
 import OutputStructureBuilder from "@/utils/output-structure-builder.util";
+import AgentService from "@/services/agent.service";
 
 enum TestingMode {
   DEVELOPER_MODE = "developer_mode",
@@ -54,7 +54,7 @@ const AgentCreate = ({ isTestMode = false }: { isTestMode: boolean }) => {
   const fetchAgent = async () => {
     const token = await getToken();
     if (!token) return;
-    return await getAgentByDocId({
+    return await AgentService.getAgentByDocId({
       agentDocId: agentDocId ?? "something-random",
       token: token,
     });
@@ -100,7 +100,7 @@ const AgentCreate = ({ isTestMode = false }: { isTestMode: boolean }) => {
     if (!token) return;
 
     const startTime = Date.now();
-    const response = await getCompletion(JSON.parse(input), token);
+    const response = await AgentService.getCompletion(JSON.parse(input), token);
     setResponseInfo({
       responseTime: Date.now() - startTime,
       statusCode: response.statusCode,

@@ -4,7 +4,7 @@ import workflowScheme from "@/workflow-scheme";
 import { useState } from "react";
 import SingleInputField from "../views/SingleInputField";
 import toast from "react-hot-toast";
-import CredentialsService from "@/utils/credentials.util";
+import CredentialsService from "@/services/credentials.service";
 import { useAuth } from "@clerk/clerk-react";
 import { NodeType } from "@/types/workflow";
 import { Input } from "@/components/ui/input";

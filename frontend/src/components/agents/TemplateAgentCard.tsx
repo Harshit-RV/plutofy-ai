@@ -7,7 +7,6 @@ import {
 } from "@/components/ui/card";
 import { ButtonCN } from "@/components/ui/buttoncn";
 import { AgentProps } from "@/types/agent";
-import { createAgent } from "@/utils/agent.utils";
 import toast from "react-hot-toast";
 import { useAuth } from "@clerk/clerk-react";
 import {
@@ -22,6 +21,7 @@ import {
 } from "@/components/ui/dialog";
 import Helper from "@/utils/helper";
 import OutputStructureBuilder from "@/utils/output-structure-builder.util";
+import AgentService from "@/services/agent.service";
 
 const TemplateAgentCard = ({
   data,
@@ -38,7 +38,7 @@ const TemplateAgentCard = ({
     const token: string | null = await getToken();
     if (!token) return;
 
-    await toast.promise(createAgent({ agentProps: data, token: token }), {
+    await toast.promise(AgentService.createAgent({ agentProps: data, token: token }), {
       loading: "Replicating from template...",
       success: <b>Agent Created</b>,
       error: <b>Could not create agent.</b>,

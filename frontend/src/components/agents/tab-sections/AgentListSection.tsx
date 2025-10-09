@@ -1,12 +1,12 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { useQuery } from "react-query";
 import toast from "react-hot-toast";
-import { deleteAgent, getAgentsByUserId } from "@/utils/agent.utils";
 import { useAuth } from "@clerk/clerk-react";
 import AgentCardSkeleton from "@/components/agents/AgentCardSkeleton";
 import TemplatesSection from "@/components/agents/AgentTemplatesSection";
 import AgentCard from "@/components/agents/AgentCard";
 import NoAgentYetCard from "@/components/agents/NoAgentYetCard";
+import AgentService from "@/services/agent.service";
 
 const AgentListSection = () => {
   const { getToken } = useAuth();
@@ -14,14 +14,14 @@ const AgentListSection = () => {
   const fetchList = async () => {
     const token = await getToken();
     if (!token) return;
-    return await getAgentsByUserId(token);
+    return await AgentService.getAgentsByUserId(token);
   };
 
   const onDelete = async (agentId: string) => {
     const token = await getToken();
     if (!token) return;
 
-    await toast.promise(deleteAgent({ agentId: agentId, token: token }), {
+    await toast.promise(AgentService.deleteAgent({ agentId: agentId, token: token }), {
       loading: "Deleting...",
       success: <b>Agent Deleted</b>,
       error: <b>Could not delete agent.</b>,
