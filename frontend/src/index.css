@@ -85,3 +85,118 @@
     scrollbar-width: none; /* Firefox */
   }
 }
+
+/* .react-flow__edge-path {
+  stroke: #9c9c9c !important;
+  stroke-width: 1px !important;
+}
+.dark .react-flow__edge-path {
+  stroke: #4b5563 !important;
+} */
+
+
+/* .react-flow__edge.selected .react-flow__edge-path {
+  stroke: #6b7280 !important;
+  stroke-width: 2px !important;
+}
+
+.dark .react-flow__edge.selected .react-flow__edge-path {
+  stroke: #9ca3af !important;
+}
+ */
+
+
+/* .react-flow__edge:hover .react-flow__edge-path {
+  stroke: #9ca3af !important;
+  stroke-width: 2px !important;
+}
+.dark .react-flow__edge:hover .react-flow__edge-path {
+  stroke: #6b7280 !important;
+} */
+
+
+
+.react-flow__handle {
+  width: 2px !important;
+  height: 2px !important;
+  /* background: #000000 !important;
+  border: 0px solid #9ca3af !important;
+  opacity: 0.8 !important; */
+}
+
+/* 
+.react-flow__handle:hover {
+  background: #9ca3af !important;
+  border-color: #6b7280 !important;
+  opacity: 1 !important;
+}
+
+.react-flow__handle.connecting {
+  background: #3b82f6 !important;
+  border-color: #2563eb !important;
+  opacity: 1 !important;
+}
+
+
+.dark .react-flow__handle {
+  background: #4b5563 !important;
+  border-color: #6b7280 !important;
+}
+
+.dark .react-flow__handle:hover {
+  background: #6b7280 !important;
+  border-color: #9ca3af !important;
+}
+
+.dark .react-flow__handle.connecting {
+  background: #3b82f6 !important;
+  border-color: #2563eb !important;
+} */
+
+
+
+/* 
+.react-flow__controls {
+  background: rgba(255, 255, 255, 0.8) !important;
+  border: 1px solid #e5e7eb !important;
+  border-radius: 8px !important;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1) !important;
+}
+.dark .react-flow__controls {
+  background: rgba(17, 24, 39, 0.8) !important;
+  border-color: #374151 !important;
+} */
+
+
+/* .react-flow__controls-button {
+  background: transparent !important;
+  border: none !important;
+  color: #6b7280 !important;
+}
+.dark .react-flow__controls-button {
+  color: #9ca3af !important;
+} */
+
+
+/* 
+
+.react-flow__controls-button:hover {
+  background: #f3f4f6 !important;
+  color: #374151 !important;
+}
+.dark .react-flow__controls-button:hover {
+  background: #374151 !important;
+  color: #d1d5db !important;
+}
+ */
+
+/* 
+.react-flow__minimap {
+  background: rgba(255, 255, 255, 0.8) !important;
+  border: 1px solid #e5e7eb !important;
+  border-radius: 8px !important;
+}
+.dark .react-flow__minimap {
+  background: rgba(17, 24, 39, 0.8) !important;
+  border-color: #374151 !important;
+} */

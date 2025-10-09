@@ -8,7 +8,7 @@ interface NodeWrapperProps {
 
 export const GeneralActionNode = ( { className, children } : NodeWrapperProps ) => {
   return (
-    <div className={cn("size-14 bg-white text-black border rounded-lg flex flex-col justify-center items-center", className)}>
+    <div className={cn("size-14 bg-white text-black border border-white rounded-lg flex flex-col justify-center items-center", className)}>
       {children}
     </div>
   )
@@ -16,7 +16,7 @@ export const GeneralActionNode = ( { className, children } : NodeWrapperProps ) 
 
 export const GeneralTriggerNode = ({ className, children } : NodeWrapperProps ) => {
   return (
-    <div className={cn("size-14 bg-white text-black border rounded-lg flex flex-col justify-center items-center rounded-l-full", className)}>
+    <div className={cn("size-14 bg-white text-black border border-white rounded-lg flex flex-col justify-center items-center rounded-l-full", className)}>
       {children}
     </div>
   )
@@ -24,7 +24,7 @@ export const GeneralTriggerNode = ({ className, children } : NodeWrapperProps ) 
 
 export const GeneralDependentNode = ({ className, children } : NodeWrapperProps ) => {
   return (
-    <div className={cn('size-full rounded-full border p-1 bg-white text-black', className ?? "")}>
+    <div className={cn('size-full rounded-full border p-1 border-white bg-white text-black', className ?? "")}>
       {children}
     </div>
   )
