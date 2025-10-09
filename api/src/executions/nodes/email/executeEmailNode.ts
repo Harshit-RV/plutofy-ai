@@ -33,7 +33,7 @@ const executeEmailNode = async (node: INode, userId: string, credStructure: Outp
     })
   
   } catch (error) {
-    console.log(error)
+    console.log("email node execution error: ", error)
   }
 }
 

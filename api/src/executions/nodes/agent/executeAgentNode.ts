@@ -6,8 +6,9 @@ import AgentExecutionHelper from "./helper";
 import { ExecuteWorkflowInput } from "../../types";
 import workflowScheme from "../../../workflow-scheme";
 import { generateDynamicObjectZodV4Schema } from "../../../utils/generateDynamicZodV4Schema";
+import parseTemplate from "../../../utils/parseTemplate";
 
-const executeAgentNode = async (input: ExecuteWorkflowInput, node: INode, userId: string, dataStructure: OutputStructure[]) : Promise<object> => {
+const executeAgentNode = async (input: ExecuteWorkflowInput, node: INode, userId: string, dataStructure: OutputStructure[], previousNodeData: object) : Promise<object> => {
   try {
     // AI Agent node has no credentials, only LLM Node does
     const data = AgentExecutionHelper.getDataFromNode(node.data, dataStructure);
@@ -43,11 +44,13 @@ const executeAgentNode = async (input: ExecuteWorkflowInput, node: INode, userId
       responseFormat: responseSchema,
     });
 
+    const parsedPrompt = parseTemplate(data.prompt as string, previousNodeData);
+
     const res = await agent.invoke({
       messages: [
         {
           role: "user",
-          content: data.prompt as string,
+          content: parsedPrompt,
         },
       ],
     });
@@ -55,7 +58,7 @@ const executeAgentNode = async (input: ExecuteWorkflowInput, node: INode, userId
     return res.structuredResponse
   
   } catch (error) {
-    console.log(error)
+    console.log("agent node execution error: ", error)
     return {};
   }
 }

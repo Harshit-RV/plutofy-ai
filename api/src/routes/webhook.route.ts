@@ -34,6 +34,32 @@ router.get("/:id", async (req, res) : Promise<any> => {
   }
 })
 
+router.post("/:id", async (req, res) : Promise<any> => {
+  try {
+    const { id } = req.params;
+
+    const webhookRecord = await WebhookService.getWebhookById(id);
+    
+    if (!webhookRecord) return res.status(400).json({error: "Workflow not found"})
+
+    const workflowToExecute = await WorkflowService.getWorkflowById(webhookRecord.workflowId, webhookRecord.userId);
+
+    if (!workflowToExecute) return res.status(400).json({error: "Workflow not found"})
+
+    await executeWorkflow({
+      workflow: workflowToExecute,
+      nodeId: webhookRecord.nodeId,
+      userId: webhookRecord.userId
+    }, [ { nodeId: webhookRecord.nodeId, data: req.body } ])
+
+    return res.status(200).json({final: "Execution trigger"})
+  } catch (error) {
+    console.error(error)
+    return res.status(500).json({final: "failure"})
+  }
+})
+
+
 router.use(requireAuth());
 
 router.post("/", async (req, res) : Promise<any> => {

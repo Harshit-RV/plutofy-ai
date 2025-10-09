@@ -4,6 +4,7 @@ import ExecutionHelper from "./helper";
 import executeAgentNode from "./nodes/agent/executeAgentNode";
 import executeEmailNode from "./nodes/email/executeEmailNode";
 import executeTelegramNode from "./nodes/telegram/executeTelegramNode";
+import executeWebhookNode from "./nodes/webhook/executeWebhookNode";
 import { ExecuteWorkflowHistory, ExecuteWorkflowInput } from "./types";
 
 const executeNode = async (input: ExecuteWorkflowInput, previousNodeData: ExecuteWorkflowHistory) : Promise<object> => {
@@ -24,10 +25,14 @@ const executeNode = async (input: ExecuteWorkflowInput, previousNodeData: Execut
       return {};
 
     case NodeType.agentNode:
-      const res = await executeAgentNode(input, node, input.userId, dataStructure)
-      return res;
+      const agentRes = await executeAgentNode(input, node, input.userId, dataStructure, previousNodeData.data)
+      return agentRes;
 
-    // TODO: implement execution logic
+    case NodeType.webhookTriggerNode:
+      const webhookRes = await executeWebhookNode(node, previousNodeData.data);
+      return webhookRes;
+    
+      // TODO: implement execution logic
     default:
       console.log("Execution unimplemented for node type ", node.type)
       return {};

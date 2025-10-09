@@ -22,7 +22,7 @@ const executeTelegramNode = async (node: INode, userId: string, credStructure: O
     })
   
   } catch (error) {
-    console.log(error)
+    console.log("telegram node execution error: ", error)
   }
 }
 
