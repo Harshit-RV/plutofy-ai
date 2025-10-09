@@ -13,7 +13,7 @@ export const WebhookTriggerNode = () => {
   const isCorrectlyConfigured = useMemo(() => node ? WorkflowValidator.isNodeConfigCorrect(node) : false, [node]);
 
   return (
-    <GeneralTriggerNode className={`border-2 ${isCorrectlyConfigured ? "border-green-400" : "border-red-500"}`}>
+    <GeneralTriggerNode className={`border-2 ${isCorrectlyConfigured ? "0" : "border-red-500"}`}>
       <div className="flex pl-2 flex-col w-full items-center">
         <img
           src={logos.webhookTriggerNode}

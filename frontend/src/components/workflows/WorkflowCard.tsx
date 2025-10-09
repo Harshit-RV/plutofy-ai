@@ -15,8 +15,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Link } from "react-router-dom";
-import { truncateString } from "@/utils/utils";
-import getRelativeTimeFromDate from "@/utils/getRelativeTimeFromDate";
+import Helper from "@/utils/helper";
 
 const WorkflowCard = ({
   name,
@@ -58,11 +57,11 @@ const WorkflowCard = ({
         </CardHeader>
         {description ?? (
           <CardContent className="py-0 pb-4">
-            <p className="text-sm text-gray-500">{truncateString(description)} </p>
+            <p className="text-sm text-gray-500">{Helper.truncateString(description)} </p>
           </CardContent>
         )}
         <CardFooter className="flex gap-4 py-0 w-full justify-between">
-          <div className="text-xs text-gray-500">Last updated {getRelativeTimeFromDate(updatedAt)}</div>
+          <div className="text-xs text-gray-500">Last updated {Helper.getRelativeTimeFromDate(updatedAt)}</div>
           <div className="flex gap-2 bg-gray-50 dark:bg-background border border-gray-200 dark:border-gray-800 rounded-full items-center h-7 px-3 xl:px-4">
             <div className="w-2 h-2 bg-green-600 rounded-full"></div>
             <p className="flex items-center text-green-600 font-black text-xs">Active</p>

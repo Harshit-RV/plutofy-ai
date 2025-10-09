@@ -13,7 +13,7 @@ const AgentLlmNode = () => {
   const isCorrectlyConfigured = useMemo(() => node ? WorkflowValidator.isNodeConfigCorrect(node) : false, [node]);
 
   return (
-    <GeneralDependentNode className={`border-2 ${isCorrectlyConfigured ? "border-green-400" : "border-red-500"}`}>
+    <GeneralDependentNode className={`border-2 ${isCorrectlyConfigured ? "" : "border-red-500"}`}>
       <img
         src={logos.agentLlmNode}
         alt="llm"

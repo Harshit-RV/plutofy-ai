@@ -23,9 +23,9 @@ import JsonTable from "@/components/json-forms/JsonToTable";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { getJsonObject } from "@/utils/utils";
 import { ConnectToAgentDialogBox } from "@/components/agents/ConnectToAgentDialogBox";
 import { AGENTS_BASE_ROUTE } from "@/config";
+import OutputStructureBuilder from "@/utils/output-structure-builder.util";
 
 enum TestingMode {
   DEVELOPER_MODE = "developer_mode",
@@ -194,7 +194,7 @@ const AgentCreate = ({ isTestMode = false }: { isTestMode: boolean }) => {
             </div>
             <pre className="bg-gray-100 dark:bg-gray-900 border p-4 text-sm rounded-md overflow-auto">
               {JSON.stringify(
-                getJsonObject(agent?.outputStructure ?? []),
+                OutputStructureBuilder.getJsonObjectForPreview(agent?.outputStructure ?? []),
                 null,
                 2,
               )}

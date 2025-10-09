@@ -6,7 +6,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { ButtonCN } from "@/components/ui/buttoncn";
-import { getJsonObject, truncateString } from "@/utils/utils";
 import { AgentProps } from "@/types/agent";
 import { createAgent } from "@/utils/agent.utils";
 import toast from "react-hot-toast";
@@ -21,6 +20,8 @@ import {
   DialogClose,
   DialogFooter,
 } from "@/components/ui/dialog";
+import Helper from "@/utils/helper";
+import OutputStructureBuilder from "@/utils/output-structure-builder.util";
 
 const TemplateAgentCard = ({
   data,
@@ -55,7 +56,7 @@ const TemplateAgentCard = ({
       </CardHeader>
       <CardContent className="py-0 pb-4 px-5">
         <p className="text-[13px] text-gray-500">
-          {truncateString(data.description, 100)}{" "}
+          {Helper.truncateString(data.description, 100)}{" "}
         </p>
       </CardContent>
       <CardFooter className="flex gap-4 px-5 pb-4 w-full justify-between">
@@ -96,7 +97,7 @@ const TemplateAgentCard = ({
                   Output Structure
                 </h3>
                 <pre className="bg-gray-100 border p-4 text-sm rounded-md overflow-auto">
-                  {JSON.stringify(getJsonObject(data.outputStructure), null, 2)}
+                  {JSON.stringify(OutputStructureBuilder.getJsonObjectForPreview(data.outputStructure), null, 2)}
                 </pre>
               </div>
             </div>

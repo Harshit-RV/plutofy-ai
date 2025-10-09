@@ -6,7 +6,7 @@ import { X, ChevronDown, ChevronRight } from "lucide-react"
 import { Input as InputAnt } from 'antd';
 import { OutputStructure, PrimitiveType } from "@/types/agent";
 import JsonPreview from "./JsonPreview";
-import convertOutputStructureToFields from "@/utils/convertOutputStructureToFields";
+import OutputStructureBuilder from "@/utils/output-structure-builder.util";
 
 export type JsonValue = string | number | boolean | null | JsonValue[] | { [key: string]: JsonValue }
 
@@ -24,7 +24,7 @@ export default function JsonBuilder(
   : { outputStructure:OutputStructure[], setOutputStructure : (outputStructure: OutputStructure[]) => void, hidePreview?: boolean } 
 ) {
   
-  const [fields, setFields] = useState<Field[]>(convertOutputStructureToFields(outputStructure))
+  const [fields, setFields] = useState<Field[]>(OutputStructureBuilder.convertOutputStructureToFields(outputStructure))
 
   const addField = (parentId: string | null = null, name: string = "") => {
     const newField: Field = {
@@ -108,17 +108,8 @@ export default function JsonBuilder(
     )
   }
 
-  const convertFieldsToOutputStructure = (fields: Field[]): OutputStructure[] => {
-    return fields.map(({ id, name, type, fields }) => ({
-      id,
-      name,
-      type,
-      fields: fields ? convertFieldsToOutputStructure(fields) : type == "array" ? [{ id: Date.now().toString(), name: "", type: "string" }] : undefined,
-    }));
-  };
-
   useEffect(() => {
-    const outputStructure: OutputStructure[] = convertFieldsToOutputStructure(fields);
+    const outputStructure: OutputStructure[] = OutputStructureBuilder.convertFieldsToOutputStructure(fields);
     setOutputStructure(outputStructure);
   }, [fields])
 

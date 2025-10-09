@@ -17,8 +17,7 @@ import {
 import toast from "react-hot-toast";
 import { useAuth } from "@clerk/clerk-react";
 import WorkflowService from "@/utils/workflow.util";
-import { truncateString } from "@/utils/utils";
-
+import Helper from "@/utils/helper";
 
 const WorkflowTemplates = ({
   collapsible = true,
@@ -125,7 +124,7 @@ const TemplateWorkflowCard = ({
       </CardHeader>
       <CardContent className="py-0 pb-3 px-5">
         <p className="text-[13px] text-gray-500">
-          {truncateString(data.description ?? "", 100)}{" "}
+          {Helper.truncateString(data.description ?? "", 100)}{" "}
         </p>
       </CardContent>
       <CardFooter className="flex gap-4 px-5 pb-4 w-full justify-end">

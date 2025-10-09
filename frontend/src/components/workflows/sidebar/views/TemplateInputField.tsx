@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Input } from "@/components/ui/input";
-import Templater from '@/utils/template.utils';
+import Templater from '@/utils/templater.utils';
 import { OutputStructure } from '@/types/agent';
 
 interface TemplateInputFieldProps {

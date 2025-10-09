@@ -14,9 +14,9 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Link } from "react-router-dom";
-import { truncateString } from "@/utils/utils";
 import { MoreOutlined } from "@ant-design/icons";
 import { AGENTS_BASE_ROUTE } from "@/config";
+import Helper from "@/utils/helper";
 
 const AgentCard = ({
   name,
@@ -57,7 +57,7 @@ const AgentCard = ({
         </CardTitle>
       </CardHeader>
       <CardContent className="py-0 pb-4">
-        <p className="text-sm text-gray-500">{truncateString(description)} </p>
+        <p className="text-sm text-gray-500">{Helper.truncateString(description)} </p>
       </CardContent>
       <CardFooter className="flex gap-4 py-0 w-full justify-between">
         <p className="bg-gray-100 dark:bg-background border border-gray-200 dark:border-gray-800 px-3 xl:px-4 rounded-full flex items-center justify-center text-xs h-7">{model}</p>

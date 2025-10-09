@@ -13,7 +13,7 @@ const TelegramNode = () => {
   const isCorrectlyConfigured = useMemo(() => node ? WorkflowValidator.isNodeConfigCorrect(node) : false, [node]);
 
   return (
-    <GeneralActionNode className={`border-2 ${isCorrectlyConfigured ? "border-green-400" : "border-red-500"}`}>
+    <GeneralActionNode className={`border-2 ${isCorrectlyConfigured ? "" : "border-red-500"}`}>
       <img
         src={logos.telegramNode}
         alt="Telegram"

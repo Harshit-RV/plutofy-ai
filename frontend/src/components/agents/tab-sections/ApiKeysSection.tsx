@@ -5,9 +5,9 @@ import { useQuery } from 'react-query'
 import { useAuth } from "@clerk/clerk-react"
 import { deleteApiKey, getApiKeys } from "@/utils/apiKey.utils"
 import toast from "react-hot-toast"
-import { convertMongoTimestampToLocal } from "@/utils/convertMongoTimestampToLocal"
 import ApiKeySkeleton from "@/components/agents/ApiKeySkeleton"
 import { ReactNode } from "react"
+import Helper from "@/utils/helper"
 
 export default function ApiKeysSection() {
   const { getToken } = useAuth();
@@ -76,7 +76,7 @@ export default function ApiKeysSection() {
                               <TableTextItem >********</TableTextItem>
                           </TableCell>
                           <TableCell className="p-4">
-                              <TableTextItem>{convertMongoTimestampToLocal(apiKey.createdAt)}</TableTextItem>
+                              <TableTextItem>{Helper.convertMongoTimestampToLocal(apiKey.createdAt)}</TableTextItem>
                           </TableCell>
                           <TableCell className="p-4">
                               <TableTextItem>{apiKey.access}</TableTextItem>

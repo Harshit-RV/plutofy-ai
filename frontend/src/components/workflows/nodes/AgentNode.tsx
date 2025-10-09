@@ -13,7 +13,7 @@ export const AgentNode = () => {
   const isCorrectlyConfigured = useMemo(() => node ? WorkflowValidator.isNodeConfigCorrect(node) : false, [node]);
   
   return (
-    <div className={'h-full w-full bg-white text-black border rounded-lg p-3 ' + (isCorrectlyConfigured ? ' border-2 border-green-500 ' : 'border-2 border-red-500 ')}>
+    <div className={'h-full w-full bg-white text-black border rounded-lg p-3 ' + (isCorrectlyConfigured ? '' : 'border-2 border-red-500 ')}>
       <Handle type="target" position={Position.Left}/>
       
       <div className="flex gap-2 items-center">
