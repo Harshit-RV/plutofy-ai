@@ -57,7 +57,7 @@ const GeneralNodeExpanded = ({ node, nodes, edges, setNodes, setEdges } : NodeEx
     <div className='flex flex-col w-full py-5 px-4'>
       
       <div className='flex items-center gap-3'>
-        <img src={nodeInfoFromScheme?.image} className='size-10' alt="" />
+        <img src={nodeInfoFromScheme?.image} className='size-10 bg-white rounded-xl p-1' alt="" />
         <h1 className='font-bold text-lg'>{nodeInfoFromScheme?.name}</h1>
       </div>
 
