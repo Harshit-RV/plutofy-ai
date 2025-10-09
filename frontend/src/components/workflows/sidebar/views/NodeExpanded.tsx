@@ -1,7 +1,5 @@
-import workflowScheme from "@/workflow-scheme";
 import { Dispatch, SetStateAction } from "react";
 import { IConnection, INode } from "@/types/workflow";
-import TriggerNodeExpanded from "./subviews/TriggerNodeExpanded";
 import GeneralNodeExpanded from "./subviews/GeneralNodeExpanded";
 
 export interface NodeExpandedProps {
