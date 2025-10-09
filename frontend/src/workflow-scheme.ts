@@ -9,6 +9,7 @@ export interface NodeInfo {
   type: NodeGeneralType,
   category: "trigger" | "action" | "child",
   credentials: InputField[],
+  showStructureBuilder?: boolean
   data: InputField[],
   // connections?: {
   //   required?: NodeGeneralType[]
@@ -48,6 +49,7 @@ const workflowScheme: WorkflowScheme  = {
       type: "webhookTriggerNode",
       image: "/webhook.svg",
       category: "trigger",
+      showStructureBuilder: true,
       credentials: [],
       data: [
         // { displayName:"", name: "Payload", type: "object" }
@@ -102,9 +104,9 @@ const workflowScheme: WorkflowScheme  = {
       image: "/bot.svg",
       category: "action",
       credentials: [],
+      showStructureBuilder: true,
       data: [
         { name: "prompt", displayName: "System Prompt", type: "string"},
-        { name: "getStructuredResponse", displayName: "Get Structured/JSON Response", type: "boolean"},
         // { name: "outputStructure", displayName: "Output Structure", type: "string"},
       ],
       // connections: {

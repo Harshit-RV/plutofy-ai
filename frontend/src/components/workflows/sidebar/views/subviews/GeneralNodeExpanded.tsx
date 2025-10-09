@@ -9,6 +9,7 @@ import NodeCredentialsEditor from "../../components/NodeCredentialsEditor";
 import JsonBuilderWrappedForWorkflow from "../../components/JsonBuilderWrappedForWorkflow";
 import { OutputStructure } from "@/types/agent";
 import DataFromPreviousNodeCard from "../../components/DataFromPreviousNodeCard";
+import { API_URL } from "@/config";
 
 const GeneralNodeExpanded = ({ node, nodes, edges, setNodes, setEdges } : NodeExpandedProps) => {
   const nodeInfoFromScheme = workflowScheme.nodes.find(wf => wf.type == node.type);
@@ -81,6 +82,15 @@ const GeneralNodeExpanded = ({ node, nodes, edges, setNodes, setEdges } : NodeEx
       )}
 
       {
+        node.type == NodeType.webhookTriggerNode && (
+          <div className="flex flex-col mt-4 gap-1">
+            <p className="text-xs">URL</p>
+            <div className="border rounded-md p-1 break-all">{API_URL}/webhook/{node.data.webhookId}</div>
+          </div>
+        )
+      }
+
+      {
         (nodeInfoFromScheme && nodeInfoFromScheme.data.length != 0) && (
           <NodeDataEditor 
             className="mt-3"
@@ -96,16 +106,18 @@ const GeneralNodeExpanded = ({ node, nodes, edges, setNodes, setEdges } : NodeEx
         )
       }
 
-      { (node.type === NodeType.agentNode && (((localData.data || {}).getStructuredResponse || false) as boolean)) && (
+      { (nodeInfoFromScheme?.showStructureBuilder) && (
         <JsonBuilderWrappedForWorkflow 
           className="mt-3"
           localData={localData}
+          title={node.type === NodeType.webhookTriggerNode ? "Input Structure" : "Output Structure"}
+          description={node.type === NodeType.webhookTriggerNode ? "Make a POST request with body in this schema" : undefined}
           setHasUnsavedChanges={setHasUnsavedChanges}
           setLocalData={setLocalData}
         />
       ) }
 
-      { !(nodeInfoFromScheme?.credentials.length == 0 && nodeInfoFromScheme?.data.length == 0) && (
+      { !(nodeInfoFromScheme?.credentials.length == 0 && nodeInfoFromScheme?.data.length == 0 && (nodeInfoFromScheme?.showStructureBuilder == false || nodeInfoFromScheme?.showStructureBuilder == undefined)) && (
         <div className='mt-3'>
           <ButtonCN 
             onClick={saveNodeChanges}

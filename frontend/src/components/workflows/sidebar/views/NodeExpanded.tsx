@@ -13,11 +13,11 @@ export interface NodeExpandedProps {
 }
 
 const NodeExpanded = ({ node, nodes, edges, setNodes, setEdges } : NodeExpandedProps ) => {
-  const nodeInfoFromScheme = workflowScheme.nodes.find(wf => wf.type == node.type);
+  // const nodeInfoFromScheme = workflowScheme.nodes.find(wf => wf.type == node.type);
 
-  if (nodeInfoFromScheme?.category == "trigger") {
-    return <TriggerNodeExpanded node={node}/>
-  }
+  // if (nodeInfoFromScheme?.category == "trigger") {
+  //   return <TriggerNodeExpanded node={node}/>
+  // }
 
   // TODO: (for far future) all if else checks for Nodes should happen here 
   // and respective data changing components and visual components like 

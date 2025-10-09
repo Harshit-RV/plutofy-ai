@@ -49,6 +49,7 @@ const WorkflowBuilder = ({ workflowName, initialEdges, initialNodes, syncWorkflo
     const newId = `${type}-${uuid()}`
     let nodeData = {}
     
+    // TODO: ideally get this extra information from a central source
     // add entry in Webhook table if webhookTriggerNode is added
     if (type == NodeType.webhookTriggerNode) {
       const token = await getToken();
@@ -59,7 +60,14 @@ const WorkflowBuilder = ({ workflowName, initialEdges, initialNodes, syncWorkflo
         workflowId: workflowDocId,
       }, token)
 
-      nodeData = { webhookId: webhookDoc._id }
+      nodeData = { webhookId: webhookDoc._id, outputStructure: [] }
+    } else if (type == NodeType.agentNode) {
+      nodeData = {
+        outputStructure: [
+            { id: uuid(), name: "success", type: "boolean" },
+            { id: uuid(), name: "response", type: "string" }
+        ]
+      }
     }
 
     const newNode: INode = {

@@ -16,7 +16,7 @@ const executeAgentNode = async (input: ExecuteWorkflowInput, node: INode, userId
     const outputStructure = (node.data as any).outputStructure as OutputStructure[];
     const responseSchema = generateDynamicObjectZodV4Schema(outputStructure);
 
-    if (data.getStructuredResponse as boolean && outputStructure.length == 0) {
+    if (outputStructure.length == 0) {
       throw Error("No output structure defined")
     }
 
@@ -40,7 +40,7 @@ const executeAgentNode = async (input: ExecuteWorkflowInput, node: INode, userId
     const agent = createReactAgent({
       llm: model,
       tools: toolsList,
-      responseFormat: data.getStructuredResponse as boolean ? responseSchema : undefined,
+      responseFormat: responseSchema,
     });
 
     const res = await agent.invoke({
@@ -52,8 +52,7 @@ const executeAgentNode = async (input: ExecuteWorkflowInput, node: INode, userId
       ],
     });
 
-    // console.log(data.getStructuredResponse as boolean ? res.structuredResponse : res.messages)
-    return data.getStructuredResponse as boolean ? res.structuredResponse : res.messages
+    return res.structuredResponse
   
   } catch (error) {
     console.log(error)

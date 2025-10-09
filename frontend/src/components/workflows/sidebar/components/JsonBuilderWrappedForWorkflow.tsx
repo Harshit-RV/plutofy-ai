@@ -7,6 +7,8 @@ import { Dispatch, SetStateAction} from "react"
 
 interface JsonBuilderWrappedForWorkflowProps {
   localData: INode,
+  title: string,
+  description?: string,
   setLocalData: Dispatch<SetStateAction<INode>>
   setHasUnsavedChanges: Dispatch<SetStateAction<boolean>>,
   className?: string
@@ -33,10 +35,13 @@ const JsonBuilderWrappedForWorkflow = ( props: JsonBuilderWrappedForWorkflowProp
     <div className={cn(props.className)}>
       <Card className="">
         <CardHeader className="pt-5 pb-3 px-3 md:px-4">
-          <CardTitle className="flex justify-between">
+          <CardTitle className="flex flex-col">
             <h4 className="text-sm font-semibold">
-              Output Structure
+              {props.title}
             </h4>
+            {props.description && (
+              <div className="text-xs mt-2 text-gray-500">{props.description}</div>
+            )}
           </CardTitle>
         </CardHeader>
         <CardContent className="py-0 pb-4 px-3 md:px-4">

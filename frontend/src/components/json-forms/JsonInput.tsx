@@ -180,6 +180,7 @@ export default function JsonBuilder(
   return (
     <div className="container mx-auto pt-2 max-w-3xl">
       <div className="space-y-1.5 border mb-4 bg-gray-100 dark:bg-background rounded-lg px-4 py-5">
+        {fields.length == 0 && (<div className="text-sm mb-2">No data</div>)}
         {fields.map((field) => renderField(field))}
         <ButtonCN onClick={() => addField()} size={'sm'} variant={'outline'} className="px-4 mt-2">
           Add Field
