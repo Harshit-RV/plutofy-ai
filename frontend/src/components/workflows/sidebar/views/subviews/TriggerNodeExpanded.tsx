@@ -1,6 +1,7 @@
 import { API_URL } from "@/config";
 import { INode, NodeType } from "@/types/workflow";
 import workflowScheme from "@/workflow-scheme";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const TriggerNodeExpanded = ({ node } : { node: INode }) => {
   const nodeInfoFromScheme = workflowScheme.nodes.find(wf => wf.type == node.type);
@@ -17,10 +18,18 @@ const TriggerNodeExpanded = ({ node } : { node: INode }) => {
       
       {
         node.type == NodeType.webhookTriggerNode && (
-          <div className="flex flex-col mt-4 gap-1">
-            <p className="text-xs">URL</p>
-            <div className="border rounded-md p-1 break-all">{API_URL}/webhook/{node.data.webhookId}</div>
-          </div>
+          <Card className="">
+            <CardHeader className="pt-5 pb-3 px-3 md:px-4">
+              <CardTitle className="flex justify-between">
+                <h4 className="text-sm font-semibold">
+                  URL
+                </h4>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="py-0 pb-4 px-3 md:px-4">
+              <div className="border rounded-md p-1 break-all">{API_URL}/webhook/{node.data.webhookId}</div>
+            </CardContent>
+          </Card>
         )
       }
      
