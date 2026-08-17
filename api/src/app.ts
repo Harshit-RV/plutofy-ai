@@ -19,6 +19,10 @@ app.use(express.json());
 
 app.use(cors());
 
+app.get('/health', (_req: Request, res: Response) => {
+  res.status(200).json({ status: 'ok' });
+});
+
 // Connect to MongoDB
 mongoose.connect(config.mongoURI);
 
